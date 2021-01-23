@@ -13,12 +13,12 @@ class Chess():
             x = single char piece color; w = white, b = black
             y = single char piece; n = knight; else first char of piece name
         """
-        self.w_k = ' \u265A '
-        self.w_q = ' \u265B '
-        self.w_r = ' \u265C '
-        self.w_b = ' \u265D '
-        self.w_n = ' \u265E '
-        self.w_p = ' \u265F '
+        self.w_k = '\033[38;2;255;255;255m \u265A '
+        self.w_q = '\033[38;2;255;255;255m \u265B '
+        self.w_r = '\033[38;2;255;255;255m \u265C '
+        self.w_b = '\033[38;2;255;255;255m \u265D '
+        self.w_n = '\033[38;2;255;255;255m \u265E '
+        self.w_p = '\033[38;2;255;255;255m \u265F '
 
         self.b_k = '\033[38;2;0;0;0m \u265A '
         self.b_q = '\033[38;2;0;0;0m \u265B '
@@ -149,15 +149,7 @@ class Chess():
 
 
 c = Chess()
-print(f'\033[48;2;128;128;128m' + f'\033[38;2;255;255;255m' +
-       '\u2654 \u2655 \u2656 \u2657 \u2658 \u2659',
-       '\u265A \u265B \u265C \u265D \u265E \u265F ' + f'\033[0m')
-print(f'\033[48;2;0;0;0m' + f'\033[38;2;255;255;255m' +
-       '\u2654 \u2655 \u2656 \u2657 \u2658 \u2659',
-       '\u265A \u265B \u265C \u265D \u265E \u265F ' + f'\033[0m')
-
 print('**********white persp')
-
 c.print_board_dict('white')
 print('**********black persp')
 c.print_board_dict('black')
