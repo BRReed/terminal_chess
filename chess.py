@@ -20,13 +20,14 @@ class Chess():
         self.w_n = ' \u265E '
         self.w_p = ' \u265F '
 
-        self.b_k = ' \u2654 '
-        self.b_q = ' \u2655 '
-        self.b_r = ' \u2656 '
-        self.b_b = ' \u2657 '
-        self.b_n = ' \u2658 '
-        self.b_p = ' \u2659 '
-        #
+        self.b_k = '\033[38;2;0;0;0m \u265A '
+        self.b_q = '\033[38;2;0;0;0m \u265B '
+        self.b_r = '\033[38;2;0;0;0m \u265C '
+        self.b_b = '\033[38;2;0;0;0m \u265D '
+        self.b_n = '\033[38;2;0;0;0m \u265E '
+        self.b_p = '\033[38;2;0;0;0m \u265F '
+
+
 
     def create_board_dict(self):
         """Create dictionary of chess board elements
@@ -38,15 +39,59 @@ class Chess():
                     colorcode reset)
         """
         self.board_dict = {}
-        piece = '   '
         for row in range(1, 9):
             for column in range(1, 9):
                 if (row + column) % 2 == 0:
-                    self.board_dict[f'{row}{column}'] = (
-                            '\033[48;2;0;0;0m', f'{piece}', '\033[0m')
+                    self.board_dict[f'{row}{column}'] = [
+                            '\033[48;2;57;78;112m', '\033[0m',
+                            f'{self.populate_start(row, column)}']
                 else:
-                    self.board_dict[f'{row}{column}'] = (
-                            '\033[48;2;128;128;128m', f'{piece}', '\033[0m')
+                    self.board_dict[f'{row}{column}'] = [
+                            '\033[48;2;66;135;245m', '\033[0m',
+                            f'{self.populate_start(row, column)}']
+    
+    def populate_start(self, r, c):
+        """Populates pieces on board at start of round
+        Args:
+            r (string): row on chess board
+            c (string): column on chess board
+        Returns:
+            Var equal to chess piece
+        """
+        if r == 1:
+            if c == 1 or c == 8:
+                return self.w_r
+            elif c == 2 or c == 7:
+                return self.w_n
+            elif c == 3 or c == 6:
+                return self.w_b
+            elif c == 4:
+                return self.w_q
+            elif c == 5:
+                return self.w_k
+            else:
+                print(f'well, this is bad r, c = {r}, {c}')
+                return
+        elif r == 2:
+            return self.w_p
+        elif r == 7: 
+            return self.b_p
+        elif r == 8:
+            if c == 1 or c == 8:
+                return self.b_r
+            elif c == 2 or c == 7:
+                return self.b_n
+            elif c == 3 or c == 6:
+                return self.b_b
+            elif c == 4:
+                return self.b_q
+            elif c == 5:
+                return self.b_k
+            else:
+                print(f'well, this is bad r, c = {r}, {c}')
+        else:
+            return '   '
+
 
     def print_board_dict(self, perspective):
         """Creates printed representation of current chess board
@@ -61,8 +106,8 @@ class Chess():
                 b = f' {r} '
                 for c in range(1, 9):
                     b += (self.board_dict[f'{r}{c}'][0] +
-                          self.board_dict[f'{r}{c}'][1] +
-                          self.board_dict[f'{r}{c}'][2])
+                          self.board_dict[f'{r}{c}'][2] +
+                          self.board_dict[f'{r}{c}'][1])
                 z += (f'{b}\n')
             z += '    A  B  C  D  E  F  G  H '
         elif perspective == 'black':
@@ -70,8 +115,8 @@ class Chess():
                 b = f' {r} '
                 for c in range(8, 0, -1):
                     b += (self.board_dict[f'{r}{c}'][0] +
-                          self.board_dict[f'{r}{c}'][1] +
-                          self.board_dict[f'{r}{c}'][2])
+                          self.board_dict[f'{r}{c}'][2] +
+                          self.board_dict[f'{r}{c}'][1])
                 z += (f'{b}\n')
             z += '    H  G  F  E  D  C  B  A '
         print(z)
@@ -85,6 +130,19 @@ class Chess():
             d_coords (string): Where the piece wants to move
         """
         pass
+
+    def piece_in_coords(self, piece, coords):
+        """Checks if space is empty or if space occupied and is opponent
+
+        Args:
+            piece (string): chess piece to be moved
+            coords (string): row x column 'rc'
+        
+        Returns:
+            Bool: True if movement is allowed; else False
+        """
+        pass
+
 
 
 
