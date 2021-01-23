@@ -26,6 +26,7 @@ class Chess():
         self.b_b = ' \u2657 '
         self.b_n = ' \u2658 '
         self.b_p = ' \u2659 '
+        #
 
     def create_board_dict(self):
         """Create dictionary of chess board elements
