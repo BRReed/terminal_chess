@@ -155,7 +155,14 @@ class Chess():
             Boolean: True if move is valid based on piece movement restrictions
                 else; False
         """
-
+        # confirm dest coords is a valid board space
+        if (int(d_coords[0]) >= 1 and int(d_coords[0]) <= 8) and (
+            int(d_coords[1]) >= 1 and int(d_coords[1]) <= 8
+            ):
+            pass
+        else:
+            return False
+        # king movement definitions
         if piece == self.w_k or piece == self.b_k:
             if (int(d_coords[0]) == (int(c_coords[0]))) or (
                 int(d_coords[0]) == (int(c_coords[0]) - 1)) or (
@@ -178,6 +185,7 @@ class Chess():
 
 
 
+
 c = Chess()
 print('**********white persp')
 c.print_board_dict('white')
@@ -187,6 +195,7 @@ print(c.board_dict['11'][2])
 c.board_dict['11'][2] = 'Friendship'
 print(c.board_dict['11'][2])
 
-print(c.piece_movement(c.w_k, '22', '22'))
-print(c.piece_movement(c.w_k, '22', '13'))
-print(c.piece_movement(c.w_k, '22', '34'))
+print(c.piece_movement(c.w_k, '22', '22')) # true
+print(c.piece_movement(c.w_k, '22', '13')) # true
+print(c.piece_movement(c.w_k, '22', '34')) # false
+print(c.piece_movement(c.w_k, '18', '09')) # false
