@@ -121,7 +121,7 @@ class Chess():
             z += '    H  G  F  E  D  C  B  A '
         print(z)
 
-    def piece_placement(self, piece, c_coords, d_coords):
+    def piece_move_main(self, piece, c_coords, d_coords):
         """Takes coordinates and checks if piece to coords is a legitimate move
 
         Args:
@@ -143,6 +143,36 @@ class Chess():
         """
         pass
 
+    def piece_movement(self, piece, c_coords, d_coords):
+        """Validate movement of a piece
+
+        Args:
+            piece (string): a unicode chess piece
+            c_coords (string): current coordinates of piece
+            d_coords ([type]): destination coordinates of piece
+
+        Returns:
+            Boolean: True if move is valid based on piece movement restrictions
+                else; False
+        """
+
+        if piece == self.w_k or piece == self.b_k:
+            if (int(d_coords[0]) == (int(c_coords[0]))) or (
+                int(d_coords[0]) == (int(c_coords[0]) - 1)) or (
+                int(d_coords[0]) == (int(c_coords[0]) + 1)) and (
+                int(d_coords[1]) == (int(c_coords[1]))) or (
+                int(d_coords[1]) == (int(c_coords[1]) - 1)) or (
+                int(d_coords[1]) == (int(c_coords[1]) + 1)
+                ):
+                return True
+            else:
+                return False
+
+
+
+
+
+
 
 
 
@@ -153,3 +183,10 @@ print('**********white persp')
 c.print_board_dict('white')
 print('**********black persp')
 c.print_board_dict('black')
+print(c.board_dict['11'][2])
+c.board_dict['11'][2] = 'Friendship'
+print(c.board_dict['11'][2])
+
+print(c.piece_movement(c.w_k, '22', '22'))
+print(c.piece_movement(c.w_k, '22', '13'))
+print(c.piece_movement(c.w_k, '22', '34'))
