@@ -173,22 +173,39 @@ class Chess():
                 int(d_coords[1]) == (int(c_coords[1]))) or (
                 int(d_coords[1]) == (int(c_coords[1]) - 1)) or (
                 int(d_coords[1]) == (int(c_coords[1]) + 1)
-                ):
+            ):
                 return True
             else:
                 return False
         # queen movement definitions
-        if piece == self.w_q or piece == self.b_q:
+        elif piece == self.w_q or piece == self.b_q:
             if (int(d_coords[0]) == (int(c_coords[0]))) or (
                 int(d_coords[1]) == (int(c_coords[1]))):
                 return True
-            elif (abs(int(d_coords[0])) - abs(int(c_coords[0])) == (
-                  abs(int(d_coords[1])) - abs(int(c_coords[1])))
-                  ):
+            elif abs(int(d_coords[0]) - int(c_coords[0])) == (
+                 abs(int(d_coords[1]) - int(c_coords[1]))
+            ):
                 return True
             else:
                 return False
-
+        # bishop movement definitions
+        elif piece == self.w_b or piece == self.b_b:
+            if abs(int(d_coords[0]) - int(c_coords[0])) == (
+               abs(int(d_coords[1]) - int(c_coords[1]))
+            ):
+                return True
+            else:
+                return False
+        # knight movement definitions
+        elif piece == self.w_n or piece == self.b_n:
+            if ((abs(int(d_coords[0]) - int(c_coords[0])) == 2) and (
+                 abs(int(d_coords[1]) - int(c_coords[1])) == 1)) or ((
+                 abs(int(d_coords[0]) - int(c_coords[0])) == 1) and (
+                 abs(int(d_coords[1]) - int(c_coords[1])) == 2)
+            ):
+                return True
+            else:
+                return False
 
 
 
@@ -215,3 +232,13 @@ print(c.piece_movement(c.w_k, '18', '09')) # false
 print(c.piece_movement(c.w_q, '14', '47')) # true
 print(c.piece_movement(c.w_q, '14', '54')) # true
 print(c.piece_movement(c.w_q, '14', '87')) # false
+print(c.piece_movement(c.w_b, '11', '44')) # true
+print(c.piece_movement(c.w_b, '84', '51')) # true
+print(c.piece_movement(c.w_b, '55', '46')) # true
+print(c.piece_movement(c.w_b, '65', '14')) # false
+print(c.piece_movement(c.w_n, '65', '14')) # false
+print(c.piece_movement(c.w_n, '65', '84')) # true
+print(c.piece_movement(c.w_n, '65', '53')) # true
+print(c.piece_movement(c.w_n, '82', '74')) # true
+print(abs(6 - 5))
+print(abs(5 - 3))
