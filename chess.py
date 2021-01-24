@@ -149,7 +149,7 @@ class Chess():
         Args:
             piece (string): a unicode chess piece
             c_coords (string): current coordinates of piece
-            d_coords ([type]): destination coordinates of piece
+            d_coords (string): destination coordinates of piece
 
         Returns:
             Boolean: True if move is valid based on piece movement restrictions
@@ -214,6 +214,26 @@ class Chess():
                 return True
             else:
                 return False
+        # pawn white movement definitions
+        elif piece == self.w_p:
+            if (int(d_coords[0]) > int(c_coords[0])) and (
+                abs(int(d_coords[1]) - int(c_coords[1])) <= 1 
+            ):
+                return True
+            else:
+                return False
+        # pawn black movement definitions
+        elif piece == self.b_p:
+            if (int(d_coords[0]) < int(c_coords[0])) and (
+                abs(int(d_coords[1]) - int(c_coords[1])) <= 1
+            ):
+                return True
+            else:
+                return False
+        else:
+            print(f'Uh oh!, d_coords = {d_coords}, c_coords = {c_coords}, ' + 
+                  f'piece = {piece}')
+            return False
 
 
 
@@ -251,3 +271,12 @@ print(c.piece_movement(c.w_n, '82', '74')) # true
 print(c.piece_movement(c.w_r, '18', '11')) # true
 print(c.piece_movement(c.w_r, '72', '12')) # true
 print(c.piece_movement(c.w_r, '82', '74')) # false
+print(c.piece_movement(c.w_p, '11', '21')) # true
+print(c.piece_movement(c.w_p, '23', '32')) # true
+print(c.piece_movement(c.w_p, '42', '54')) # false
+print(c.piece_movement(c.w_p, '43', '44')) # false
+print(c.piece_movement(c.b_p, '11', '21')) # false
+print(c.piece_movement(c.b_p, '23', '32')) # false
+print(c.piece_movement(c.b_p, '42', '54')) # false
+print(c.piece_movement(c.b_p, '43', '44')) # false
+print(c.piece_movement(c.b_p, '43', '34')) # true
