@@ -206,6 +206,14 @@ class Chess():
                 return True
             else:
                 return False
+        # rook movement definitions
+        elif piece == self.w_r or piece == self.b_r:
+            if (int(d_coords[0]) == int(c_coords[0])) or (
+                int(d_coords[1]) == int(c_coords[1])
+            ):
+                return True
+            else:
+                return False
 
 
 
@@ -240,5 +248,6 @@ print(c.piece_movement(c.w_n, '65', '14')) # false
 print(c.piece_movement(c.w_n, '65', '84')) # true
 print(c.piece_movement(c.w_n, '65', '53')) # true
 print(c.piece_movement(c.w_n, '82', '74')) # true
-print(abs(6 - 5))
-print(abs(5 - 3))
+print(c.piece_movement(c.w_r, '18', '11')) # true
+print(c.piece_movement(c.w_r, '72', '12')) # true
+print(c.piece_movement(c.w_r, '82', '74')) # false
