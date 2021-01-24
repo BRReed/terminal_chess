@@ -156,11 +156,14 @@ class Chess():
                 else; False
         """
         # confirm dest coords is a valid board space
-        if (int(d_coords[0]) >= 1 and int(d_coords[0]) <= 8) and (
+        if ((int(d_coords[0]) >= 1 and int(d_coords[0]) <= 8) and (
             int(d_coords[1]) >= 1 and int(d_coords[1]) <= 8
-            ):
+            )) and (int(d_coords) != int(c_coords)):
             pass
         else:
+            return False
+        # confirm dest coords is not same as current coords
+        if int(d_coords) == int(c_coords):
             return False
         # king movement definitions
         if piece == self.w_k or piece == self.b_k:
@@ -174,7 +177,17 @@ class Chess():
                 return True
             else:
                 return False
-
+        # queen movement definitions
+        if piece == self.w_q or piece == self.b_q:
+            if (int(d_coords[0]) == (int(c_coords[0]))) or (
+                int(d_coords[1]) == (int(c_coords[1]))):
+                return True
+            elif (abs(int(d_coords[0])) - abs(int(c_coords[0])) == (
+                  abs(int(d_coords[1])) - abs(int(c_coords[1])))
+                  ):
+                return True
+            else:
+                return False
 
 
 
@@ -199,3 +212,6 @@ print(c.piece_movement(c.w_k, '22', '22')) # true
 print(c.piece_movement(c.w_k, '22', '13')) # true
 print(c.piece_movement(c.w_k, '22', '34')) # false
 print(c.piece_movement(c.w_k, '18', '09')) # false
+print(c.piece_movement(c.w_q, '14', '47')) # true
+print(c.piece_movement(c.w_q, '14', '54')) # true
+print(c.piece_movement(c.w_q, '14', '87')) # false
