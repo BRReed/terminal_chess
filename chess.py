@@ -157,8 +157,7 @@ class Chess():
         """
         # confirm dest coords is a valid board space
         if ((int(d_coords[0]) >= 1 and int(d_coords[0]) <= 8) and (
-            int(d_coords[1]) >= 1 and int(d_coords[1]) <= 8
-            )) and (int(d_coords) != int(c_coords)):
+            int(d_coords[1]) >= 1 and int(d_coords[1]) <= 8)):
             pass
         else:
             return False
@@ -167,13 +166,13 @@ class Chess():
             return False
         # king movement definitions
         if piece == self.w_k or piece == self.b_k:
-            if (int(d_coords[0]) == (int(c_coords[0]))) or (
+            if (int(d_coords[0]) == (int(c_coords[0])) or (
                 int(d_coords[0]) == (int(c_coords[0]) - 1)) or (
-                int(d_coords[0]) == (int(c_coords[0]) + 1)) and (
-                int(d_coords[1]) == (int(c_coords[1]))) or (
+                int(d_coords[0]) == (int(c_coords[0]) + 1))) and (
+                int(d_coords[1]) == (int(c_coords[1])) or (
                 int(d_coords[1]) == (int(c_coords[1]) - 1)) or (
                 int(d_coords[1]) == (int(c_coords[1]) + 1)
-            ):
+            )):
                 return True
             else:
                 return False
@@ -216,7 +215,7 @@ class Chess():
                 return False
         # pawn white movement definitions
         elif piece == self.w_p:
-            if (int(d_coords[0]) > int(c_coords[0])) and (
+            if (int(d_coords[0]) - int(c_coords[0]) == 1) and (
                 abs(int(d_coords[1]) - int(c_coords[1])) <= 1 
             ):
                 return True
@@ -224,7 +223,7 @@ class Chess():
                 return False
         # pawn black movement definitions
         elif piece == self.b_p:
-            if (int(d_coords[0]) < int(c_coords[0])) and (
+            if (int(c_coords[0]) - int(d_coords[0]) == 1) and (
                 abs(int(d_coords[1]) - int(c_coords[1])) <= 1
             ):
                 return True
@@ -235,48 +234,3 @@ class Chess():
                   f'piece = {piece}')
             return False
 
-
-
-
-
-
-
-
-
-
-c = Chess()
-print('**********white persp')
-c.print_board_dict('white')
-print('**********black persp')
-c.print_board_dict('black')
-print(c.board_dict['11'][2])
-c.board_dict['11'][2] = 'Friendship'
-print(c.board_dict['11'][2])
-
-print(c.piece_movement(c.w_k, '22', '22')) # true
-print(c.piece_movement(c.w_k, '22', '13')) # true
-print(c.piece_movement(c.w_k, '22', '34')) # false
-print(c.piece_movement(c.w_k, '18', '09')) # false
-print(c.piece_movement(c.w_q, '14', '47')) # true
-print(c.piece_movement(c.w_q, '14', '54')) # true
-print(c.piece_movement(c.w_q, '14', '87')) # false
-print(c.piece_movement(c.w_b, '11', '44')) # true
-print(c.piece_movement(c.w_b, '84', '51')) # true
-print(c.piece_movement(c.w_b, '55', '46')) # true
-print(c.piece_movement(c.w_b, '65', '14')) # false
-print(c.piece_movement(c.w_n, '65', '14')) # false
-print(c.piece_movement(c.w_n, '65', '84')) # true
-print(c.piece_movement(c.w_n, '65', '53')) # true
-print(c.piece_movement(c.w_n, '82', '74')) # true
-print(c.piece_movement(c.w_r, '18', '11')) # true
-print(c.piece_movement(c.w_r, '72', '12')) # true
-print(c.piece_movement(c.w_r, '82', '74')) # false
-print(c.piece_movement(c.w_p, '11', '21')) # true
-print(c.piece_movement(c.w_p, '23', '32')) # true
-print(c.piece_movement(c.w_p, '42', '54')) # false
-print(c.piece_movement(c.w_p, '43', '44')) # false
-print(c.piece_movement(c.b_p, '11', '21')) # false
-print(c.piece_movement(c.b_p, '23', '32')) # false
-print(c.piece_movement(c.b_p, '42', '54')) # false
-print(c.piece_movement(c.b_p, '43', '44')) # false
-print(c.piece_movement(c.b_p, '43', '34')) # true
