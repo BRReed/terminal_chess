@@ -258,4 +258,7 @@ class Chess():
                   f'piece = {piece}')
             return False
 
+    def move_piece(self, piece, d_coords):
+        pass
+
 

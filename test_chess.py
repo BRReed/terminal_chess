@@ -97,6 +97,9 @@ class TestPieceInCoords(unittest.TestCase):
     def test_black_piece_to_black(self):
         self.assertFalse(c.piece_in_coords(c.b_p, '78', '87'))
         self.assertFalse(c.piece_in_coords(c.b_p, '56', '86'))
+
+class TestMovePiece(unittest.TestCase):
+    pass
         
 if __name__ == '__main__':
     c = Chess()
