@@ -72,6 +72,32 @@ class TestPieceMovement(unittest.TestCase):
         self.assertFalse(c.piece_movement(c.w_p, '23', '22'))
         self.assertFalse(c.piece_movement(c.w_p, '42', '22'))
     
+class TestPieceInCoords(unittest.TestCase):
+    
+    def test_white_piece_to_empty(self):
+        self.assertTrue(c.piece_in_coords(c.w_p, '11', '31'))
+        self.assertTrue(c.piece_in_coords(c.w_p, '11', '68'))
+
+    def test_black_piece_to_empty(self):
+        self.assertTrue(c.piece_in_coords(c.b_p, '11', '31'))
+        self.assertTrue(c.piece_in_coords(c.b_p, '11', '68'))
+
+    def test_white_piece_to_black(self):
+        self.assertTrue(c.piece_in_coords(c.w_p, '11', '81'))
+        self.assertTrue(c.piece_in_coords(c.w_p, '78', '82'))
+
+    def test_black_piece_to_white(self):
+        self.assertTrue(c.piece_in_coords(c.b_p, '81', '11'))
+        self.assertTrue(c.piece_in_coords(c.b_p, '12', '22'))
+
+    def test_white_piece_to_white(self):
+        self.assertFalse(c.piece_in_coords(c.w_p, '11', '21'))
+        self.assertFalse(c.piece_in_coords(c.w_p, '23', '28'))
+
+    def test_black_piece_to_black(self):
+        self.assertFalse(c.piece_in_coords(c.b_p, '78', '87'))
+        self.assertFalse(c.piece_in_coords(c.b_p, '56', '86'))
+        
 if __name__ == '__main__':
     c = Chess()
     unittest.main()
