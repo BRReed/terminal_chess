@@ -131,17 +131,41 @@ class Chess():
         """
         pass
 
-    def piece_in_coords(self, piece, coords):
+    def piece_in_coords(self, piece, c_coords, d_coords):
         """Checks if space is empty or if space occupied and is opponent
 
         Args:
             piece (string): chess piece to be moved
-            coords (string): row x column 'rc'
+            d_coords (string): destination row x column 'rc'
+            c_coords (string): current row x column 'rc'
         
         Returns:
             Bool: True if movement is allowed; else False
         """
-        pass
+        white = '38;2;255;255;255m'
+        black = '38;2;0;0;0m'
+        empty = '   '
+        repr_d_coords = repr(self.board_dict[d_coords])
+        if empty in repr_d_coords:
+            return True
+        if white in repr(piece):
+            if black in repr_d_coords:
+                return True
+            elif white in repr_d_coords:
+                return False
+            else:
+                print(f'piece_in_coords error piece:{piece}, ' +
+                      f'dest: {d_coords} current: {c_coords}')
+        elif black in repr(piece):
+            if white in repr_d_coords:
+                return True
+            elif black in repr_d_coords:
+                return False
+            else:
+                print(f'piece_in_coords error piece:{piece}, ' +
+                      f'dest: {d_coords} current: {c_coords}')
+        else:
+            print('lose')
 
     def piece_movement(self, piece, c_coords, d_coords):
         """Validate movement of a piece
@@ -233,4 +257,5 @@ class Chess():
             print(f'Uh oh!, d_coords = {d_coords}, c_coords = {c_coords}, ' + 
                   f'piece = {piece}')
             return False
+
 
