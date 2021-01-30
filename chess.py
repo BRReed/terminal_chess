@@ -179,77 +179,62 @@ class Chess():
             Boolean: True if move is valid based on piece movement restrictions
                 else; False
         """
+        try:
+            x1 = int(c_coords[0])
+            y1 = int(c_coords[1])
+            x2 = int(d_coords[0])
+            y2 = int(d_coords[1])
+        except ValueError:
+            return False
         # confirm dest coords is a valid board space
-        if ((int(d_coords[0]) >= 1 and int(d_coords[0]) <= 8) and (
-            int(d_coords[1]) >= 1 and int(d_coords[1]) <= 8)):
+        if ((x2 >= 1 and x2 <= 8) and (y2 >= 1 and y2 <= 8)):
             pass
         else:
             return False
         # confirm dest coords is not same as current coords
-        if int(d_coords) == int(c_coords):
+        if x1 == x2 and y1 == y2:
             return False
         # king movement definitions
         if piece == self.w_k or piece == self.b_k:
-            if (int(d_coords[0]) == (int(c_coords[0])) or (
-                int(d_coords[0]) == (int(c_coords[0]) - 1)) or (
-                int(d_coords[0]) == (int(c_coords[0]) + 1))) and (
-                int(d_coords[1]) == (int(c_coords[1])) or (
-                int(d_coords[1]) == (int(c_coords[1]) - 1)) or (
-                int(d_coords[1]) == (int(c_coords[1]) + 1)
-            )):
+            if (abs(x1 - x2), abs(y1 - y2)) in [(0,1), (1,0), (1,1)]:
                 return True
             else:
                 return False
         # queen movement definitions
         elif piece == self.w_q or piece == self.b_q:
-            if (int(d_coords[0]) == (int(c_coords[0]))) or (
-                int(d_coords[1]) == (int(c_coords[1]))):
+            if x1 == x2 or y1 == y2:
                 return True
-            elif abs(int(d_coords[0]) - int(c_coords[0])) == (
-                 abs(int(d_coords[1]) - int(c_coords[1]))
-            ):
+            elif abs(x1 - x2) == abs(y1 - y2):
                 return True
             else:
                 return False
         # bishop movement definitions
         elif piece == self.w_b or piece == self.b_b:
-            if abs(int(d_coords[0]) - int(c_coords[0])) == (
-               abs(int(d_coords[1]) - int(c_coords[1]))
-            ):
+            if abs(x1 - x2) == abs(y1 - y2):
                 return True
             else:
                 return False
         # knight movement definitions
         elif piece == self.w_n or piece == self.b_n:
-            if ((abs(int(d_coords[0]) - int(c_coords[0])) == 2) and (
-                 abs(int(d_coords[1]) - int(c_coords[1])) == 1)) or ((
-                 abs(int(d_coords[0]) - int(c_coords[0])) == 1) and (
-                 abs(int(d_coords[1]) - int(c_coords[1])) == 2)
-            ):
+            if (abs(x1 - x2), abs(y1 - y2)) in [(2,1), (1,2)]:
                 return True
             else:
                 return False
         # rook movement definitions
         elif piece == self.w_r or piece == self.b_r:
-            if (int(d_coords[0]) == int(c_coords[0])) or (
-                int(d_coords[1]) == int(c_coords[1])
-            ):
+            if x1 == x2 or y1 == y2:
                 return True
             else:
                 return False
         # pawn white movement definitions
         elif piece == self.w_p:
-            if (int(d_coords[0]) - int(c_coords[0]) == 1) and (
-                abs(int(d_coords[1]) - int(c_coords[1])) <= 1 
-            ):
+            if x2 - x1 == 1 and abs(y2 - y1) <= 1:
                 return True
             else:
                 return False
         # pawn black movement definitions
         elif piece == self.b_p:
-            if (int(c_coords[0]) - int(d_coords[0]) == 1) and (
-                abs(int(d_coords[1]) - int(c_coords[1])) <= 1
-            ):
+            if x1 - x2 == 1 and abs(y2 - y1) <= 1:
                 return True
             else:
                 return False
@@ -269,5 +254,3 @@ class Chess():
         empty = '   '
         self.board_dict[d_coords][2] = piece 
         self.board_dict[c_coords][2] = empty
-
-
