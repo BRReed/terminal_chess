@@ -258,4 +258,16 @@ class Chess():
                   f'piece = {piece}')
             return False
 
+    def move_piece(self, piece, c_coords, d_coords):
+        """Move piece on board
+
+        Args:
+            piece (string): unicode chess piece 
+            c_coords (string): row x column 'rc'
+            d_coords (string): row x column 'rc'
+        """
+        empty = '   '
+        self.board_dict[d_coords][2] = piece 
+        self.board_dict[c_coords][2] = empty
+
 
