@@ -27,7 +27,7 @@ class Chess():
         self.b_n = '\033[38;2;0;0;0m \u265E \033[38;0m'
         self.b_p = '\033[38;2;0;0;0m \u265F \033[38;0m'
 
-
+        self.empty = '   '
 
     def create_board_dict(self):
         """Create dictionary of chess board elements
@@ -144,9 +144,8 @@ class Chess():
         """
         white = '38;2;255;255;255m'
         black = '38;2;0;0;0m'
-        empty = '   '
         repr_d_coords = repr(self.board_dict[d_coords])
-        if empty in repr_d_coords:
+        if self.empty in repr_d_coords:
             return True
         if white in repr(piece):
             if black in repr_d_coords:
@@ -251,6 +250,13 @@ class Chess():
             c_coords (string): row x column 'rc'
             d_coords (string): row x column 'rc'
         """
-        empty = '   '
         self.board_dict[d_coords][2] = piece 
-        self.board_dict[c_coords][2] = empty
+        self.board_dict[c_coords][2] = self.empty
+
+    def possible_moves(self, piece):
+        """Given current board state check all possible moves
+
+        Args:
+            piece (string): unicode chess piece
+        """
+        pass
