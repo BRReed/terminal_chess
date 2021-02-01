@@ -6,7 +6,6 @@ class Chess():
         self.create_board_dict()
 
 
-
     def create_pieces(self):
         """Assign variables to unicode representations of chess pieces
         Vars: self.x_y = unicode_char 
@@ -20,12 +19,18 @@ class Chess():
         self.w_n = '\033[38;2;255;255;255m \u265E \033[38;0m'
         self.w_p = '\033[38;2;255;255;255m \u265F \033[38;0m'
 
+        self.w_pieces = [self.w_k, self.w_q, self.w_r, self.w_b, self.w_n,
+                         self.w_p]
+
         self.b_k = '\033[38;2;0;0;0m \u265A \033[38;0m'
         self.b_q = '\033[38;2;0;0;0m \u265B \033[38;0m'
         self.b_r = '\033[38;2;0;0;0m \u265C \033[38;0m'
         self.b_b = '\033[38;2;0;0;0m \u265D \033[38;0m'
         self.b_n = '\033[38;2;0;0;0m \u265E \033[38;0m'
         self.b_p = '\033[38;2;0;0;0m \u265F \033[38;0m'
+
+        self.b_pieces = [self.b_k, self.b_q, self.b_r, self.b_b, self.b_n,
+                         self.b_p]
 
         self.empty = '   '
 
@@ -141,25 +146,26 @@ class Chess():
         
         Returns:
             Bool: True if movement is allowed; else False
+            Bool: True if space is empty; else False
         """
         white = '38;2;255;255;255m'
         black = '38;2;0;0;0m'
         repr_d_coords = repr(self.board_dict[d_coords])
         if self.empty in repr_d_coords:
-            return True
+            return True, True
         if white in repr(piece):
             if black in repr_d_coords:
-                return True
+                return True, False
             elif white in repr_d_coords:
-                return False
+                return False, False
             else:
                 print(f'piece_in_coords error piece:{piece}, ' +
                       f'dest: {d_coords} current: {c_coords}')
         elif black in repr(piece):
             if white in repr_d_coords:
-                return True
+                return True, False
             elif black in repr_d_coords:
-                return False
+                return False, False
             else:
                 print(f'piece_in_coords error piece:{piece}, ' +
                       f'dest: {d_coords} current: {c_coords}')
@@ -253,10 +259,52 @@ class Chess():
         self.board_dict[d_coords][2] = piece 
         self.board_dict[c_coords][2] = self.empty
 
-    def possible_moves(self, piece):
+    def possible_moves(self, piece, c_coords):
         """Given current board state check all possible moves
 
         Args:
             piece (string): unicode chess piece
+            c_coords (string): row x column 'rc'
         """
         pass
+
+
+class Mafs():
+    
+    def diag(self, piece, coords):
+        moves = []
+        squarz = [1, 2, 3, 4, 5, 6, 7, 8]
+        x1 = int(coords[0])
+        y1 = int(coords[1])
+        t = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+        for drc in t:
+            x2 = x1
+            y2 = y1
+            x_dir = drc[0]
+            y_dir = drc[1]
+            for _ in range(1, 9):
+                if x2 + x_dir in squarz and y2 + y_dir  in squarz:
+                    x2 += x_dir
+                    y2 += y_dir
+                    c_move, c_piece = c.piece_in_coords(piece, coords, f'{x2}{y2}')
+                    if c_move is True and c_piece is True:
+                        moves.append(f'{x2}{y2}')
+                    elif c_move is True and c_piece is False:
+                        moves.append(f'{x2}{y2}')
+                        break
+                    elif c_move is False:
+                        break
+                    else:
+                        print('diag dun messed up')
+                    
+                else:
+                    break
+        print(moves)
+
+
+
+c = Chess()
+m = Mafs()
+m.diag(c.w_q, '56')
+# c.possible_moves(c.w_k, '55')
+# c.possible_moves(c.w_q, '56')
