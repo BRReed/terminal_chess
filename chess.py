@@ -284,7 +284,6 @@ class Chess():
             x_dir = drc[0]
             y_dir = drc[1]
             for _ in range(1, 9):
-                # key = f'{x2 + x_dir}{y2 + y_dir}'
                 if (f'{x2 + x_dir}{y2 + y_dir}') in self.board_dict:
                     x2 += x_dir
                     y2 += y_dir
