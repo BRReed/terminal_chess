@@ -259,52 +259,58 @@ class Chess():
         self.board_dict[d_coords][2] = piece 
         self.board_dict[c_coords][2] = self.empty
 
-    def possible_moves(self, piece, c_coords):
+    def possible_moves(self, piece, coords):
         """Given current board state check all possible moves
 
         Args:
             piece (string): unicode chess piece
-            c_coords (string): row x column 'rc'
+            coords (string): row x column 'rc'
         """
-        pass
-
-
-class Mafs():
-    
-    def diag(self, piece, coords):
         moves = []
-        squarz = [1, 2, 3, 4, 5, 6, 7, 8]
+        t = []
         x1 = int(coords[0])
         y1 = int(coords[1])
-        t = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+        diag = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+        horz_vert = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        if piece in [self.w_b, self.b_b, self.w_q, self.b_q]:
+            for xy in diag:
+                t.append(xy)
+        if piece in [self.w_r, self.b_r, self.w_q, self.b_q]:
+            for xy in horz_vert:
+                t.append(xy)
         for drc in t:
             x2 = x1
             y2 = y1
             x_dir = drc[0]
             y_dir = drc[1]
             for _ in range(1, 9):
-                if x2 + x_dir in squarz and y2 + y_dir  in squarz:
+                # key = f'{x2 + x_dir}{y2 + y_dir}'
+                if (f'{x2 + x_dir}{y2 + y_dir}') in self.board_dict:
                     x2 += x_dir
                     y2 += y_dir
-                    c_move, c_piece = c.piece_in_coords(piece, coords, f'{x2}{y2}')
-                    if c_move is True and c_piece is True:
+                    c_move, c_piece  = c.piece_in_coords(piece, coords, f'{x2}{y2}')
+                    if c_move and c_piece:
                         moves.append(f'{x2}{y2}')
-                    elif c_move is True and c_piece is False:
+                    elif c_move and not c_piece:
                         moves.append(f'{x2}{y2}')
                         break
-                    elif c_move is False:
+                    elif not c_move:
                         break
                     else:
-                        print('diag dun messed up')
-                    
+                        print('what went wrong here?')
                 else:
                     break
         print(moves)
 
 
 
+
+
+
+
+
 c = Chess()
-m = Mafs()
-m.diag(c.w_q, '56')
+
+c.possible_moves(c.w_q, '56')
 # c.possible_moves(c.w_k, '55')
 # c.possible_moves(c.w_q, '56')
