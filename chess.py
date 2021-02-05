@@ -6,7 +6,6 @@ class Chess():
         self.create_board_dict()
 
 
-
     def create_pieces(self):
         """Assign variables to unicode representations of chess pieces
         Vars: self.x_y = unicode_char 
@@ -20,6 +19,9 @@ class Chess():
         self.w_n = '\033[38;2;255;255;255m \u265E \033[38;0m'
         self.w_p = '\033[38;2;255;255;255m \u265F \033[38;0m'
 
+        self.w_pieces = [self.w_k, self.w_q, self.w_r, self.w_b, self.w_n,
+                         self.w_p]
+
         self.b_k = '\033[38;2;0;0;0m \u265A \033[38;0m'
         self.b_q = '\033[38;2;0;0;0m \u265B \033[38;0m'
         self.b_r = '\033[38;2;0;0;0m \u265C \033[38;0m'
@@ -27,7 +29,10 @@ class Chess():
         self.b_n = '\033[38;2;0;0;0m \u265E \033[38;0m'
         self.b_p = '\033[38;2;0;0;0m \u265F \033[38;0m'
 
+        self.b_pieces = [self.b_k, self.b_q, self.b_r, self.b_b, self.b_n,
+                         self.b_p]
 
+        self.empty = '   '
 
     def create_board_dict(self):
         """Create dictionary of chess board elements
@@ -141,26 +146,26 @@ class Chess():
         
         Returns:
             Bool: True if movement is allowed; else False
+            Bool: True if space is empty; else False
         """
         white = '38;2;255;255;255m'
         black = '38;2;0;0;0m'
-        empty = '   '
         repr_d_coords = repr(self.board_dict[d_coords])
-        if empty in repr_d_coords:
-            return True
+        if self.empty in repr_d_coords:
+            return True, True
         if white in repr(piece):
             if black in repr_d_coords:
-                return True
+                return True, False
             elif white in repr_d_coords:
-                return False
+                return False, False
             else:
                 print(f'piece_in_coords error piece:{piece}, ' +
                       f'dest: {d_coords} current: {c_coords}')
         elif black in repr(piece):
             if white in repr_d_coords:
-                return True
+                return True, False
             elif black in repr_d_coords:
-                return False
+                return False, False
             else:
                 print(f'piece_in_coords error piece:{piece}, ' +
                       f'dest: {d_coords} current: {c_coords}')
@@ -251,6 +256,60 @@ class Chess():
             c_coords (string): row x column 'rc'
             d_coords (string): row x column 'rc'
         """
-        empty = '   '
         self.board_dict[d_coords][2] = piece 
-        self.board_dict[c_coords][2] = empty
+        self.board_dict[c_coords][2] = self.empty
+
+    def possible_moves(self, piece, coords):
+        """Given current board state check all possible moves
+
+        Args:
+            piece (string): unicode chess piece
+            coords (string): row x column 'rc'
+        """
+        moves = []
+        t = []
+        x1 = int(coords[0])
+        y1 = int(coords[1])
+        diag = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+        horz_vert = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        if piece in [self.w_b, self.b_b, self.w_q, self.b_q]:
+            for xy in diag:
+                t.append(xy)
+        if piece in [self.w_r, self.b_r, self.w_q, self.b_q]:
+            for xy in horz_vert:
+                t.append(xy)
+        for drc in t:
+            x2 = x1
+            y2 = y1
+            x_dir = drc[0]
+            y_dir = drc[1]
+            for _ in range(1, 9):
+                if (f'{x2 + x_dir}{y2 + y_dir}') in self.board_dict:
+                    x2 += x_dir
+                    y2 += y_dir
+                    c_move, c_piece  = c.piece_in_coords(piece, coords, f'{x2}{y2}')
+                    if c_move and c_piece:
+                        moves.append(f'{x2}{y2}')
+                    elif c_move and not c_piece:
+                        moves.append(f'{x2}{y2}')
+                        break
+                    elif not c_move:
+                        break
+                    else:
+                        print('what went wrong here?')
+                else:
+                    break
+        print(moves)
+
+
+
+
+
+
+
+
+c = Chess()
+
+c.possible_moves(c.w_q, '56')
+# c.possible_moves(c.w_k, '55')
+# c.possible_moves(c.w_q, '56')
