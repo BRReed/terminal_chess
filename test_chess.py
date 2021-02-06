@@ -75,28 +75,28 @@ class TestPieceMovement(unittest.TestCase):
 class TestPieceInCoords(unittest.TestCase):
     
     def test_white_piece_to_empty(self):
-        self.assertTrue(c.piece_in_coords(c.w_p, '11', '31'))
-        self.assertTrue(c.piece_in_coords(c.w_p, '11', '68'))
+        self.assertEqual(c.piece_in_coords(c.w_p, '11', '31'), (True, True))
+        self.assertEqual(c.piece_in_coords(c.w_p, '11', '68'), (True, True))
 
     def test_black_piece_to_empty(self):
-        self.assertTrue(c.piece_in_coords(c.b_p, '11', '31'))
-        self.assertTrue(c.piece_in_coords(c.b_p, '11', '68'))
+        self.assertEqual(c.piece_in_coords(c.b_p, '11', '31'), (True, True))
+        self.assertEqual(c.piece_in_coords(c.b_p, '11', '68'), (True, True))
 
     def test_white_piece_to_black(self):
-        self.assertTrue(c.piece_in_coords(c.w_p, '11', '81'))
-        self.assertTrue(c.piece_in_coords(c.w_p, '78', '82'))
+        self.assertEqual(c.piece_in_coords(c.w_p, '11', '81'), (True, False))
+        self.assertEqual(c.piece_in_coords(c.w_p, '78', '82'), (True, False))
 
     def test_black_piece_to_white(self):
-        self.assertTrue(c.piece_in_coords(c.b_p, '81', '11'))
-        self.assertTrue(c.piece_in_coords(c.b_p, '12', '22'))
+        self.assertEqual(c.piece_in_coords(c.b_p, '81', '11'), (True, False))
+        self.assertEqual(c.piece_in_coords(c.b_p, '12', '22'), (True, False))
 
     def test_white_piece_to_white(self):
-        self.assertFalse(c.piece_in_coords(c.w_p, '11', '21'))
-        self.assertFalse(c.piece_in_coords(c.w_p, '23', '28'))
+        self.assertEqual(c.piece_in_coords(c.w_p, '11', '21'), (False, False))
+        self.assertEqual(c.piece_in_coords(c.w_p, '23', '28'), (False, False))
 
     def test_black_piece_to_black(self):
-        self.assertFalse(c.piece_in_coords(c.b_p, '78', '87'))
-        self.assertFalse(c.piece_in_coords(c.b_p, '56', '86'))
+        self.assertEqual(c.piece_in_coords(c.b_p, '78', '87'), (False, False))
+        self.assertEqual(c.piece_in_coords(c.b_p, '56', '86'), (False, False))
 
 class TestMovePiece(unittest.TestCase):
     
