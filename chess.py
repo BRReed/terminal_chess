@@ -136,7 +136,7 @@ class Chess():
         """
         pass
 
-    def piece_in_coords(self, piece, c_coords, d_coords):
+    def piece_in_coords(self, piece, d_coords):
         """Checks if space is empty or if space occupied and is opponent
 
         Args:
@@ -160,7 +160,7 @@ class Chess():
                 return False, False
             else:
                 print(f'piece_in_coords error piece:{piece}, ' +
-                      f'dest: {d_coords} current: {c_coords}')
+                      f'dest: {d_coords}')
         elif black in repr(piece):
             if white in repr_d_coords:
                 return True, False
@@ -168,7 +168,7 @@ class Chess():
                 return False, False
             else:
                 print(f'piece_in_coords error piece:{piece}, ' +
-                      f'dest: {d_coords} current: {c_coords}')
+                      f'dest: {d_coords}')
         else:
             print('lose')
 
@@ -287,7 +287,7 @@ class Chess():
                 if (f'{x2 + x_dir}{y2 + y_dir}') in self.board_dict:
                     x2 += x_dir
                     y2 += y_dir
-                    c_move, c_piece  = c.piece_in_coords(piece, coords, f'{x2}{y2}')
+                    c_move, c_piece  = c.piece_in_coords(piece, f'{x2}{y2}')
                     if c_move and c_piece:
                         moves.append(f'{x2}{y2}')
                     elif c_move and not c_piece:

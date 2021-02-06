@@ -75,28 +75,28 @@ class TestPieceMovement(unittest.TestCase):
 class TestPieceInCoords(unittest.TestCase):
     
     def test_white_piece_to_empty(self):
-        self.assertEqual(c.piece_in_coords(c.w_p, '11', '31'), (True, True))
-        self.assertEqual(c.piece_in_coords(c.w_p, '11', '68'), (True, True))
+        self.assertEqual(c.piece_in_coords(c.w_p, '31'), (True, True))
+        self.assertEqual(c.piece_in_coords(c.w_p, '68'), (True, True))
 
     def test_black_piece_to_empty(self):
-        self.assertEqual(c.piece_in_coords(c.b_p, '11', '31'), (True, True))
-        self.assertEqual(c.piece_in_coords(c.b_p, '11', '68'), (True, True))
+        self.assertEqual(c.piece_in_coords(c.b_p, '31'), (True, True))
+        self.assertEqual(c.piece_in_coords(c.b_p, '68'), (True, True))
 
     def test_white_piece_to_black(self):
-        self.assertEqual(c.piece_in_coords(c.w_p, '11', '81'), (True, False))
-        self.assertEqual(c.piece_in_coords(c.w_p, '78', '82'), (True, False))
+        self.assertEqual(c.piece_in_coords(c.w_p, '81'), (True, False))
+        self.assertEqual(c.piece_in_coords(c.w_p, '82'), (True, False))
 
     def test_black_piece_to_white(self):
-        self.assertEqual(c.piece_in_coords(c.b_p, '81', '11'), (True, False))
-        self.assertEqual(c.piece_in_coords(c.b_p, '12', '22'), (True, False))
+        self.assertEqual(c.piece_in_coords(c.b_p, '11'), (True, False))
+        self.assertEqual(c.piece_in_coords(c.b_p, '22'), (True, False))
 
     def test_white_piece_to_white(self):
-        self.assertEqual(c.piece_in_coords(c.w_p, '11', '21'), (False, False))
-        self.assertEqual(c.piece_in_coords(c.w_p, '23', '28'), (False, False))
+        self.assertEqual(c.piece_in_coords(c.w_p, '21'), (False, False))
+        self.assertEqual(c.piece_in_coords(c.w_p, '28'), (False, False))
 
     def test_black_piece_to_black(self):
-        self.assertEqual(c.piece_in_coords(c.b_p, '78', '87'), (False, False))
-        self.assertEqual(c.piece_in_coords(c.b_p, '56', '86'), (False, False))
+        self.assertEqual(c.piece_in_coords(c.b_p, '87'), (False, False))
+        self.assertEqual(c.piece_in_coords(c.b_p, '86'), (False, False))
 
 class TestMovePiece(unittest.TestCase):
     
