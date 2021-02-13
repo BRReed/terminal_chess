@@ -126,15 +126,24 @@ class Chess():
             z += '    H  G  F  E  D  C  B  A '
         print(z)
 
-    def piece_move_main(self, piece, c_coords, d_coords):
-        """Takes coordinates and checks if piece to coords is a legitimate move
+    def coords_valid(self, coords):
+        """Validate coordinates
 
         Args:
-            piece (string): The piece to move
-            c_coords (string): Where the piece is currently
-            d_coords (string): Where the piece wants to move
+            coords (string): row x column 'rc'
+
+        Returns:
+            Bool: True if coordinates is valid; else False
         """
-        pass
+        try:
+            x = int(coords[0])
+            y = int(coords[1])
+        except ValueError:
+            return False
+        if ((x >= 1 and x <= 8) and (y >= 1 and y <= 8)):
+            return True
+        else:
+            return False
 
     def piece_in_coords(self, piece, d_coords):
         """Checks if space is empty or if space occupied and is opponent
@@ -142,8 +151,7 @@ class Chess():
         Args:
             piece (string): chess piece to be moved
             d_coords (string): destination row x column 'rc'
-            c_coords (string): current row x column 'rc'
-        
+
         Returns:
             Bool: True if movement is allowed; else False
             Bool: True if space is empty; else False
@@ -272,12 +280,24 @@ class Chess():
         y1 = int(coords[1])
         diag = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
         horz_vert = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        if piece in [self.w_b, self.b_b, self.w_q, self.b_q]:
+        # queen moves
+        if piece in [self.w_q, self.b_q]:
             for xy in diag:
                 t.append(xy)
-        if piece in [self.w_r, self.b_r, self.w_q, self.b_q]:
             for xy in horz_vert:
                 t.append(xy)
+        # bishop moves
+        elif piece in [self.w_b, self.b_b]:
+            for xy in diag:
+                t.append(xy)
+        # rook moves
+        elif piece in [self.w_r, self.b_r]:
+            for xy in horz_vert:
+                t.append(xy)
+        # king moves
+        elif piece in [self.w_k, self.b_k]:
+            pass
+        
         for drc in t:
             x2 = x1
             y2 = y1
