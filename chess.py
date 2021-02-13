@@ -404,8 +404,6 @@ class Chess():
         print(moves)
         return moves
 
-
-
     def possible_moves(self, piece, coords):
         """Given current board state check all possible moves
 
@@ -416,8 +414,19 @@ class Chess():
         moves = []
         diag = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
         horz_vert = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        # king moves
+        if piece in [self.w_k, self.b_k]:
+            for shift in diag:
+                moves += (self.moves_dir(coords, shift, self.is_black(piece)))
+            for shift in horz_vert:
+                moves += (self.moves_dir(coords, shift, self.is_black(piece)))
+            m = moves.copy()
+            for move in m:
+                if not self.piece_movement(piece, coords, move):
+                    moves.remove(move)
+            # need to add function for not putting self in check
         # queen moves
-        if piece in [self.w_q, self.b_q]:
+        elif piece in [self.w_q, self.b_q]:
             for shift in diag:
                 moves += (self.moves_dir(coords, shift, self.is_black(piece)))
             for shift in horz_vert:
@@ -430,6 +439,7 @@ class Chess():
         elif piece in [self.w_r, self.b_r]:
             for shift in horz_vert:
                 moves += self.moves_dir(coords, shift, self.is_black(piece))
+        # knight moves
         print(moves)
 
 
@@ -438,7 +448,7 @@ class Chess():
 
 c = Chess()
 
-c.possible_moves(c.w_q, '43')
+c.possible_moves(c.w_k, '61')
 c.print_board_dict('white')
 # c.possible_moves(c.w_k, '55')
 # c.possible_moves(c.w_q, '56')
