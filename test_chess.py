@@ -3,13 +3,6 @@ from chess import Chess
 
 class TestPieceMovement(unittest.TestCase):
 
-    def test_valid_space(self):
-        self.assertFalse(c.piece_movement(c.w_k, '11', '01'))
-        self.assertFalse(c.piece_movement(c.w_k, '11', '10'))
-        self.assertFalse(c.piece_movement(c.w_k, '11', '00'))
-        self.assertFalse(c.piece_movement(c.w_k, '11', '11'))
-        self.assertFalse(c.piece_movement(c.w_q, '33', '99'))
-
     def test_king_move(self):
         self.assertTrue(c.piece_movement(c.w_k, '22', '21'))
         self.assertTrue(c.piece_movement(c.w_k, '22', '12'))
@@ -187,14 +180,6 @@ class TestCoordsValid(unittest.TestCase):
         self.assertFalse(c.coords_valid('97'))
         self.assertFalse(c.coords_valid('98'))
         self.assertFalse(c.coords_valid('99'))
-    
-    def test_not_int(self):
-        self.assertFalse(c.coords_valid('a1'))
-        self.assertFalse(c.coords_valid('1a'))
-        self.assertFalse(c.coords_valid('1['))
-        self.assertFalse(c.coords_valid('[1'))
-        self.assertFalse(c.coords_valid('1*'))
-        self.assertFalse(c.coords_valid('*1'))
 
 class TestCoordsNotEqual(unittest.TestCase):
 
@@ -211,10 +196,28 @@ class TestCoordsNotEqual(unittest.TestCase):
         self.assertTrue(c.coords_not_equal('65', '54'))
         self.assertTrue(c.coords_not_equal('12', '21'))
 
-class TestMovePiece(unittest.TestCase):
+class TestCheckCoords(unittest.TestCase):
     
-    def test_move(self):
-        pass
+    def test_ints(self):
+        self.assertTrue(c.check_coords('11'))
+        self.assertTrue(c.check_coords('99'))
+    
+    def test_symb(self):
+        self.assertFalse(c.check_coords('1['))
+        self.assertFalse(c.check_coords('[3'))
+        self.assertFalse(c.check_coords('5?'))
+        self.assertFalse(c.check_coords('1/'))
+        self.assertFalse(c.check_coords('1\\'))
+    
+    def test_alpha(self):
+        self.assertFalse(c.check_coords('1g'))
+        self.assertFalse(c.check_coords('h6'))
+        self.assertFalse(c.check_coords('jj'))
+        self.assertFalse(c.check_coords('l2'))
+
+
+
+
         
 if __name__ == '__main__':
     c = Chess()

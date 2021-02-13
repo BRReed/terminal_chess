@@ -125,6 +125,39 @@ class Chess():
                 z += (f'{b}\n')
             z += '    H  G  F  E  D  C  B  A '
         print(z)
+    
+    def check_coords(self, coords):
+        """check coords are integers
+
+        Args:
+            coords (string): row x column 'rc'
+
+        Returns:
+            Bool: True if both positions in coords string are ints;
+                  else False
+        """
+        try:
+            int(coords[0])
+            int(coords[1])
+        except ValueError:
+            return False
+        return True
+
+
+    def str_coords_to_int(self, coords):
+        """change string coordinates into integers 
+
+        Args:
+            coords (string): row x column 'rc'
+
+        Returns:
+            int : 0 position in coords
+            int : 1 position in coords
+        """
+        x = int(coords[0])
+        y = int(coords[1])
+        return x, y
+
 
     def coords_valid(self, coords):
         """Validate coordinates
@@ -135,11 +168,8 @@ class Chess():
         Returns:
             Bool: True if coordinates is valid; else False
         """
-        try:
-            x = int(coords[0])
-            y = int(coords[1])
-        except ValueError:
-            return False
+
+        x, y = self.str_coords_to_int(coords)
         if ((x >= 1 and x <= 8) and (y >= 1 and y <= 8)):
             return True
         else:
@@ -207,19 +237,8 @@ class Chess():
             Boolean: True if move is valid based on piece movement restrictions
                 else; False
         """
-        try:
-            x1 = int(c_coords[0])
-            y1 = int(c_coords[1])
-            x2 = int(d_coords[0])
-            y2 = int(d_coords[1])
-        except ValueError:
-            return False
-        # confirm dest coords is a valid board space
-        if self.coords_valid(d_coords) is False:
-            return False
-        # confirm dest coords is not same as current coords
-        if self.coords_not_equal(c_coords, d_coords) is False:
-            return False
+        x1, y1 = self.str_coords_to_int(c_coords)
+        x2, y2 = self.str_coords_to_int(d_coords)
         # king movement definitions
         if piece == self.w_k or piece == self.b_k:
             if (abs(x1 - x2), abs(y1 - y2)) in [(0,1), (1,0), (1,1)]:
@@ -289,8 +308,7 @@ class Chess():
         """
         moves = []
         t = []
-        x1 = int(coords[0])
-        y1 = int(coords[1])
+        x1, y1 = self.str_coords_to_int(coords)
         diag = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
         horz_vert = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         # queen moves
@@ -344,5 +362,6 @@ class Chess():
 c = Chess()
 
 c.possible_moves(c.w_q, '56')
+c.print_board_dict('white')
 # c.possible_moves(c.w_k, '55')
 # c.possible_moves(c.w_q, '56')
