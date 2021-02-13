@@ -314,30 +314,76 @@ class Chess():
             return False
 
     def is_friendly(self, coords, is_black):
+        """checks if piece in coords is friendly
+
+        Args:
+            coords (string): row x column 'rc'
+            is_black (bool): True if piece in movement is black; else False
+
+        Returns:
+            Bool: If piece in bounds is same color as piece in coords True;
+                  else False
+        """
         if is_black == self.is_black(self.board_dict[coords][2]):
             return True
         else:
             return False
 
     def is_enemy(self, coords, is_black):
+        """checks if piece in coords is enemy
+
+        Args:
+            coords (string): row x column 'rc'
+            is_black (bool): True if piece in movement is black; else False
+
+        Returns:
+            [type]: [description]
+        """
         if is_black != self.is_black(self.board_dict[coords][2]):
             return True
         else:
             return False
 
     def is_empty(self, coords):
+        """checks if coords is empty
+
+        Args:
+            coords (string): row x column 'rc'
+
+        Returns:
+            Bool: True if space is empty; else False
+        """
         if self.empty in self.board_dict[coords][2]:
             return True
         else:
             return False
 
     def add_coords(self, coords, shift):
+        """adds a shift to coords
+
+        Args:
+            coords (string): row x column 'rc'
+            shift (tuple): amount to shift (row, column)
+
+        Returns:
+            string: coords with shift applied 'rc'
+        """
         x, y = self.str_coords_to_int(coords)
         x += shift[0]
         y += shift[1]
         return f'{x}{y}'
 
     def moves_dir(self, coords, shift, is_black):
+        """checks all possible moves for piece
+
+        Args:
+            coords (string): row x column 'rc'
+            shift (tuple): amount to shift (row, column)
+            is_black (bool): if piece in movement is black: True; else False
+
+        Returns:
+            list: possible moves based on shift and coords
+        """
         moves = []
         coords = self.add_coords(coords, shift)
         while True:
@@ -385,9 +431,6 @@ class Chess():
             for shift in horz_vert:
                 moves += self.moves_dir(coords, shift, self.is_black(piece))
         print(moves)
-
-
-
 
 
 
