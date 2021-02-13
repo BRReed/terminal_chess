@@ -298,6 +298,67 @@ class Chess():
         """
         self.board_dict[d_coords][2] = piece 
         self.board_dict[c_coords][2] = self.empty
+    
+    def is_black(self, piece):
+        """checks if a piece is black
+
+        Args:
+            piece (string): chess piece
+
+        Returns:
+            Bool: True if '\033[38;2;0;0;0m' in var piece; else False
+        """
+        if '\033[38;2;0;0;0m' in piece:
+            return True
+        else:
+            return False
+
+    def is_friendly(self, coords, is_black):
+        if is_black == self.is_black(self.board_dict[coords][2]):
+            return True
+        else:
+            return False
+
+    def is_enemy(self, coords, is_black):
+        if is_black != self.is_black(self.board_dict[coords][2]):
+            return True
+        else:
+            return False
+
+    def is_empty(self, coords):
+        if self.empty in self.board_dict[coords][2]:
+            return True
+        else:
+            return False
+
+    def add_coords(self, coords, shift):
+        x, y = self.str_coords_to_int(coords)
+        x += shift[0]
+        y += shift[1]
+        return f'{x}{y}'
+
+    def moves_dir(self, coords, shift, is_black):
+        moves = []
+        coords = self.add_coords(coords, shift)
+        while True:
+            try:
+                if self.is_empty(coords):
+                    moves.append(coords)
+                    coords = self.add_coords(coords, shift)
+                    continue
+                elif self.is_enemy(coords, is_black):
+                    moves.append(coords)
+                    break
+                elif self.is_friendly(coords, is_black):
+                    break
+                else:
+                    break
+            except KeyError:
+                break
+        print(moves)
+        return moves
+
+
 
     def possible_moves(self, piece, coords):
         """Given current board state check all possible moves
@@ -307,49 +368,22 @@ class Chess():
             coords (string): row x column 'rc'
         """
         moves = []
-        t = []
-        x1, y1 = self.str_coords_to_int(coords)
         diag = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
         horz_vert = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         # queen moves
         if piece in [self.w_q, self.b_q]:
-            for xy in diag:
-                t.append(xy)
-            for xy in horz_vert:
-                t.append(xy)
+            for shift in diag:
+                moves += (self.moves_dir(coords, shift, self.is_black(piece)))
+            for shift in horz_vert:
+                moves += (self.moves_dir(coords, shift, self.is_black(piece)))
         # bishop moves
         elif piece in [self.w_b, self.b_b]:
-            for xy in diag:
-                t.append(xy)
+            for shift in diag:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
         # rook moves
         elif piece in [self.w_r, self.b_r]:
-            for xy in horz_vert:
-                t.append(xy)
-        # king moves
-        elif piece in [self.w_k, self.b_k]:
-            pass
-        
-        for drc in t:
-            x2 = x1
-            y2 = y1
-            x_dir = drc[0]
-            y_dir = drc[1]
-            for _ in range(1, 9):
-                if (f'{x2 + x_dir}{y2 + y_dir}') in self.board_dict:
-                    x2 += x_dir
-                    y2 += y_dir
-                    c_move, c_piece  = c.piece_in_coords(piece, f'{x2}{y2}')
-                    if c_move and c_piece:
-                        moves.append(f'{x2}{y2}')
-                    elif c_move and not c_piece:
-                        moves.append(f'{x2}{y2}')
-                        break
-                    elif not c_move:
-                        break
-                    else:
-                        print('what went wrong here?')
-                else:
-                    break
+            for shift in horz_vert:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
         print(moves)
 
 
@@ -361,7 +395,7 @@ class Chess():
 
 c = Chess()
 
-c.possible_moves(c.w_q, '56')
+c.possible_moves(c.w_q, '43')
 c.print_board_dict('white')
 # c.possible_moves(c.w_k, '55')
 # c.possible_moves(c.w_q, '56')
