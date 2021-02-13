@@ -196,6 +196,21 @@ class TestCoordsValid(unittest.TestCase):
         self.assertFalse(c.coords_valid('1*'))
         self.assertFalse(c.coords_valid('*1'))
 
+class TestCoordsNotEqual(unittest.TestCase):
+
+    def coords_are_equal(self):
+        self.assertFalse(c.coords_not_equal('11', '11'))
+        self.assertFalse(c.coords_not_equal('65', '65'))
+        self.assertFalse(c.coords_not_equal('42', '42'))
+        self.assertFalse(c.coords_not_equal('87', '87'))
+        self.assertFalse(c.coords_not_equal('73', '73'))
+
+    def coords_are_not_equal(self):
+        self.assertTrue(c.coords_not_equal('11', '22'))
+        self.assertTrue(c.coords_not_equal('90', '91'))
+        self.assertTrue(c.coords_not_equal('65', '54'))
+        self.assertTrue(c.coords_not_equal('12', '21'))
+
 class TestMovePiece(unittest.TestCase):
     
     def test_move(self):

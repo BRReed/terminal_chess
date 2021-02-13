@@ -145,6 +145,21 @@ class Chess():
         else:
             return False
 
+    def coords_not_equal(self, c_coords, d_coords):
+        """Check that current coords are not equal to destination coords
+
+        Args:
+            c_coords (string): destination row x column 'rc'
+            d_coords (string): destination row x column 'rc'
+
+        Returns:
+            Bool: True if c_coords != d_coords; else False
+        """
+        if c_coords.lower() == d_coords.lower():
+            return False
+        else:
+            return True
+
     def piece_in_coords(self, piece, d_coords):
         """Checks if space is empty or if space occupied and is opponent
 
@@ -200,12 +215,10 @@ class Chess():
         except ValueError:
             return False
         # confirm dest coords is a valid board space
-        if ((x2 >= 1 and x2 <= 8) and (y2 >= 1 and y2 <= 8)):
-            pass
-        else:
+        if self.coords_valid(d_coords) is False:
             return False
         # confirm dest coords is not same as current coords
-        if x1 == x2 and y1 == y2:
+        if self.coords_not_equal(c_coords, d_coords) is False:
             return False
         # king movement definitions
         if piece == self.w_k or piece == self.b_k:
