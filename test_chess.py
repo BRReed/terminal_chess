@@ -263,6 +263,7 @@ class TestIsEnemy(unittest.TestCase):
         self.assertTrue(c.is_enemy('74', c.is_black(c.w_k)))
 
 class TestIsEmpty(unittest.TestCase):
+    
     def space_is_empty(self):
         self.assertTrue(c.is_empty('67'))
         self.assertTrue(c.is_empty('43'))
@@ -270,6 +271,17 @@ class TestIsEmpty(unittest.TestCase):
     def space_is_occupied(self):
         self.assertFalse(c.is_empty('14'))
         self.assertFalse(c.is_empty('83'))
+
+class TestAddCoords(unittest.TestCase):
+    
+    def shift_add(self):
+        self.assertEqual(c.add_coords('11', (1, 1)), '22')
+        self.assertEqual(c.add_coords('32', (4, 3)), '75')
+
+    def shift_subtract(self):
+        self.assertEqual(c.add_coords('45', (-1, -3)), '32')
+        self.assertEqual(c.add_coords('86', (-4, 0)), '46')
+
 
         
 if __name__ == '__main__':
