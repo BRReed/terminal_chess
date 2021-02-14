@@ -469,6 +469,7 @@ class Chess():
                 pawn_moves.append((-1, 1))
             for shift in pawn_moves:
                 moves += self.moves_dir(coords, shift, self.is_black(piece))
+
         m = moves.copy()
         for move in m:
             if not self.piece_movement(piece, coords, move):
@@ -482,7 +483,7 @@ class Chess():
 
 c = Chess()
 
-c.possible_moves(c.w_p, '66')
+c.possible_moves(c.w_q, '66')
 c.print_board_dict('white')
 # c.possible_moves(c.w_k, '55')
 # c.possible_moves(c.w_q, '56')

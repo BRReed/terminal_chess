@@ -183,14 +183,14 @@ class TestCoordsValid(unittest.TestCase):
 
 class TestCoordsNotEqual(unittest.TestCase):
 
-    def coords_are_equal(self):
+    def test_coords_are_equal(self):
         self.assertFalse(c.coords_not_equal('11', '11'))
         self.assertFalse(c.coords_not_equal('65', '65'))
         self.assertFalse(c.coords_not_equal('42', '42'))
         self.assertFalse(c.coords_not_equal('87', '87'))
         self.assertFalse(c.coords_not_equal('73', '73'))
 
-    def coords_are_not_equal(self):
+    def test_coords_are_not_equal(self):
         self.assertTrue(c.coords_not_equal('11', '22'))
         self.assertTrue(c.coords_not_equal('90', '91'))
         self.assertTrue(c.coords_not_equal('65', '54'))
@@ -264,26 +264,33 @@ class TestIsEnemy(unittest.TestCase):
 
 class TestIsEmpty(unittest.TestCase):
     
-    def space_is_empty(self):
+    def test_space_is_empty(self):
         self.assertTrue(c.is_empty('67'))
         self.assertTrue(c.is_empty('43'))
 
-    def space_is_occupied(self):
+    def test_space_is_occupied(self):
         self.assertFalse(c.is_empty('14'))
         self.assertFalse(c.is_empty('83'))
 
 class TestAddCoords(unittest.TestCase):
     
-    def shift_add(self):
+    def test_shift_add(self):
         self.assertEqual(c.add_coords('11', (1, 1)), '22')
         self.assertEqual(c.add_coords('32', (4, 3)), '75')
 
-    def shift_subtract(self):
+    def test_shift_subtract(self):
         self.assertEqual(c.add_coords('45', (-1, -3)), '32')
         self.assertEqual(c.add_coords('86', (-4, 0)), '46')
 
+    
 
-        
+class TestMovesDir(unittest.TestCase):
+
+    def test_move_diag_positive_all_black(self):
+        self.assertEqual(c.moves_dir('55', (1, 1), True), ['66'])
+        self.assertEqual(c.moves_dir('31', (1, 1), True), ['42', '53', '64'])
+        self.assertEqual(c.moves_dir('47', (1, 1), True), ['58'])
+
 if __name__ == '__main__':
     c = Chess()
     unittest.main()
