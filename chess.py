@@ -125,25 +125,78 @@ class Chess():
                 z += (f'{b}\n')
             z += '    H  G  F  E  D  C  B  A '
         print(z)
-
-    def piece_move_main(self, piece, c_coords, d_coords):
-        """Takes coordinates and checks if piece to coords is a legitimate move
+    
+    def check_coords(self, coords):
+        """check coords are integers
 
         Args:
-            piece (string): The piece to move
-            c_coords (string): Where the piece is currently
-            d_coords (string): Where the piece wants to move
-        """
-        pass
+            coords (string): row x column 'rc'
 
-    def piece_in_coords(self, piece, c_coords, d_coords):
+        Returns:
+            Bool: True if both positions in coords string are ints;
+                  else False
+        """
+        try:
+            int(coords[0])
+            int(coords[1])
+        except ValueError:
+            return False
+        return True
+
+
+    def str_coords_to_int(self, coords):
+        """change string coordinates into integers 
+
+        Args:
+            coords (string): row x column 'rc'
+
+        Returns:
+            int : 0 position in coords
+            int : 1 position in coords
+        """
+        x = int(coords[0])
+        y = int(coords[1])
+        return x, y
+
+
+    def coords_valid(self, coords):
+        """Validate coordinates
+
+        Args:
+            coords (string): row x column 'rc'
+
+        Returns:
+            Bool: True if coordinates is valid; else False
+        """
+
+        x, y = self.str_coords_to_int(coords)
+        if ((x >= 1 and x <= 8) and (y >= 1 and y <= 8)):
+            return True
+        else:
+            return False
+
+    def coords_not_equal(self, c_coords, d_coords):
+        """Check that current coords are not equal to destination coords
+
+        Args:
+            c_coords (string): destination row x column 'rc'
+            d_coords (string): destination row x column 'rc'
+
+        Returns:
+            Bool: True if c_coords != d_coords; else False
+        """
+        if c_coords.lower() == d_coords.lower():
+            return False
+        else:
+            return True
+
+    def piece_in_coords(self, piece, d_coords):
         """Checks if space is empty or if space occupied and is opponent
 
         Args:
             piece (string): chess piece to be moved
             d_coords (string): destination row x column 'rc'
-            c_coords (string): current row x column 'rc'
-        
+
         Returns:
             Bool: True if movement is allowed; else False
             Bool: True if space is empty; else False
@@ -160,7 +213,7 @@ class Chess():
                 return False, False
             else:
                 print(f'piece_in_coords error piece:{piece}, ' +
-                      f'dest: {d_coords} current: {c_coords}')
+                      f'dest: {d_coords}')
         elif black in repr(piece):
             if white in repr_d_coords:
                 return True, False
@@ -168,7 +221,7 @@ class Chess():
                 return False, False
             else:
                 print(f'piece_in_coords error piece:{piece}, ' +
-                      f'dest: {d_coords} current: {c_coords}')
+                      f'dest: {d_coords}')
         else:
             print('lose')
 
@@ -184,21 +237,8 @@ class Chess():
             Boolean: True if move is valid based on piece movement restrictions
                 else; False
         """
-        try:
-            x1 = int(c_coords[0])
-            y1 = int(c_coords[1])
-            x2 = int(d_coords[0])
-            y2 = int(d_coords[1])
-        except ValueError:
-            return False
-        # confirm dest coords is a valid board space
-        if ((x2 >= 1 and x2 <= 8) and (y2 >= 1 and y2 <= 8)):
-            pass
-        else:
-            return False
-        # confirm dest coords is not same as current coords
-        if x1 == x2 and y1 == y2:
-            return False
+        x1, y1 = self.str_coords_to_int(c_coords)
+        x2, y2 = self.str_coords_to_int(d_coords)
         # king movement definitions
         if piece == self.w_k or piece == self.b_k:
             if (abs(x1 - x2), abs(y1 - y2)) in [(0,1), (1,0), (1,1)]:
@@ -258,6 +298,110 @@ class Chess():
         """
         self.board_dict[d_coords][2] = piece 
         self.board_dict[c_coords][2] = self.empty
+    
+    def is_black(self, piece):
+        """checks if a piece is black
+
+        Args:
+            piece (string): chess piece
+
+        Returns:
+            Bool: True if '\033[38;2;0;0;0m' in var piece; else False
+        """
+        if '\033[38;2;0;0;0m' in piece:
+            return True
+        else:
+            return False
+
+    def is_friendly(self, coords, is_black):
+        """checks if piece in coords is friendly
+
+        Args:
+            coords (string): row x column 'rc'
+            is_black (bool): True if piece in movement is black; else False
+
+        Returns:
+            Bool: If piece in bounds is same color as piece in coords True;
+                  else False
+        """
+        if is_black == self.is_black(self.board_dict[coords][2]):
+            return True
+        else:
+            return False
+
+    def is_enemy(self, coords, is_black):
+        """checks if piece in coords is enemy
+
+        Args:
+            coords (string): row x column 'rc'
+            is_black (bool): True if piece in movement is black; else False
+
+        Returns:
+            [type]: [description]
+        """
+        if is_black != self.is_black(self.board_dict[coords][2]):
+            return True
+        else:
+            return False
+
+    def is_empty(self, coords):
+        """checks if coords is empty
+
+        Args:
+            coords (string): row x column 'rc'
+
+        Returns:
+            Bool: True if space is empty; else False
+        """
+        if self.empty in self.board_dict[coords][2]:
+            return True
+        else:
+            return False
+
+    def add_coords(self, coords, shift):
+        """adds a shift to coords
+
+        Args:
+            coords (string): row x column 'rc'
+            shift (tuple): amount to shift (row, column)
+
+        Returns:
+            string: coords with shift applied 'rc'
+        """
+        x, y = self.str_coords_to_int(coords)
+        x += shift[0]
+        y += shift[1]
+        return f'{x}{y}'
+
+    def moves_dir(self, coords, shift, is_black):
+        """checks all possible moves for piece
+
+        Args:
+            coords (string): row x column 'rc'
+            shift (tuple): amount to shift (row, column)
+            is_black (bool): if piece in movement is black: True; else False
+
+        Returns:
+            list: possible moves based on shift and coords
+        """
+        moves = []
+        coords = self.add_coords(coords, shift)
+        while True:
+            try:
+                if self.is_empty(coords):
+                    moves.append(coords)
+                    coords = self.add_coords(coords, shift)
+                    continue
+                elif self.is_enemy(coords, is_black):
+                    moves.append(coords)
+                    break
+                elif self.is_friendly(coords, is_black):
+                    break
+                else:
+                    break
+            except KeyError:
+                break
+        return moves
 
     def possible_moves(self, piece, coords):
         """Given current board state check all possible moves
@@ -267,42 +411,71 @@ class Chess():
             coords (string): row x column 'rc'
         """
         moves = []
-        t = []
-        x1 = int(coords[0])
-        y1 = int(coords[1])
         diag = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
         horz_vert = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        if piece in [self.w_b, self.b_b, self.w_q, self.b_q]:
-            for xy in diag:
-                t.append(xy)
-        if piece in [self.w_r, self.b_r, self.w_q, self.b_q]:
-            for xy in horz_vert:
-                t.append(xy)
-        for drc in t:
-            x2 = x1
-            y2 = y1
-            x_dir = drc[0]
-            y_dir = drc[1]
-            for _ in range(1, 9):
-                if (f'{x2 + x_dir}{y2 + y_dir}') in self.board_dict:
-                    x2 += x_dir
-                    y2 += y_dir
-                    c_move, c_piece  = c.piece_in_coords(piece, coords, f'{x2}{y2}')
-                    if c_move and c_piece:
-                        moves.append(f'{x2}{y2}')
-                    elif c_move and not c_piece:
-                        moves.append(f'{x2}{y2}')
-                        break
-                    elif not c_move:
-                        break
-                    else:
-                        print('what went wrong here?')
-                else:
-                    break
-        print(moves)
+        # king moves
+        if piece in [self.w_k, self.b_k]:
+            for shift in diag:
+                moves += (self.moves_dir(coords, shift, self.is_black(piece)))
+            for shift in horz_vert:
+                moves += (self.moves_dir(coords, shift, self.is_black(piece)))
+        # queen moves
+        elif piece in [self.w_q, self.b_q]:
+            for shift in diag:
+                moves += (self.moves_dir(coords, shift, self.is_black(piece)))
+            for shift in horz_vert:
+                moves += (self.moves_dir(coords, shift, self.is_black(piece)))
+        # bishop moves
+        elif piece in [self.w_b, self.b_b]:
+            for shift in diag:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
+        # rook moves
+        elif piece in [self.w_r, self.b_r]:
+            for shift in horz_vert:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
+        # knight moves
+        elif piece in [self.w_n, self.b_n]:
+            knight_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1), 
+                            (1, 2), (1, -2), (-1, 2), (-1, -2)]
+            for shift in knight_moves:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
+        # white pawn moves
+        elif piece is self.w_p:
+            pawn_moves = []
+            x, y = self.str_coords_to_int(coords)
+            fwd = f'{x + 1}{y}'
+            diag_minus = f'{x + 1}{y - 1}'
+            diag_plus = f'{x + 1}{y + 1}'
+            if not self.is_enemy(fwd, self.is_black(piece)):
+                pawn_moves.append((1, 0))
+            if self.is_enemy(diag_minus, self.is_black(piece)):
+                pawn_moves.append((1, -1))
+            if self.is_enemy(diag_plus, self.is_black(piece)):
+                pawn_moves.append((1, 1))
+            for shift in pawn_moves:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
+        # black pawn moves
+        elif piece is self.b_p:
+            pawn_moves = []
+            x, y = self.str_coords_to_int(coords)
+            fwd = f'{x - 1}{y}'
+            diag_minus = f'{x - 1}{y - 1}'
+            diag_plus = f'{x - 1}{y + 1}'
+            if not self.is_enemy(fwd, self.is_black(piece)):
+                pawn_moves.append((-1, 0))
+            if self.is_enemy(diag_minus, self.is_black(piece)):
+                pawn_moves.append((-1, -1))
+            if self.is_enemy(diag_plus, self.is_black(piece)):
+                pawn_moves.append((-1, 1))
+            for shift in pawn_moves:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
 
-
-
+        m = moves.copy()
+        for move in m:
+            if not self.piece_movement(piece, coords, move):
+                moves.remove(move)
+        # add function for not putting self in check
+        return moves
 
 
 
@@ -310,6 +483,7 @@ class Chess():
 
 c = Chess()
 
-c.possible_moves(c.w_q, '56')
+print(c.possible_moves(c.w_q, '66'))
+c.print_board_dict('white')
 # c.possible_moves(c.w_k, '55')
 # c.possible_moves(c.w_q, '56')
