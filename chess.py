@@ -373,6 +373,12 @@ class Chess():
         y += shift[1]
         return f'{x}{y}'
 
+    def in_check(self, coords, is_black):
+        pass
+
+    def find_piece(self, piece, is_black):
+        pass
+
     def moves_dir(self, coords, shift, is_black):
         """checks all possible moves for piece
 
