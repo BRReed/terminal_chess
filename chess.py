@@ -401,7 +401,6 @@ class Chess():
                     break
             except KeyError:
                 break
-        print(moves)
         return moves
 
     def possible_moves(self, piece, coords):
@@ -420,11 +419,6 @@ class Chess():
                 moves += (self.moves_dir(coords, shift, self.is_black(piece)))
             for shift in horz_vert:
                 moves += (self.moves_dir(coords, shift, self.is_black(piece)))
-            m = moves.copy()
-            for move in m:
-                if not self.piece_movement(piece, coords, move):
-                    moves.remove(move)
-            # need to add function for not putting self in check
         # queen moves
         elif piece in [self.w_q, self.b_q]:
             for shift in diag:
@@ -440,6 +434,46 @@ class Chess():
             for shift in horz_vert:
                 moves += self.moves_dir(coords, shift, self.is_black(piece))
         # knight moves
+        elif piece in [self.w_n, self.b_n]:
+            knight_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1), 
+                            (1, 2), (1, -2), (-1, 2), (-1, -2)]
+            for shift in knight_moves:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
+        # white pawn moves
+        elif piece is self.w_p:
+            pawn_moves = []
+            x, y = self.str_coords_to_int(coords)
+            fwd = f'{x + 1}{y}'
+            diag_minus = f'{x + 1}{y - 1}'
+            diag_plus = f'{x + 1}{y + 1}'
+            if not self.is_enemy(fwd, self.is_black(piece)):
+                pawn_moves.append((1, 0))
+            if self.is_enemy(diag_minus, self.is_black(piece)):
+                pawn_moves.append((1, -1))
+            if self.is_enemy(diag_plus, self.is_black(piece)):
+                pawn_moves.append((1, 1))
+            for shift in pawn_moves:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
+        # black pawn moves
+        elif piece is self.b_p:
+            pawn_moves = []
+            x, y = self.str_coords_to_int(coords)
+            fwd = f'{x - 1}{y}'
+            diag_minus = f'{x - 1}{y - 1}'
+            diag_plus = f'{x - 1}{y + 1}'
+            if not self.is_enemy(fwd, self.is_black(piece)):
+                pawn_moves.append((-1, 0))
+            if self.is_enemy(diag_minus, self.is_black(piece)):
+                pawn_moves.append((-1, -1))
+            if self.is_enemy(diag_plus, self.is_black(piece)):
+                pawn_moves.append((-1, 1))
+            for shift in pawn_moves:
+                moves += self.moves_dir(coords, shift, self.is_black(piece))
+        m = moves.copy()
+        for move in m:
+            if not self.piece_movement(piece, coords, move):
+                moves.remove(move)
+        # add function for not putting self in check
         print(moves)
 
 
@@ -448,7 +482,7 @@ class Chess():
 
 c = Chess()
 
-c.possible_moves(c.w_k, '61')
+c.possible_moves(c.w_p, '66')
 c.print_board_dict('white')
 # c.possible_moves(c.w_k, '55')
 # c.possible_moves(c.w_q, '56')
