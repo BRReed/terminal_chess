@@ -262,6 +262,15 @@ class TestIsEnemy(unittest.TestCase):
         self.assertTrue(c.is_enemy('86', c.is_black(c.w_p)))
         self.assertTrue(c.is_enemy('74', c.is_black(c.w_k)))
 
+class TestIsEmpty(unittest.TestCase):
+    def space_is_empty(self):
+        self.assertTrue(c.is_empty('67'))
+        self.assertTrue(c.is_empty('43'))
+
+    def space_is_occupied(self):
+        self.assertFalse(c.is_empty('14'))
+        self.assertFalse(c.is_empty('83'))
+
         
 if __name__ == '__main__':
     c = Chess()
