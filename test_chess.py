@@ -334,7 +334,7 @@ class TestMovesDir(unittest.TestCase):
         self.assertEqual(c.moves_dir('31', (-1, -1), False),
                                      [])
 
-    def test_move_horz_rneg_cconst_black(self):
+    def test_move_vert_rneg_cconst_black(self):
         self.assertEqual(c.moves_dir('44', (-1, 0), True),
                                      ['34', '24'])
         self.assertEqual(c.moves_dir('78', (-1, 0), True),
@@ -342,7 +342,7 @@ class TestMovesDir(unittest.TestCase):
         self.assertEqual(c.moves_dir('31', (-1, 0), True),
                                      ['21'])
     
-    def test_move_horz_rneg_cconst_white(self):
+    def test_move_vert_rneg_cconst_white(self):
         self.assertEqual(c.moves_dir('44', (-1, 0), False),
                                      ['34'])
         self.assertEqual(c.moves_dir('78', (-1, 0), False),
@@ -350,6 +350,21 @@ class TestMovesDir(unittest.TestCase):
         self.assertEqual(c.moves_dir('31', (-1, 0), False),
                                      [])
 
+    def test_move_vert_rposi_cconst_black(self):
+        self.assertEqual(c.moves_dir('44', (1, 0), True),
+                                     ['54', '64'])
+        self.assertEqual(c.moves_dir('78', (1, 0), True),
+                                     [])
+        self.assertEqual(c.moves_dir('31', (1, 0), True),
+                                     ['41', '51', '61'])
+    
+    def test_move_vert_rposi_cconst_white(self):
+        self.assertEqual(c.moves_dir('44', (1, 0), False),
+                                     ['54', '64', '74'])
+        self.assertEqual(c.moves_dir('78', (1, 0), False),
+                                     ['88'])
+        self.assertEqual(c.moves_dir('31', (1, 0), False),
+                                     ['41', '51', '61', '71'])
 
 
 
