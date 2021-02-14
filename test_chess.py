@@ -226,6 +226,24 @@ class TestIsBlack(unittest.TestCase):
     def test_empty(self):
         self.assertFalse(c.is_black('   '))
 
+class TestIsFriendly(unittest.TestCase):
+
+    def test_black_to_black(self):
+        self.assertTrue(c.is_friendly('87', c.is_black(c.b_q)))
+        self.assertTrue(c.is_friendly('71', c.is_black(c.b_p)))
+    
+    def test_white_to_white(self):
+        self.assertTrue(c.is_friendly('17', c.is_black(c.w_q)))
+        self.assertTrue(c.is_friendly('28', c.is_black(c.w_k)))
+
+    def test_black_to_white(self):
+        self.assertFalse(c.is_friendly('17', c.is_black(c.b_n)))
+        self.assertFalse(c.is_friendly('22', c.is_black(c.b_r)))
+
+    def test_white_to_black(self):
+        self.assertFalse(c.is_friendly('87', c.is_black(c.w_p)))
+        self.assertFalse(c.is_friendly('72', c.is_black(c.w_q)))
+
 
         
 if __name__ == '__main__':
