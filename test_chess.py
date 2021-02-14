@@ -215,7 +215,16 @@ class TestCheckCoords(unittest.TestCase):
         self.assertFalse(c.check_coords('jj'))
         self.assertFalse(c.check_coords('l2'))
 
+class TestIsBlack(unittest.TestCase):
 
+    def test_black(self):
+        self.assertTrue(c.is_black('\033[38;2;0;0;0m'))
+    
+    def test_white(self):
+        self.assertFalse(c.is_black('\033[38;2;255;255;255m'))
+    
+    def test_empty(self):
+        self.assertFalse(c.is_black('   '))
 
 
         
