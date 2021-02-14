@@ -286,10 +286,72 @@ class TestAddCoords(unittest.TestCase):
 
 class TestMovesDir(unittest.TestCase):
 
-    def test_move_diag_positive_all_black(self):
-        self.assertEqual(c.moves_dir('55', (1, 1), True), ['66'])
-        self.assertEqual(c.moves_dir('31', (1, 1), True), ['42', '53', '64'])
-        self.assertEqual(c.moves_dir('47', (1, 1), True), ['58'])
+    def test_move_diag_rposi_cposi_black(self):
+        self.assertEqual(c.moves_dir('55', (1, 1), True),
+                                     ['66'])
+        self.assertEqual(c.moves_dir('31', (1, 1), True),
+                                     ['42', '53', '64'])
+        self.assertEqual(c.moves_dir('47', (1, 1), True),
+                                     ['58'])
+    
+    def test_move_diag_rposi_cposi_white(self):
+        self.assertEqual(c.moves_dir('55', (1, 1), False),
+                                     ['66', '77'])
+        self.assertEqual(c.moves_dir('31', (1, 1), False),
+                                     ['42', '53', '64', '75'])
+        self.assertEqual(c.moves_dir('47', (1, 1), False),
+                                     ['58'])
+
+    def test_move_diag_rposi_cneg_black(self):
+        self.assertEqual(c.moves_dir('55', (1, -1), True),
+                                     ['64'])
+        self.assertEqual(c.moves_dir('36', (1, -1), True),
+                                     ['45', '54', '63'])
+        self.assertEqual(c.moves_dir('47', (1, -1), True),
+                                     ['56', '65'])
+
+    def test_move_diag_rposi_cneg_white(self):
+        self.assertEqual(c.moves_dir('55', (1, -1), False),
+                                     ['64', '73'])
+        self.assertEqual(c.moves_dir('36', (1, -1), False),
+                                     ['45', '54', '63', '72'])
+        self.assertEqual(c.moves_dir('47', (1, -1), False),
+                                     ['56', '65', '74'])
+
+    def test_move_diag_rneg_cneg_black(self):
+        self.assertEqual(c.moves_dir('44', (-1, -1), True),
+                                     ['33', '22'])
+        self.assertEqual(c.moves_dir('78', (-1, -1), True),
+                                     ['67', '56', '45', '34', '23'])
+        self.assertEqual(c.moves_dir('31', (-1, -1), True),
+                                     [])
+    
+    def test_move_diag_rneg_cneg_white(self):
+        self.assertEqual(c.moves_dir('44', (-1, -1), False),
+                                     ['33'])
+        self.assertEqual(c.moves_dir('78', (-1, -1), False),
+                                     ['67', '56', '45', '34'])
+        self.assertEqual(c.moves_dir('31', (-1, -1), False),
+                                     [])
+
+    def test_move_horz_rneg_cconst_black(self):
+        self.assertEqual(c.moves_dir('44', (-1, 0), True),
+                                     ['34', '24'])
+        self.assertEqual(c.moves_dir('78', (-1, 0), True),
+                                     ['68', '58', '48', '38', '28'])
+        self.assertEqual(c.moves_dir('31', (-1, 0), True),
+                                     ['21'])
+    
+    def test_move_horz_rneg_cconst_white(self):
+        self.assertEqual(c.moves_dir('44', (-1, 0), False),
+                                     ['34'])
+        self.assertEqual(c.moves_dir('78', (-1, 0), False),
+                                     ['68', '58', '48', '38'])
+        self.assertEqual(c.moves_dir('31', (-1, 0), False),
+                                     [])
+
+
+
 
 if __name__ == '__main__':
     c = Chess()
