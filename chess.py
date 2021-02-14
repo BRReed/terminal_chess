@@ -475,7 +475,7 @@ class Chess():
             if not self.piece_movement(piece, coords, move):
                 moves.remove(move)
         # add function for not putting self in check
-        print(moves)
+        return moves
 
 
 
@@ -483,7 +483,7 @@ class Chess():
 
 c = Chess()
 
-c.possible_moves(c.w_q, '66')
+print(c.possible_moves(c.w_q, '66'))
 c.print_board_dict('white')
 # c.possible_moves(c.w_k, '55')
 # c.possible_moves(c.w_q, '56')

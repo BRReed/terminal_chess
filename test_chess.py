@@ -398,6 +398,9 @@ class TestMovesDir(unittest.TestCase):
         self.assertEqual(c.moves_dir('44', (0, 1), False),
                                     ['45', '46', '47', '48'])
 
+class TestPossibleMoves(unittest.TestCase):
+    pass
+
 if __name__ == '__main__':
     c = Chess()
     unittest.main()
