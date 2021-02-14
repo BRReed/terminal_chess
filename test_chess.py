@@ -244,6 +244,23 @@ class TestIsFriendly(unittest.TestCase):
         self.assertFalse(c.is_friendly('87', c.is_black(c.w_p)))
         self.assertFalse(c.is_friendly('72', c.is_black(c.w_q)))
 
+class TestIsEnemy(unittest.TestCase):
+    
+    def test_black_to_black(self):
+        self.assertFalse(c.is_enemy('81', c.is_black(c.b_k)))
+        self.assertFalse(c.is_enemy('76', c.is_black(c.b_q)))
+
+    def test_white_to_white(self):
+        self.assertFalse(c.is_enemy('12', c.is_black(c.w_p)))
+        self.assertFalse(c.is_enemy('26', c.is_black(c.w_r)))
+    
+    def test_black_to_white(self):
+        self.assertTrue(c.is_enemy('12', c.is_black(c.b_n)))
+        self.assertTrue(c.is_enemy('28', c.is_black(c.b_b)))
+
+    def test_white_to_black(self):
+        self.assertTrue(c.is_enemy('86', c.is_black(c.w_p)))
+        self.assertTrue(c.is_enemy('74', c.is_black(c.w_k)))
 
         
 if __name__ == '__main__':
