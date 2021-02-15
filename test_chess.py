@@ -1,7 +1,11 @@
 import unittest
 from chess import Chess
 
+
 class TestPieceMovement(unittest.TestCase):
+
+    def test_reset_board(self):
+        c.create_board_dict()
 
     def test_king_move(self):
         self.assertTrue(c.piece_movement(c.w_k, '22', '21'))
@@ -64,34 +68,12 @@ class TestPieceMovement(unittest.TestCase):
 
         self.assertFalse(c.piece_movement(c.w_p, '23', '22'))
         self.assertFalse(c.piece_movement(c.w_p, '42', '22'))
-    
-class TestPieceInCoords(unittest.TestCase):
-    
-    def test_white_piece_to_empty(self):
-        self.assertEqual(c.piece_in_coords(c.w_p, '31'), (True, True))
-        self.assertEqual(c.piece_in_coords(c.w_p, '68'), (True, True))
 
-    def test_black_piece_to_empty(self):
-        self.assertEqual(c.piece_in_coords(c.b_p, '31'), (True, True))
-        self.assertEqual(c.piece_in_coords(c.b_p, '68'), (True, True))
-
-    def test_white_piece_to_black(self):
-        self.assertEqual(c.piece_in_coords(c.w_p, '81'), (True, False))
-        self.assertEqual(c.piece_in_coords(c.w_p, '82'), (True, False))
-
-    def test_black_piece_to_white(self):
-        self.assertEqual(c.piece_in_coords(c.b_p, '11'), (True, False))
-        self.assertEqual(c.piece_in_coords(c.b_p, '22'), (True, False))
-
-    def test_white_piece_to_white(self):
-        self.assertEqual(c.piece_in_coords(c.w_p, '21'), (False, False))
-        self.assertEqual(c.piece_in_coords(c.w_p, '28'), (False, False))
-
-    def test_black_piece_to_black(self):
-        self.assertEqual(c.piece_in_coords(c.b_p, '87'), (False, False))
-        self.assertEqual(c.piece_in_coords(c.b_p, '86'), (False, False))
 
 class TestCoordsValid(unittest.TestCase):
+
+    def test_reset_board(self):
+        c.create_board_dict()
 
     def test_valid_spaces(self):
         self.assertTrue(c.coords_valid('11'))
@@ -183,6 +165,9 @@ class TestCoordsValid(unittest.TestCase):
 
 class TestCoordsNotEqual(unittest.TestCase):
 
+    def test_reset_board(self):
+        c.create_board_dict()
+
     def test_coords_are_equal(self):
         self.assertFalse(c.coords_not_equal('11', '11'))
         self.assertFalse(c.coords_not_equal('65', '65'))
@@ -197,6 +182,9 @@ class TestCoordsNotEqual(unittest.TestCase):
         self.assertTrue(c.coords_not_equal('12', '21'))
 
 class TestCheckCoords(unittest.TestCase):
+
+    def test_reset_board(self):
+        c.create_board_dict()
     
     def test_ints(self):
         self.assertTrue(c.check_coords('11'))
@@ -217,6 +205,9 @@ class TestCheckCoords(unittest.TestCase):
 
 class TestIsBlack(unittest.TestCase):
 
+    def test_reset_board(self):
+        c.create_board_dict()
+
     def test_black(self):
         self.assertTrue(c.is_black('\033[38;2;0;0;0m'))
     
@@ -227,6 +218,9 @@ class TestIsBlack(unittest.TestCase):
         self.assertFalse(c.is_black('   '))
 
 class TestIsFriendly(unittest.TestCase):
+
+    def test_reset_board(self):
+        c.create_board_dict()
 
     def test_black_to_black(self):
         self.assertTrue(c.is_friendly('87', c.is_black(c.b_q)))
@@ -246,6 +240,9 @@ class TestIsFriendly(unittest.TestCase):
 
 class TestIsEnemy(unittest.TestCase):
     
+    def test_reset_board(self):
+        c.create_board_dict()
+
     def test_black_to_black(self):
         self.assertFalse(c.is_enemy('81', c.is_black(c.b_k)))
         self.assertFalse(c.is_enemy('76', c.is_black(c.b_q)))
@@ -264,6 +261,9 @@ class TestIsEnemy(unittest.TestCase):
 
 class TestIsEmpty(unittest.TestCase):
     
+    def test_reset_board(self):
+        c.create_board_dict()
+
     def test_space_is_empty(self):
         self.assertTrue(c.is_empty('67'))
         self.assertTrue(c.is_empty('43'))
@@ -274,6 +274,9 @@ class TestIsEmpty(unittest.TestCase):
 
 class TestAddCoords(unittest.TestCase):
     
+    def test_reset_board(self):
+        c.create_board_dict()
+
     def test_shift_add(self):
         self.assertEqual(c.add_coords('11', (1, 1)), '22')
         self.assertEqual(c.add_coords('32', (4, 3)), '75')
@@ -285,6 +288,9 @@ class TestAddCoords(unittest.TestCase):
     
 
 class TestMovesDir(unittest.TestCase):
+
+    def test_reset_board(self):
+        c.create_board_dict()
 
     def test_move_diag_rposi_cposi_black(self):
         self.assertEqual(c.moves_dir('55', (1, 1), True),
@@ -399,12 +405,19 @@ class TestMovesDir(unittest.TestCase):
                                     ['45', '46', '47', '48'])
 
 class TestFindPiece(unittest.TestCase):
+    
+    def test_reset_board(self):
+        c.create_board_dict()
 
     def test_find_white_queen(self):
         self.assertEqual(c.find_piece(c.w_q, False), '14')
     
     def test_find_black_queen(self):
         self.assertEqual(c.find_piece(c.b_q, True), '84')
+
+class TestInCheck(unittest.TestCase):
+
+    pass
 
 class TestPossibleMoves(unittest.TestCase):
     pass
