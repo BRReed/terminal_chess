@@ -377,11 +377,20 @@ class Chess():
         pass
 
     def find_piece(self, piece, is_black):
+        """find piece if exists on board. Returns location of only one piece
+
+        Args:
+            piece (string): unicode representation of a chess piece
+            is_black (bool): True if piece is black; else False
+
+        Returns:
+            string: row x column 'rc' if piece on board; else returns False
+        """
         for space in self.board_dict:
             if piece in self.board_dict[space][2] and (
                 is_black == self.is_black(self.board_dict[space][2])):
                 return space
-        return 
+        return False
 
 
 
