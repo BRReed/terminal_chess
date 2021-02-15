@@ -398,6 +398,14 @@ class TestMovesDir(unittest.TestCase):
         self.assertEqual(c.moves_dir('44', (0, 1), False),
                                     ['45', '46', '47', '48'])
 
+class TestFindPiece(unittest.TestCase):
+
+    def test_find_white_queen(self):
+        self.assertEqual(c.find_piece(c.w_q, False), '14')
+    
+    def test_find_black_queen(self):
+        self.assertEqual(c.find_piece(c.b_q, True), '84')
+
 class TestPossibleMoves(unittest.TestCase):
     pass
 
