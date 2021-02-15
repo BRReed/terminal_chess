@@ -377,7 +377,13 @@ class Chess():
         pass
 
     def find_piece(self, piece, is_black):
-        pass
+        for space in self.board_dict:
+            if piece in self.board_dict[space][2] and (
+                is_black == self.is_black(self.board_dict[space][2])):
+                return space
+        return 
+
+
 
     def moves_dir(self, coords, shift, is_black):
         """checks all possible moves for piece
