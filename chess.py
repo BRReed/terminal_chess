@@ -347,23 +347,21 @@ class Chess():
         Returns:
             bool: True if king in check; else False
         """
-        
+        mov = []
         if is_black is True:
-            king_space = self.find_piece(c.b_k, True)
+            king_space = self.find_piece(c.b_k, is_black)
             print(f'black k: {king_space}')
             for coords in self.board_dict:
                 if not self.is_black(self.board_dict[coords][2]):
-                    print(self.board_dict[coords][2])
-                    mov = self.possible_moves(self.board_dict[coords][2], coords)
-                    print(mov)
+                    mov += self.possible_moves(self.board_dict[coords][2], coords)
+
         else:
-            king_space = self.find_piece(c.w_k, False)
+            king_space = self.find_piece(c.w_k, is_black)
             print(f'white k: {king_space}')
             for coords in self.board_dict:
                 if self.is_black(self.board_dict[coords][2]):
-                    print(self.board_dict[coords][2])
-                    mov = self.possible_moves(self.board_dict[coords][2], coords)
-                    print(mov)
+                    mov += self.possible_moves(self.board_dict[coords][2], coords)
+
         if king_space in mov:
             return True
         else:
@@ -531,6 +529,7 @@ c.print_board_dict('white')
 # c.possible_moves(c.w_q, '56')
 c.move_piece(c.w_n, '12', '64')
 print(c.in_check(False))
+c.print_board_dict('black')
 print(c.in_check(True))
-
+c.move_piece(c.w_n, '12', '64')
 ## pawn moves problemo
