@@ -349,9 +349,9 @@ class Chess():
         """
         mov = []
         if is_black is True:
-            king_space = self.find_piece(c.b_k, is_black)
+            king_space = self.find_piece(self.b_k, is_black)
         else:
-            king_space = self.find_piece(c.w_k, is_black)
+            king_space = self.find_piece(self.w_k, is_black)
         for coords in self.board_dict:
             if is_black != self.is_black(self.board_dict[coords][2]):
                 mov += self.possible_moves(self.board_dict[coords][2], coords)
@@ -509,29 +509,3 @@ class Chess():
                 moves.remove(move)
         # add function for not putting self in check
         return moves
-
-
-
-
-
-c = Chess()
-
-print(c.possible_moves(c.w_q, '66'))
-c.print_board_dict('white')
-# c.possible_moves(c.w_k, '55')
-# c.possible_moves(c.w_q, '56')
-c.move_piece(c.w_n, '12', '64')
-print(c.in_check(False))
-c.print_board_dict('black')
-print(c.in_check(True))
-c.move_piece(c.w_n, '12', '64')
-print(c.in_check(False))
-
-c.move_piece(c.b_n, '82', '34')
-print(c.in_check(False))
-c.print_board_dict('black')
-
-c.print_board_dict('black')
-c.move_piece(c.w_p, '24', '34')
-c.move_piece(c.b_q, '84', '51')
-c.print_board_dict('black')
