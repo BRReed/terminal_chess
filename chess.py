@@ -190,41 +190,6 @@ class Chess():
         else:
             return True
 
-    def piece_in_coords(self, piece, d_coords):
-        """Checks if space is empty or if space occupied and is opponent
-
-        Args:
-            piece (string): chess piece to be moved
-            d_coords (string): destination row x column 'rc'
-
-        Returns:
-            Bool: True if movement is allowed; else False
-            Bool: True if space is empty; else False
-        """
-        white = '38;2;255;255;255m'
-        black = '38;2;0;0;0m'
-        repr_d_coords = repr(self.board_dict[d_coords])
-        if self.empty in repr_d_coords:
-            return True, True
-        if white in repr(piece):
-            if black in repr_d_coords:
-                return True, False
-            elif white in repr_d_coords:
-                return False, False
-            else:
-                print(f'piece_in_coords error piece:{piece}, ' +
-                      f'dest: {d_coords}')
-        elif black in repr(piece):
-            if white in repr_d_coords:
-                return True, False
-            elif black in repr_d_coords:
-                return False, False
-            else:
-                print(f'piece_in_coords error piece:{piece}, ' +
-                      f'dest: {d_coords}')
-        else:
-            print('lose')
-
     def piece_movement(self, piece, c_coords, d_coords):
         """Validate movement of a piece
 
@@ -373,6 +338,47 @@ class Chess():
         y += shift[1]
         return f'{x}{y}'
 
+    def in_check(self, is_black):
+        """check if king is in check
+
+        Args:
+            is_black (bool): if king is black True; else False
+
+        Returns:
+            bool: True if king in check; else False
+        """
+        mov = []
+        if is_black is True:
+            king_space = self.find_piece(self.b_k, is_black)
+        else:
+            king_space = self.find_piece(self.w_k, is_black)
+        for coords in self.board_dict:
+            if is_black != self.is_black(self.board_dict[coords][2]):
+                mov += self.possible_moves(self.board_dict[coords][2], coords)
+
+        if king_space in mov:
+            return True
+        else:
+            return False
+
+    def find_piece(self, piece, is_black):
+        """find piece if exists on board. Returns location of only one piece
+
+        Args:
+            piece (string): unicode representation of a chess piece
+            is_black (bool): True if piece is black; else False
+
+        Returns:
+            string: row x column 'rc' if piece on board; else returns False
+        """
+        for space in self.board_dict:
+            if piece in self.board_dict[space][2] and (
+                is_black == self.is_black(self.board_dict[space][2])):
+                return space
+        return False
+
+
+
     def moves_dir(self, coords, shift, is_black):
         """checks all possible moves for piece
 
@@ -446,12 +452,25 @@ class Chess():
             fwd = f'{x + 1}{y}'
             diag_minus = f'{x + 1}{y - 1}'
             diag_plus = f'{x + 1}{y + 1}'
-            if not self.is_enemy(fwd, self.is_black(piece)):
-                pawn_moves.append((1, 0))
-            if self.is_enemy(diag_minus, self.is_black(piece)):
-                pawn_moves.append((1, -1))
-            if self.is_enemy(diag_plus, self.is_black(piece)):
-                pawn_moves.append((1, 1))
+            try:
+                if self.is_empty(fwd):
+                    pawn_moves.append((1, 0))
+            except KeyError:
+                pass
+            try:
+                if self.is_empty(diag_minus):
+                    pass
+                elif self.is_enemy(diag_minus, self.is_black(piece)):
+                    pawn_moves.append((1, -1))
+            except KeyError:
+                pass
+            try:
+                if self.is_empty(diag_plus):
+                    pass
+                elif self.is_enemy(diag_plus, self.is_black(piece)):
+                    pawn_moves.append((1, 1))
+            except KeyError:
+                pass
             for shift in pawn_moves:
                 moves += self.moves_dir(coords, shift, self.is_black(piece))
         # black pawn moves
@@ -461,29 +480,32 @@ class Chess():
             fwd = f'{x - 1}{y}'
             diag_minus = f'{x - 1}{y - 1}'
             diag_plus = f'{x - 1}{y + 1}'
-            if not self.is_enemy(fwd, self.is_black(piece)):
-                pawn_moves.append((-1, 0))
-            if self.is_enemy(diag_minus, self.is_black(piece)):
-                pawn_moves.append((-1, -1))
-            if self.is_enemy(diag_plus, self.is_black(piece)):
-                pawn_moves.append((-1, 1))
+            try:
+                if self.is_empty(fwd):
+                    pawn_moves.append((-1, 0))
+            except KeyError:
+                pass
+            try:
+                if self.is_empty(diag_minus):
+                    pass
+                elif self.is_enemy(diag_minus, self.is_black(piece)):
+
+                    pawn_moves.append((-1, -1))
+            except KeyError:
+                pass
+            try:
+                if self.is_empty(diag_plus):
+                    pass
+                elif self.is_enemy(diag_plus, self.is_black(piece)):
+                    pawn_moves.append((-1, 1))
+            except KeyError:
+                pass
+            
             for shift in pawn_moves:
                 moves += self.moves_dir(coords, shift, self.is_black(piece))
-
         m = moves.copy()
         for move in m:
             if not self.piece_movement(piece, coords, move):
                 moves.remove(move)
         # add function for not putting self in check
         return moves
-
-
-
-
-
-c = Chess()
-
-print(c.possible_moves(c.w_q, '66'))
-c.print_board_dict('white')
-# c.possible_moves(c.w_k, '55')
-# c.possible_moves(c.w_q, '56')
