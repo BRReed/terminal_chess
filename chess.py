@@ -361,6 +361,21 @@ class Chess():
         else:
             return False
 
+    def check_mate(self, is_black):
+        mov = []
+        if is_black is True:
+            king_space = self.find_piece(self.b_k, is_black)
+            king_spaces = self.possible_moves(self.b_k, king_space)
+            for coords in self.board_dict:
+                if is_black != self.is_black(self.board_dict[coords][2]):
+                    mov += self.possible_moves(self.board_dict[coords][2], coords)
+        for move in king_spaces:
+            if move in mov:
+                return True
+            else:
+                return False
+
+
     def find_piece(self, piece, is_black):
         """find piece if exists on board. Returns location of only one piece
 
