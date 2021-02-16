@@ -350,23 +350,16 @@ class Chess():
         mov = []
         if is_black is True:
             king_space = self.find_piece(c.b_k, is_black)
-            print(f'black k: {king_space}')
-            for coords in self.board_dict:
-                if not self.is_black(self.board_dict[coords][2]):
-                    mov += self.possible_moves(self.board_dict[coords][2], coords)
-
         else:
             king_space = self.find_piece(c.w_k, is_black)
-            print(f'white k: {king_space}')
-            for coords in self.board_dict:
-                if self.is_black(self.board_dict[coords][2]):
-                    mov += self.possible_moves(self.board_dict[coords][2], coords)
+        for coords in self.board_dict:
+            if is_black != self.is_black(self.board_dict[coords][2]):
+                mov += self.possible_moves(self.board_dict[coords][2], coords)
 
         if king_space in mov:
             return True
         else:
             return False
-
 
     def find_piece(self, piece, is_black):
         """find piece if exists on board. Returns location of only one piece
@@ -532,4 +525,13 @@ print(c.in_check(False))
 c.print_board_dict('black')
 print(c.in_check(True))
 c.move_piece(c.w_n, '12', '64')
-## pawn moves problemo
+print(c.in_check(False))
+
+c.move_piece(c.b_n, '82', '34')
+print(c.in_check(False))
+c.print_board_dict('black')
+
+c.print_board_dict('black')
+c.move_piece(c.w_p, '24', '34')
+c.move_piece(c.b_q, '84', '51')
+c.print_board_dict('black')
