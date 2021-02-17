@@ -362,18 +362,37 @@ class Chess():
             return False
 
     def check_mate(self, is_black):
+        """check if king is check mated
+
+        Args:
+            is_black (bool): if king being checked is black True; else False
+
+        Returns:
+            bool: True if check mate, else False
+        """
+        if self.in_check(is_black):
+            pass
+        else:
+            return False
         mov = []
         if is_black is True:
             king_space = self.find_piece(self.b_k, is_black)
             king_spaces = self.possible_moves(self.b_k, king_space)
-            for coords in self.board_dict:
-                if is_black != self.is_black(self.board_dict[coords][2]):
-                    mov += self.possible_moves(self.board_dict[coords][2], coords)
+            
+        else:
+            king_space = self.find_piece(self.w_k, is_black)
+            king_spaces = self.possible_moves(self.w_k, king_space)
+
+        for coords in self.board_dict:
+            if is_black != self.is_black(self.board_dict[coords][2]):
+                mov += self.possible_moves(self.board_dict[coords][2], 
+                                                                       coords)
         for move in king_spaces:
-            if move in mov:
-                return True
-            else:
+            if move not in mov:
                 return False
+            else:
+                continue
+        return True
 
 
     def find_piece(self, piece, is_black):
