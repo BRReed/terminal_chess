@@ -453,7 +453,32 @@ class TestInCheck(unittest.TestCase):
         c.move_piece(c.w_q, '14', '65')
         self.assertFalse(c.in_check(True))
 
+class TestCheckMate(unittest.TestCase):
 
+    def setUp(self):
+        reset_board()
+    
+    def test_black_king_not_mate(self):
+        self.assertFalse(c.check_mate(True))
+    
+    def test_white_king_not_mate(self):
+        self.assertFalse(c.check_mate(False))
+
+    def test_black_king_mate_white_knight(self):
+        c.move_piece(c.w_n, '12', '64')
+        self.assertTrue(c.check_mate(True))
+    
+    def test_white_king_mate_black_knight(self):
+        c.move_piece(c.b_n, '82', '34')
+        self.assertTrue(c.check_mate(False))
+
+    def test_white_king_not_in_check_black_queen_attacking(self):
+        c.move_piece(c.b_q, '84', '51')
+        c.move_piece(c.w_p, '24', '34')
+        c.move_piece(c.w_p, '25', '35')
+        self.assertFalse(c.check_mate(False))
+    
+    
 
 class TestPossibleMoves(unittest.TestCase):
     pass
