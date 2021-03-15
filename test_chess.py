@@ -3,7 +3,7 @@ from chess import Chess, BoardState
 
 
 def reset_board():
-    c.bs.create_start_state()
+    c.current_state = c.bs.create_start_state()
 
 class TestPieceMovement(unittest.TestCase):
 
