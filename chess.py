@@ -84,7 +84,161 @@ class Chess():
                 z += (f'{b}\n')
             z += '    H  G  F  E  D  C  B  A '
         print(z)
+
+
+    def move_piece(self, piece, c_coords, d_coords):
+        """Move piece on board
+
+        Args:
+            piece (string): unicode chess piece 
+            c_coords (string): row x column 'rc'
+            d_coords (string): row x column 'rc'
+        """
+        self.current_state[d_coords][2] = piece 
+        self.current_state[c_coords][2] = self.empty
     
+
+
+
+    def in_check(self, is_black, board_state):
+        """check if king is in check
+
+        Args:
+            is_black (bool): if king is black True; else False
+            board_state (dict): dictionary representation of a board state
+        Returns:
+            bool: True if king in check; else False
+        """
+        mov = []
+        if is_black is True:
+            king_space = self.bs.find_piece(self.bk, is_black, board_state)
+        else:
+            king_space = self.bs.find_piece(self.wk, is_black, board_state)
+        for coords in board_state:
+            if is_black != self.bs.is_black(board_state[coords][2]):
+                mov += self.bs.possible_moves(board_state[coords][2], coords, 
+                                           board_state)
+
+        if king_space in mov:
+            return True
+        else:
+            return False
+
+    def check_mate(self, is_black, board_state):
+        """check if king is check mated
+
+        Args:
+            is_black (bool): if king being checked is black True; else False
+            board_state (dict): dictionary representation of a board state
+        Returns:
+            bool: True if check mate, else False
+        """
+        if self.in_check(is_black, board_state):
+            pass
+        else:
+            return False
+        mov = []
+        if is_black is True:
+            king_space = self.bs.find_piece(self.bk, is_black, board_state)
+            king_spaces = self.bs.possible_moves(self.bk, king_space, board_state)
+            
+        else:
+            king_space = self.bs.find_piece(self.wk, is_black, board_state)
+            king_spaces = self.bs.possible_moves(self.wk, king_space, board_state)
+
+        for coords in board_state:
+            if is_black != self.bs.is_black(board_state[coords][2]):
+                mov += self.bs.possible_moves(board_state[coords][2], coords, 
+                                           board_state)
+        for move in king_spaces:
+            if move not in mov:
+                return False
+            else:
+                continue
+        return True
+
+
+class BoardState():
+    def __init__(self):
+        self.wk = assign_piece(False, 'king')
+        self.wq = assign_piece(False, 'queen')
+        self.wr = assign_piece(False, 'rook')
+        self.wb = assign_piece(False, 'bishop')
+        self.wn = assign_piece(False, 'knight')
+        self.wp = assign_piece(False, 'pawn')
+
+        self.bk = assign_piece(True, 'king')
+        self.bq = assign_piece(True, 'queen')
+        self.br = assign_piece(True, 'rook')
+        self.bb = assign_piece(True, 'bishop')
+        self.bn = assign_piece(True, 'knight')
+        self.bp = assign_piece(True, 'pawn')
+        self.empty = '   '
+
+    def create_start_state(self):
+        """Create start game board state
+        Vars:
+            self.start_state:
+                keys = [rc] where row is r and column is c. Both represented 
+                    by a number
+                values = (RGB BG colorcode, unicode chess piece,
+                    colorcode reset)
+        """
+        start_state = {}
+        for row in range(1, 9):
+            for column in range(1, 9):
+                if (row + column) % 2 == 0:
+                    start_state[f'{row}{column}'] = [
+                            '\033[48;2;57;78;112m', '\033[0m',
+                            f'{self.populate_start(row, column)}']
+                else:
+                    start_state[f'{row}{column}'] = [
+                            '\033[48;2;66;135;245m', '\033[0m',
+                            f'{self.populate_start(row, column)}']
+        return start_state
+    
+    def populate_start(self, r, c):
+        """Populates pieces on board at start of game
+        Args:
+            r (string): row on chess board
+            c (string): column on chess board
+        Returns:
+            Var equal to chess piece
+        """
+        if r == 1:
+            if c == 1 or c == 8:
+                return self.wr
+            elif c == 2 or c == 7:
+                return self.wn
+            elif c == 3 or c == 6:
+                return self.wb
+            elif c == 4:
+                return self.wq
+            elif c == 5:
+                return self.wk
+            else:
+                print(f'well, this is bad r, c = {r}, {c}')
+                return
+        elif r == 2:
+            return self.wp
+        elif r == 7: 
+            return self.bp
+        elif r == 8:
+            if c == 1 or c == 8:
+                return self.br
+            elif c == 2 or c == 7:
+                return self.bn
+            elif c == 3 or c == 6:
+                return self.bb
+            elif c == 4:
+                return self.bq
+            elif c == 5:
+                return self.bk
+            else:
+                print(f'well, this is bad r, c = {r}, {c}')
+        else:
+            return '   '
+
     def check_coords(self, coords):
         """check coords are integers
 
@@ -149,80 +303,6 @@ class Chess():
         else:
             return True
 
-    def piece_movement(self, piece, c_coords, d_coords):
-        """Validate movement of a piece
-
-        Args:
-            piece (string): a unicode chess piece
-            c_coords (string): current coordinates of piece
-            d_coords (string): destination coordinates of piece
-
-        Returns:
-            Boolean: True if move is valid based on piece movement restrictions
-                else; False
-        """
-        x1, y1 = self.str_coords_to_int(c_coords)
-        x2, y2 = self.str_coords_to_int(d_coords)
-        # king movement definitions
-        if piece == self.wk or piece == self.bk:
-            if (abs(x1 - x2), abs(y1 - y2)) in [(0,1), (1,0), (1,1)]:
-                return True
-            else:
-                return False
-        # queen movement definitions
-        elif piece == self.wq or piece == self.bq:
-            if x1 == x2 or y1 == y2:
-                return True
-            elif abs(x1 - x2) == abs(y1 - y2):
-                return True
-            else:
-                return False
-        # bishop movement definitions
-        elif piece == self.wb or piece == self.bb:
-            if abs(x1 - x2) == abs(y1 - y2):
-                return True
-            else:
-                return False
-        # knight movement definitions
-        elif piece == self.wn or piece == self.bn:
-            if (abs(x1 - x2), abs(y1 - y2)) in [(2,1), (1,2)]:
-                return True
-            else:
-                return False
-        # rook movement definitions
-        elif piece == self.wr or piece == self.br:
-            if x1 == x2 or y1 == y2:
-                return True
-            else:
-                return False
-        # pawn white movement definitions
-        elif piece == self.wp:
-            if x2 - x1 == 1 and abs(y2 - y1) <= 1:
-                return True
-            else:
-                return False
-        # pawn black movement definitions
-        elif piece == self.bp:
-            if x1 - x2 == 1 and abs(y2 - y1) <= 1:
-                return True
-            else:
-                return False
-        else:
-            print(f'Uh oh!, d_coords = {d_coords}, c_coords = {c_coords}, ' + 
-                  f'piece = {piece}')
-            return False
-
-    def move_piece(self, piece, c_coords, d_coords):
-        """Move piece on board
-
-        Args:
-            piece (string): unicode chess piece 
-            c_coords (string): row x column 'rc'
-            d_coords (string): row x column 'rc'
-        """
-        self.current_state[d_coords][2] = piece 
-        self.current_state[c_coords][2] = self.empty
-    
     def is_black(self, piece):
         """checks if a piece is black
 
@@ -297,65 +377,6 @@ class Chess():
         y += shift[1]
         return f'{x}{y}'
 
-
-    def in_check(self, is_black, board_state):
-        """check if king is in check
-
-        Args:
-            is_black (bool): if king is black True; else False
-            board_state (dict): dictionary representation of a board state
-        Returns:
-            bool: True if king in check; else False
-        """
-        mov = []
-        if is_black is True:
-            king_space = self.find_piece(self.bk, is_black, board_state)
-        else:
-            king_space = self.find_piece(self.wk, is_black, board_state)
-        for coords in board_state:
-            if is_black != self.is_black(board_state[coords][2]):
-                mov += self.possible_moves(board_state[coords][2], coords, 
-                                           board_state)
-
-        if king_space in mov:
-            return True
-        else:
-            return False
-
-    def check_mate(self, is_black, board_state):
-        """check if king is check mated
-
-        Args:
-            is_black (bool): if king being checked is black True; else False
-            board_state (dict): dictionary representation of a board state
-        Returns:
-            bool: True if check mate, else False
-        """
-        if self.in_check(is_black, board_state):
-            pass
-        else:
-            return False
-        mov = []
-        if is_black is True:
-            king_space = self.find_piece(self.bk, is_black, board_state)
-            king_spaces = self.possible_moves(self.bk, king_space, board_state)
-            
-        else:
-            king_space = self.find_piece(self.wk, is_black, board_state)
-            king_spaces = self.possible_moves(self.wk, king_space, board_state)
-
-        for coords in board_state:
-            if is_black != self.is_black(board_state[coords][2]):
-                mov += self.possible_moves(board_state[coords][2], coords, 
-                                           board_state)
-        for move in king_spaces:
-            if move not in mov:
-                return False
-            else:
-                continue
-        return True
-
-
     def find_piece(self, piece, is_black, board_state):
         """find piece if exists on board. Returns location of only one piece
 
@@ -371,8 +392,6 @@ class Chess():
                 is_black == self.is_black(board_state[space][2])):
                 return space
         return False
-
-
 
     def moves_dir(self, coords, shift, is_black, board_state):
         """checks all possible moves for piece
@@ -404,6 +423,65 @@ class Chess():
                 break
         return moves
 
+    def piece_movement(self, piece, c_coords, d_coords):
+        """Validate movement of a piece
+
+        Args:
+            piece (string): a unicode chess piece
+            c_coords (string): current coordinates of piece
+            d_coords (string): destination coordinates of piece
+
+        Returns:
+            Boolean: True if move is valid based on piece movement restrictions
+                else; False
+        """
+        x1, y1 = self.str_coords_to_int(c_coords)
+        x2, y2 = self.str_coords_to_int(d_coords)
+        # king movement definitions
+        if piece == self.wk or piece == self.bk:
+            if (abs(x1 - x2), abs(y1 - y2)) in [(0,1), (1,0), (1,1)]:
+                return True
+            else:
+                return False
+        # queen movement definitions
+        elif piece == self.wq or piece == self.bq:
+            if x1 == x2 or y1 == y2:
+                return True
+            elif abs(x1 - x2) == abs(y1 - y2):
+                return True
+            else:
+                return False
+        # bishop movement definitions
+        elif piece == self.wb or piece == self.bb:
+            if abs(x1 - x2) == abs(y1 - y2):
+                return True
+            else:
+                return False
+        # knight movement definitions
+        elif piece == self.wn or piece == self.bn:
+            if (abs(x1 - x2), abs(y1 - y2)) in [(2,1), (1,2)]:
+                return True
+            else:
+                return False
+        # rook movement definitions
+        elif piece == self.wr or piece == self.br:
+            if x1 == x2 or y1 == y2:
+                return True
+            else:
+                return False
+        # pawn white movement definitions
+        elif piece == self.wp:
+            if x2 - x1 == 1 and abs(y2 - y1) <= 1:
+                return True
+            else:
+                return False
+        # pawn black movement definitions
+        elif piece == self.bp:
+            if x1 - x2 == 1 and abs(y2 - y1) <= 1:
+                return True
+            else:
+                return False
+    
     def possible_moves(self, piece, coords, board_state):
         """Given current board state check all possible moves
 
@@ -518,89 +596,6 @@ class Chess():
                 moves.remove(move)
         # add function for not putting self in check
         return moves
-
-
-
-class BoardState():
-    def __init__(self):
-        self.wk = assign_piece(False, 'king')
-        self.wq = assign_piece(False, 'queen')
-        self.wr = assign_piece(False, 'rook')
-        self.wb = assign_piece(False, 'bishop')
-        self.wn = assign_piece(False, 'knight')
-        self.wp = assign_piece(False, 'pawn')
-
-        self.bk = assign_piece(True, 'king')
-        self.bq = assign_piece(True, 'queen')
-        self.br = assign_piece(True, 'rook')
-        self.bb = assign_piece(True, 'bishop')
-        self.bn = assign_piece(True, 'knight')
-        self.bp = assign_piece(True, 'pawn')
-        self.empty = '   '
-
-    def create_start_state(self):
-        """Create start game board state
-        Vars:
-            self.start_state:
-                keys = [rc] where row is r and column is c. Both represented 
-                    by a number
-                values = (RGB BG colorcode, unicode chess piece,
-                    colorcode reset)
-        """
-        start_state = {}
-        for row in range(1, 9):
-            for column in range(1, 9):
-                if (row + column) % 2 == 0:
-                    start_state[f'{row}{column}'] = [
-                            '\033[48;2;57;78;112m', '\033[0m',
-                            f'{self.populate_start(row, column)}']
-                else:
-                    start_state[f'{row}{column}'] = [
-                            '\033[48;2;66;135;245m', '\033[0m',
-                            f'{self.populate_start(row, column)}']
-        return start_state
-    
-    def populate_start(self, r, c):
-        """Populates pieces on board at start of game
-        Args:
-            r (string): row on chess board
-            c (string): column on chess board
-        Returns:
-            Var equal to chess piece
-        """
-        if r == 1:
-            if c == 1 or c == 8:
-                return self.wr
-            elif c == 2 or c == 7:
-                return self.wn
-            elif c == 3 or c == 6:
-                return self.wb
-            elif c == 4:
-                return self.wq
-            elif c == 5:
-                return self.wk
-            else:
-                print(f'well, this is bad r, c = {r}, {c}')
-                return
-        elif r == 2:
-            return self.wp
-        elif r == 7: 
-            return self.bp
-        elif r == 8:
-            if c == 1 or c == 8:
-                return self.br
-            elif c == 2 or c == 7:
-                return self.bn
-            elif c == 3 or c == 6:
-                return self.bb
-            elif c == 4:
-                return self.bq
-            elif c == 5:
-                return self.bk
-            else:
-                print(f'well, this is bad r, c = {r}, {c}')
-        else:
-            return '   '
 
     def block_check(self, is_black, board_state):
         """check if friendly piece of king under attack can block
