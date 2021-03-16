@@ -303,6 +303,18 @@ class BoardState():
         else:
             return True
 
+    def move_piece(self, piece, c_coords, d_coords, board_state):
+        """Move piece on board
+
+        Args:
+            piece (string): unicode chess piece 
+            c_coords (string): row x column 'rc'
+            d_coords (string): row x column 'rc'
+        """
+        board_state[d_coords][2] = piece 
+        board_state[c_coords][2] = self.empty
+        return board_state
+
     def is_black(self, piece):
         """checks if a piece is black
 
@@ -597,6 +609,22 @@ class BoardState():
         # add function for not putting self in check
         return moves
 
+    def in_check(self, is_black, board_state):
+        mov = []
+        if is_black is True:
+            king_space = self.find_piece(self.bk, is_black, board_state)
+        else:
+            king_space = self.find_piece(self.wk, is_black, board_state)
+        for coords in board_state:
+            if is_black != self.is_black(board_state[coords][2]):
+                mov += self.possible_moves(board_state[coords][2], coords, 
+                                           board_state)
+
+        if king_space in mov:
+            return True
+        else:
+            return False
+
     def block_check(self, is_black, board_state):
         """check if friendly piece of king under attack can block
 
@@ -607,4 +635,20 @@ class BoardState():
         Returns:
             bool: if friendly piece can block check True; else False
         """
-        pass
+        for space in board_state:
+            
+            if is_black == self.is_black(board_state[space][2]):
+                moves = self.possible_moves(board_state[space][2], space, 
+                                            board_state)
+                for move in moves:
+                    temp_board = board_state.copy()
+                    temp_board = self.move_piece(temp_board[space][2], space, 
+                                                 move, temp_board)
+                    if self.in_check(is_black, temp_board):
+                        continue
+                    else:
+                        return True
+            else:
+                continue
+        return False
+
