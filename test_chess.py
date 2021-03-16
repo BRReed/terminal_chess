@@ -483,6 +483,36 @@ class TestCheckMate(unittest.TestCase):
 class TestPossibleMoves(unittest.TestCase):
     pass
 
+class TestBlockCheck(unittest.TestCase):
+    def setUp(self):
+        reset_board()
+    
+    def test_black_block_check_white_bishop(self):
+        c.move_piece(c.bp, '74', '54')
+        c.move_piece(c.wb, '13', '65')
+        self.assertTrue(c.bs.block_check(True, c.current_state))
+
+    def test_black_block_check_knight_takes_knight_attacker(self):
+        c.move_piece(c.bp, '73', '53')
+        c.move_piece(c.bp, '75', '55')
+        c.move_piece(c.bn, '87', '75')
+        c.move_piece(c.bn, '82', '52')
+        c.move_piece(c.wn, '12', '64')
+        self.assertTrue(c.bs.block_check(True, c.current_state))
+
+    def test_black_block_check_king_takes_pawn_attacker(self):
+        c.move_piece(c.wp, '21', '45') 
+        c.move_piece(c.bk, '84', '54')
+        self.assertTrue(c.bs.block_check(True, c.current_state))
+    
+    def test_black_not_block_check_queen_attacker(self):
+        c.move_piece(c.wq, '14', '58')
+        c.move_piece(c.bp, '76', '66')
+        c.move_piece(c.bp, '77', '57')
+        self.assertFalse(c.bs.block_check(True, c.current_state))
+    
+    
+
 if __name__ == '__main__':
     c = Chess()
     unittest.main()

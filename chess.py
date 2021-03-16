@@ -310,6 +310,9 @@ class BoardState():
             piece (string): unicode chess piece 
             c_coords (string): row x column 'rc'
             d_coords (string): row x column 'rc'
+        
+        Returns:
+            Dict: board_state with applied movement changes
         """
         board_state[d_coords][2] = piece 
         board_state[c_coords][2] = self.empty
@@ -610,6 +613,14 @@ class BoardState():
         return moves
 
     def in_check(self, is_black, board_state):
+        """check if king is in check
+
+        Args:
+            is_black (bool): if king is black True; else False
+            board_state (dict): dictionary representation of a board state
+        Returns:
+            bool: True if king in check; else False
+        """
         mov = []
         if is_black is True:
             king_space = self.find_piece(self.bk, is_black, board_state)
@@ -636,7 +647,6 @@ class BoardState():
             bool: if friendly piece can block check True; else False
         """
         for space in board_state:
-            
             if is_black == self.is_black(board_state[space][2]):
                 moves = self.possible_moves(board_state[space][2], space, 
                                             board_state)
@@ -651,4 +661,5 @@ class BoardState():
             else:
                 continue
         return False
+
 
