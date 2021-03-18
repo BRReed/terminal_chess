@@ -1,32 +1,6 @@
-def assign_piece(is_black, piece):
-    """create and return string of chess piece
+from copy import deepcopy
 
-    Args:
-        is_black (bool): if piece is black, True, else False
-        piece (string): accepts king, queen, rook, bishop, knight, pawn
 
-    Returns:
-        string: (rgb code for color) + (unicode for piece) + (color reset) 
-    """
-    string = ''
-    if is_black == True:
-        string += '\033[38;2;0;0;0m'
-    else:
-        string += '\033[38;2;255;255;255m'
-    if piece.lower() == 'king':
-        string += ' \u265A '
-    elif piece.lower() == 'queen':
-        string += ' \u265B '
-    elif piece.lower() == 'rook':
-        string += ' \u265C '
-    elif piece.lower() == 'bishop':
-        string += ' \u265D '
-    elif piece.lower() == 'knight':
-        string += ' \u265E '
-    elif piece.lower() == 'pawn':
-        string += ' \u265F '
-    string += '\033[38;0m'
-    return string
 
 
 
@@ -36,22 +10,6 @@ def assign_piece(is_black, piece):
 
 class Chess():
     def __init__(self):
-        
-        self.bs = BoardState()
-        self.wk = assign_piece(False, 'king')
-        self.wq = assign_piece(False, 'queen')
-        self.wr = assign_piece(False, 'rook')
-        self.wb = assign_piece(False, 'bishop')
-        self.wn = assign_piece(False, 'knight')
-        self.wp = assign_piece(False, 'pawn')
-
-        self.bk = assign_piece(True, 'king')
-        self.bq = assign_piece(True, 'queen')
-        self.br = assign_piece(True, 'rook')
-        self.bb = assign_piece(True, 'bishop')
-        self.bn = assign_piece(True, 'knight')
-        self.bp = assign_piece(True, 'pawn')
-        self.empty = '   '
         self.bs = BoardState()
         self.current_state = self.bs.create_start_state()
 
@@ -95,7 +53,7 @@ class Chess():
             d_coords (string): row x column 'rc'
         """
         self.current_state[d_coords][2] = piece 
-        self.current_state[c_coords][2] = self.empty
+        self.current_state[c_coords][2] = self.bs.empty
     
 
 
@@ -111,9 +69,9 @@ class Chess():
         """
         mov = []
         if is_black is True:
-            king_space = self.bs.find_piece(self.bk, is_black, board_state)
+            king_space = self.bs.find_piece(self.bs.bk, is_black, board_state)
         else:
-            king_space = self.bs.find_piece(self.wk, is_black, board_state)
+            king_space = self.bs.find_piece(self.bs.wk, is_black, board_state)
         for coords in board_state:
             if is_black != self.bs.is_black(board_state[coords][2]):
                 mov += self.bs.possible_moves(board_state[coords][2], coords, 
@@ -139,12 +97,12 @@ class Chess():
             return False
         mov = []
         if is_black is True:
-            king_space = self.bs.find_piece(self.bk, is_black, board_state)
-            king_spaces = self.bs.possible_moves(self.bk, king_space, board_state)
+            king_space = self.bs.find_piece(self.bs.bk, is_black, board_state)
+            king_spaces = self.bs.possible_moves(self.bs.bk, king_space, board_state)
             
         else:
-            king_space = self.bs.find_piece(self.wk, is_black, board_state)
-            king_spaces = self.bs.possible_moves(self.wk, king_space, board_state)
+            king_space = self.bs.find_piece(self.bs.wk, is_black, board_state)
+            king_spaces = self.bs.possible_moves(self.bs.wk, king_space, board_state)
 
         for coords in board_state:
             if is_black != self.bs.is_black(board_state[coords][2]):
@@ -160,20 +118,50 @@ class Chess():
 
 class BoardState():
     def __init__(self):
-        self.wk = assign_piece(False, 'king')
-        self.wq = assign_piece(False, 'queen')
-        self.wr = assign_piece(False, 'rook')
-        self.wb = assign_piece(False, 'bishop')
-        self.wn = assign_piece(False, 'knight')
-        self.wp = assign_piece(False, 'pawn')
+        self.wk = self.assign_piece(False, 'king')
+        self.wq = self.assign_piece(False, 'queen')
+        self.wr = self.assign_piece(False, 'rook')
+        self.wb = self.assign_piece(False, 'bishop')
+        self.wn = self.assign_piece(False, 'knight')
+        self.wp = self.assign_piece(False, 'pawn')
 
-        self.bk = assign_piece(True, 'king')
-        self.bq = assign_piece(True, 'queen')
-        self.br = assign_piece(True, 'rook')
-        self.bb = assign_piece(True, 'bishop')
-        self.bn = assign_piece(True, 'knight')
-        self.bp = assign_piece(True, 'pawn')
+        self.bk = self.assign_piece(True, 'king')
+        self.bq = self.assign_piece(True, 'queen')
+        self.br = self.assign_piece(True, 'rook')
+        self.bb = self.assign_piece(True, 'bishop')
+        self.bn = self.assign_piece(True, 'knight')
+        self.bp = self.assign_piece(True, 'pawn')
         self.empty = '   '
+
+    def assign_piece(self, is_black, piece):
+        """create and return string of chess piece
+
+        Args:
+            is_black (bool): if piece is black, True, else False
+            piece (string): accepts king, queen, rook, bishop, knight, pawn
+
+        Returns:
+            string: (rgb code for color) + (unicode for piece) + (color reset) 
+        """
+        string = ''
+        if is_black == True:
+            string += '\033[38;2;0;0;0m'
+        else:
+            string += '\033[38;2;255;255;255m'
+        if piece.lower() == 'king':
+            string += ' \u265A '
+        elif piece.lower() == 'queen':
+            string += ' \u265B '
+        elif piece.lower() == 'rook':
+            string += ' \u265C '
+        elif piece.lower() == 'bishop':
+            string += ' \u265D '
+        elif piece.lower() == 'knight':
+            string += ' \u265E '
+        elif piece.lower() == 'pawn':
+            string += ' \u265F '
+        string += '\033[38;0m'
+        return string
 
     def create_start_state(self):
         """Create start game board state
@@ -636,6 +624,36 @@ class BoardState():
         else:
             return False
 
+    def print_current_state(self, perspective, board_state):
+        """Creates printed representation of current chess board
+
+        Args:
+            perspective (string): either 'black' or 'white' flips board 
+                to show proper perspective
+        """
+        z = ''
+        if perspective == 'white':
+            for r in range(8, 0, -1):
+                b = f' {r} '
+                for c in range(1, 9):
+                    b += (board_state[f'{r}{c}'][0] +
+                          board_state[f'{r}{c}'][2] +
+                          board_state[f'{r}{c}'][1])
+                z += (f'{b}\n')
+            z += '    A  B  C  D  E  F  G  H '
+        elif perspective == 'black':
+            for r in range(1, 9):
+                b = f' {r} '
+                for c in range(8, 0, -1):
+                    b += (board_state[f'{r}{c}'][0] +
+                          board_state[f'{r}{c}'][2] +
+                          board_state[f'{r}{c}'][1])
+                z += (f'{b}\n')
+            z += '    H  G  F  E  D  C  B  A '
+        print(z)
+
+    
+
     def block_check(self, is_black, board_state):
         """check if friendly piece of king under attack can block
 
@@ -651,11 +669,11 @@ class BoardState():
                 moves = self.possible_moves(board_state[space][2], space, 
                                             board_state)
                 for move in moves:
-                    temp_board = board_state.copy()
-                    temp_board = self.move_piece(temp_board[space][2], space, 
-                                                 move, temp_board)
+                    temp_board = deepcopy(board_state)
+                    temp_board = self.move_piece(temp_board[space][2], space,
+                                                    move, temp_board)
                     if self.in_check(is_black, temp_board):
-                        continue
+                        pass
                     else:
                         return True
             else:
