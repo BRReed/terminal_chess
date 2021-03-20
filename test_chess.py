@@ -1,4 +1,5 @@
 import unittest
+from collections import Counter
 from chess import Chess, BoardState
 
 
@@ -498,7 +499,41 @@ class TestCheckMate(unittest.TestCase):
     
 
 class TestPossibleMoves(unittest.TestCase):
-    pass
+    def setUp(self):
+        reset_board()
+
+    def test_white_king_no_moves(self):
+        self.assertEqual(c.bs.possible_moves(c.bs.wk, '15', c.current_state), 
+                                             [])
+
+    def test_white_pawn_no_target(self):
+        self.assertEqual(c.bs.possible_moves(c.bs.wp, '21', c.current_state), 
+                                             ['31'])
+    
+    def test_white_pawn_blocked(self):
+        c.move_piece(c.bs.bp, '71', '31')
+        self.assertEqual(c.bs.possible_moves(c.bs.wp, '21', c.current_state),
+                                             [])
+
+    def test_white_queen_from_45(self):
+        c.move_piece(c.bs.wq, '14', '45')
+        actual_moves = c.bs.possible_moves(c.bs.wq, '45', c.current_state)
+        expected_moves = ['55', '65', '75', '35', '44', '43', '42', '41',
+                          '46', '47', '48', '34', '56', '67', '78', '36',
+                          '54', '63', '72']
+        actual = Counter(actual_moves)
+        expected = Counter(expected_moves)
+        assert actual == expected
+    
+    def test_black_queen_from_52(self):
+        c.move_piece(c.bs.bq, '84', '52')
+        actual_moves = c.bs.possible_moves(c.bs.bq, '52', c.current_state)
+        expected_moves = ['51', '61', '62', '63', '53', '54', '55', '56', 
+                          '57', '58', '43', '34', '25', '42', '41', '32', 
+                          '22']
+        actual = Counter(actual_moves)
+        expected = Counter(expected_moves)
+        assert actual == expected
 
 class TestBlockCheck(unittest.TestCase):
     def setUp(self):
