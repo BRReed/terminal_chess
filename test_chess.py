@@ -515,6 +515,14 @@ class TestPossibleMoves(unittest.TestCase):
         self.assertEqual(c.bs.possible_moves(c.bs.wp, '21', c.current_state),
                                              [])
 
+    def test_black_pawn_target(self):
+        c.move_piece(c.bs.wp, '22', '62')
+        actual_moves = c.bs.possible_moves(c.bs.bp, '71', c.current_state)
+        expected_moves = ['61', '62']
+        actual = Counter(actual_moves)
+        expected = Counter(expected_moves)
+        assert actual == expected
+
     def test_white_queen_from_45(self):
         c.move_piece(c.bs.wq, '14', '45')
         actual_moves = c.bs.possible_moves(c.bs.wq, '45', c.current_state)
@@ -531,6 +539,39 @@ class TestPossibleMoves(unittest.TestCase):
         expected_moves = ['51', '61', '62', '63', '53', '54', '55', '56', 
                           '57', '58', '43', '34', '25', '42', '41', '32', 
                           '22']
+        actual = Counter(actual_moves)
+        expected = Counter(expected_moves)
+        assert actual == expected
+
+    def test_white_bishop_from_44(self):
+        c.move_piece(c.bs.wb, '13', '44')
+        actual_moves = c.bs.possible_moves(c.bs.wb, '44', c.current_state)
+        expected_moves = ['33', '35', '53', '62', '71', '55', '66', '77']
+        actual = Counter(actual_moves)
+        expected = Counter(expected_moves)
+        assert actual == expected
+
+    def test_black_knight_from_33(self):
+        c.move_piece(c.bs.bn, '82', '33')
+        actual_moves = c.bs.possible_moves(c.bs.bn, '33', c.current_state)
+        expected_moves = ['12', '14', '21', '25', '41', '45', '52', '54']
+        actual = Counter(actual_moves)
+        expected = Counter(expected_moves)
+        assert actual == expected
+
+    def test_black_rook_from_56(self):
+        c.move_piece(c.bs.br, '88', '56')
+        actual_moves = c.bs.possible_moves(c.bs.br, '56', c.current_state)
+        expected_moves = ['66', '46', '36', '26', '57', '58', '55', '54', 
+                          '53', '52', '51']
+        actual = Counter(actual_moves)
+        expected = Counter(expected_moves)
+        assert actual == expected
+
+    def test_white_king_from_44(self):
+        c.move_piece(c.bs.wk, '15', '44')
+        actual_moves = c.bs.possible_moves(c.bs.wk, '44', c.current_state)
+        expected_moves = ['53', '54', '55', '43', '45', '35', '34', '33']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
