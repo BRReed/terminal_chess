@@ -351,10 +351,11 @@ class BoardState():
         Returns:
             [type]: [description]
         """
-        if is_black != self.is_black(board_state[coords][2]):
-            return True
-        else:
+        if self.is_empty(coords, board_state) or (
+            is_black == self.is_black(board_state[coords][2])):
             return False
+        elif is_black != self.is_black(board_state[coords][2]):
+            return True
 
     def is_empty(self, coords, board_state):
         """checks if coords is empty
@@ -401,22 +402,61 @@ class BoardState():
                 return space
         return False
 
-    def check_castling(self, is_black, board_state):
+    def check_castling(self, is_black, side, board_state):
         """[summary]
 
         Args:
             is_black (bool): if king to castle is black True, else False
+            side (string): if king side 'king', if queen side 'queen'
             board_state (dict): state of the board to check
         Returns:
             bool: True if castling is valid, else False
         """
-        if is_black:
+        if self.in_check(is_black, board_state):
+            return False
+
+        elif is_black:
             if not self.b_king_side_castle and not self.b_queen_side_castle:
                 return False
-        
-        if not is_black:
+            elif side.lower() == 'king':
+                if self.b_king_side_castle:
+                    spaces = ['86', '87']
+                else:
+                    return False
+            elif side.lower() == 'queen':
+                if self.b_queen_side_castle:
+                    spaces = ['84', '83']
+
+        elif not is_black:
             if not self.w_king_side_castle and not self.w_queen_side_castle:
                 return False
+            elif side.lower() == 'king':
+                if self.w_king_side_castle:
+                    spaces = ['16', '17']
+                else:
+                    return False
+            elif side.lower() == 'queen':
+                if self.w_queen_side_castle:
+                    spaces = ['13', '14']
+                else:
+                    return False
+        for space in board_state:
+            if not self.is_empty(space, board_state):
+                return False
+            elif self.is_enemy(space, is_black, board_state):
+                moves = self.possible_moves(board_state[space][2], space, 
+                                            board_state)
+            for move in moves:
+                if move in spaces:
+                    return False
+                
+                else:
+                    continue
+        return True
+
+
+
+
 
 
     def moves_dir(self, coords, shift, is_black, board_state):
