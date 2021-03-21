@@ -405,7 +405,7 @@ class BoardState():
         return False
 
     def check_castling(self, is_black, side, board_state):
-        """[summary]
+        """Checks if king can castle 
 
         Args:
             is_black (bool): if king to castle is black True, else False
@@ -457,6 +457,32 @@ class BoardState():
                 continue
         return True
 
+    def check_castling_valid(self, board_state):
+        """checks if king or rooks move from their spots
+
+            self.w_king_side_castle, self.w_queen_side_castle, 
+            self.b_king_side_castle, self.b_queen_side_castle change based on
+            if king moves both vars of that color are False, if rook moves 
+            that direction that color is False
+        """
+        if self.w_king_side_castle or self.w_queen_side_castle:
+            if self.wk not in board_state['15'][2]:
+                self.w_king_side_castle = False
+                self.w_queen_side_castle = False
+
+            elif self.wr not in board_state['11'][2]:
+                self.w_queen_side_castle = False
+            elif self.wr not in board_state['18'][2]:
+                self.w_king_side_castle = False
+
+        if self.b_king_side_castle or self.b_queen_side_castle:
+            if self.bk not in board_state['85'][2]:
+                self.b_king_side_castle = False
+                self.b_queen_side_castle = False
+            elif self.br not in board_state['81'][2]:
+                self.b_queen_side_castle = False
+            if self.br not in board_state['88'][2]:
+                self.b_king_side_castle = False
 
 
 

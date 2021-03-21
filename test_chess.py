@@ -5,6 +5,10 @@ from chess import Chess, BoardState
 
 def reset_board():
     c.current_state = c.bs.create_start_state()
+    c.bs.w_king_side_castle = True
+    c.bs.w_queen_side_castle = True
+    c.bs.b_king_side_castle = True
+    c.bs.b_queen_side_castle = True
 
 class TestPieceMovement(unittest.TestCase):
 
@@ -711,6 +715,69 @@ class TestCheckCastling(unittest.TestCase):
         c.move_piece(c.bs.bn, '82', '61')
         c.move_piece(c.bs.wq, '14', '32')
         self.assertTrue(c.bs.check_castling(True, 'queen', c.current_state))
+
+class TestCheckCastlingValid(unittest.TestCase):
+
+    def setUp(self):
+        reset_board()
+
+    def no_changes(self):
+        c.bs.check_castling_valid(c.current_state)
+        assert c.bs.w_king_side_castle == True
+        assert c.bs.w_queen_side_castle == True
+        assert c.bs.b_king_side_castle == True
+        assert c.bs.b_queen_side_castle == True
+    
+    def white_king_moved(self):
+        c.move_piece(c.bs.wk, '15', '35')
+        c.bs.check_castling_valid(c.current_state)
+        assert c.bs.w_king_side_castle == False
+        assert c.bs.w_queen_side_castle == False
+        assert c.bs.b_king_side_castle == True
+        assert c.bs.b_queen_side_castle == True
+    
+    def white_king_side_rook_moved(self):
+        c.move_piece(c.bs.wr, '88', '68')
+        c.bs.check_castling_valid(c.current_state)
+        assert c.bs.w_king_side_castle == False
+        assert c.bs.w_queen_side_castle == True
+        assert c.bs.b_king_side_castle == True
+        assert c.bs.b_queen_side_castle == True
+
+    def white_queen_side_rook_moved(self):
+        c.move_piece(c.bs.wr, '81', '61')
+        c.bs.check_castling_valid(c.current_state)
+        assert c.bs.w_king_side_castle == True
+        assert c.bs.w_queen_side_castle == False
+        assert c.bs.b_king_side_castle == True
+        assert c.bs.b_queen_side_castle == True
+
+    def black_king_moved(self):
+        c.move_piece(c.bs.bk, '85', '65')
+        c.bs.check_castling_valid(c.current_state)
+        assert c.bs.w_king_side_castle == True
+        assert c.bs.w_queen_side_castle == True
+        assert c.bs.b_king_side_castle == False
+        assert c.bs.b_queen_side_castle == False
+
+    def black_king_side_rook_moved(self):
+        c.move_piece(c.bs.br, '18', '38')
+        c.bs.check_castling_valid(c.current_state)
+        assert c.bs.w_king_side_castle == True
+        assert c.bs.w_queen_side_castle == True
+        assert c.bs.b_king_side_castle == False
+        assert c.bs.b_queen_side_castle == True
+
+    def black_queen_side_rook_moved(self):
+        c.move_piece(c.bs.br, '11', '31')
+        c.bs.check_castling_valid(c.current_state)
+        assert c.bs.w_king_side_castle == True
+        assert c.bs.w_queen_side_castle == True
+        assert c.bs.b_king_side_castle == True
+        assert c.bs.b_queen_side_castle == False
+
+
+
 
 if __name__ == '__main__':
     c = Chess()
