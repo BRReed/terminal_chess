@@ -679,6 +679,15 @@ class TestCheckCastling(unittest.TestCase):
         c.move_piece(c.bs.br, '88', '67')
         self.assertFalse(c.bs.check_castling(False, 'king', c.current_state))
 
+    def test_white_king_side_in_check(self):
+        c.move_piece(c.bs.wb, '16', '36')
+        c.move_piece(c.bs.wn, '17', '46')
+        c.move_piece(c.bs.wp, '28', '37')
+        c.move_piece(c.bs.bp, '78', '67')
+        c.move_piece(c.bs.wp, '25', '34')
+        c.move_piece(c.bs.br, '88', '65')
+        self.assertFalse(c.bs.check_castling(False, 'king', c.current_state))
+
 if __name__ == '__main__':
     c = Chess()
     unittest.main()
