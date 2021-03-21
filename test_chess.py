@@ -643,29 +643,41 @@ class TestCheckCastling(unittest.TestCase):
     def test_black_queen_side_spaces_occupied(self):
         self.assertFalse(c.bs.check_castling(True, 'queen', c.current_state))
 
-    def test_white_king_side(self):
+    def test_white_king_side_protected_free(self):
         c.move_piece(c.bs.wb, '16', '36')
         c.move_piece(c.bs.wn, '17', '38')
         self.assertTrue(c.bs.check_castling(False, 'king', c.current_state))
 
-    def test_white_queen_side(self):
+    def test_white_queen_side_protected_free(self):
         c.move_piece(c.bs.wq, '14', '34')
         c.move_piece(c.bs.wb, '13', '33')
         c.move_piece(c.bs.wn, '12', '31')
         self.assertTrue(c.bs.check_castling(False, 'queen', c.current_state))
 
-    def test_black_king_side(self):
+    def test_black_king_side_protected_free(self):
         c.move_piece(c.bs.bb, '86', '66')
         c.move_piece(c.bs.bn, '87', '68')
         self.assertTrue(c.bs.check_castling(True, 'king', c.current_state))
 
-    def test_black_queen_side(self):
+    def test_black_queen_side_protected_free(self):
         c.move_piece(c.bs.bq, '84', '64')
         c.move_piece(c.bs.bb, '83', '63')
         c.move_piece(c.bs.bn, '82', '61')
         self.assertTrue(c.bs.check_castling(True, 'queen', c.current_state))
     
-    
+    def test_white_king_side_rook_attacked(self):
+        c.move_piece(c.bs.wb, '16', '36')
+        c.move_piece(c.bs.wn, '17', '35')
+        c.move_piece(c.bs.wp, '28', '37')
+        c.move_piece(c.bs.bp, '78', '67')
+        self.assertTrue(c.bs.check_castling(False, 'king', c.current_state))
+
+    def test_white_king_side_king_landing_space_attacked(self):
+        c.move_piece(c.bs.wb, '16', '36')
+        c.move_piece(c.bs.wn, '17', '35')
+        c.move_piece(c.bs.wp, '27', '46')
+        c.move_piece(c.bs.br, '88', '67')
+        self.assertFalse(c.bs.check_castling(False, 'king', c.current_state))
 
 if __name__ == '__main__':
     c = Chess()

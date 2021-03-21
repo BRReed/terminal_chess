@@ -439,15 +439,20 @@ class BoardState():
         for space in spaces:
             if not self.is_empty(space, board_state):
                 return False
-            elif self.is_enemy(space, is_black, board_state):
+        for space in board_state:
+            if self.is_enemy(space, is_black, board_state):
                 moves = self.possible_moves(board_state[space][2], space, 
                                             board_state)
                 for move in moves:
+                    
                     if move == spaces[0] or move == spaces[1]:
+
                         return False
                     
                     else:
                         continue
+            else:
+                continue
         return True
 
 
