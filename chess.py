@@ -9,6 +9,7 @@ from copy import deepcopy
 
 
 class Chess():
+
     def __init__(self):
         self.bs = BoardState()
         self.current_state = self.bs.create_start_state()
@@ -132,6 +133,10 @@ class BoardState():
         self.bn = self.assign_piece(True, 'knight')
         self.bp = self.assign_piece(True, 'pawn')
         self.empty = '   '
+        self.w_king_side_castle = True
+        self.w_queen_side_castle = True
+        self.b_king_side_castle = True
+        self.b_queen_side_castle = True
 
     def assign_piece(self, is_black, piece):
         """create and return string of chess piece
@@ -395,6 +400,24 @@ class BoardState():
                 is_black == self.is_black(board_state[space][2])):
                 return space
         return False
+
+    def check_castling(self, is_black, board_state):
+        """[summary]
+
+        Args:
+            is_black (bool): if king to castle is black True, else False
+            board_state (dict): state of the board to check
+        Returns:
+            bool: True if castling is valid, else False
+        """
+        if is_black:
+            if not self.b_king_side_castle and not self.b_queen_side_castle:
+                return False
+        
+        if not is_black:
+            if not self.w_king_side_castle and not self.w_queen_side_castle:
+                return False
+
 
     def moves_dir(self, coords, shift, is_black, board_state):
         """checks all possible moves for piece
