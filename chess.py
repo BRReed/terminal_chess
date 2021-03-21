@@ -99,11 +99,13 @@ class Chess():
         mov = []
         if is_black is True:
             king_space = self.bs.find_piece(self.bs.bk, is_black, board_state)
-            king_spaces = self.bs.possible_moves(self.bs.bk, king_space, board_state)
+            king_spaces = self.bs.possible_moves(self.bs.bk, king_space, 
+                                                 board_state)
             
         else:
             king_space = self.bs.find_piece(self.bs.wk, is_black, board_state)
-            king_spaces = self.bs.possible_moves(self.bs.wk, king_space, board_state)
+            king_spaces = self.bs.possible_moves(self.bs.wk, king_space, 
+                                                 board_state)
 
         for coords in board_state:
             if is_black != self.bs.is_black(board_state[coords][2]):
