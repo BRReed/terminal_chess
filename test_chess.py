@@ -627,6 +627,45 @@ class TestBlockCheck(unittest.TestCase):
         c.move_piece(c.bs.bp, '77', '37')
         self.assertFalse(c.bs.block_check(False, c.current_state))
 
+class TestCheckCastling(unittest.TestCase):
+    def setUp(self):
+        reset_board()
+
+    def test_white_king_side_spaces_occupied(self):
+        self.assertFalse(c.bs.check_castling(False, 'king', c.current_state))
+
+    def test_white_queen_side_spaces_occupied(self):
+        self.assertFalse(c.bs.check_castling(False, 'queen', c.current_state))
+    
+    def test_black_king_side_spaces_occupied(self):
+        self.assertFalse(c.bs.check_castling(True, 'king', c.current_state))
+    
+    def test_black_queen_side_spaces_occupied(self):
+        self.assertFalse(c.bs.check_castling(True, 'queen', c.current_state))
+
+    def test_white_king_side(self):
+        c.move_piece(c.bs.wb, '16', '36')
+        c.move_piece(c.bs.wn, '17', '38')
+        self.assertTrue(c.bs.check_castling(False, 'king', c.current_state))
+
+    def test_white_queen_side(self):
+        c.move_piece(c.bs.wq, '14', '34')
+        c.move_piece(c.bs.wb, '13', '33')
+        c.move_piece(c.bs.wn, '12', '31')
+        self.assertTrue(c.bs.check_castling(False, 'queen', c.current_state))
+
+    def test_black_king_side(self):
+        c.move_piece(c.bs.bb, '86', '66')
+        c.move_piece(c.bs.bn, '87', '68')
+        self.assertTrue(c.bs.check_castling(True, 'king', c.current_state))
+
+    def test_black_queen_side(self):
+        c.move_piece(c.bs.bq, '84', '64')
+        c.move_piece(c.bs.bb, '83', '63')
+        c.move_piece(c.bs.bn, '82', '61')
+        self.assertTrue(c.bs.check_castling(True, 'queen', c.current_state))
+    
+    
 
 if __name__ == '__main__':
     c = Chess()

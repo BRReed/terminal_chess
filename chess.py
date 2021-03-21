@@ -416,42 +416,38 @@ class BoardState():
             return False
 
         elif is_black:
-            if not self.b_king_side_castle and not self.b_queen_side_castle:
-                return False
-            elif side.lower() == 'king':
+            if side.lower() == 'king':
                 if self.b_king_side_castle:
                     spaces = ['86', '87']
                 else:
                     return False
             elif side.lower() == 'queen':
                 if self.b_queen_side_castle:
-                    spaces = ['84', '83']
+                    spaces = ['84', '83', '82']
 
         elif not is_black:
-            if not self.w_king_side_castle and not self.w_queen_side_castle:
-                return False
-            elif side.lower() == 'king':
+            if side.lower() == 'king':
                 if self.w_king_side_castle:
                     spaces = ['16', '17']
                 else:
                     return False
             elif side.lower() == 'queen':
                 if self.w_queen_side_castle:
-                    spaces = ['13', '14']
+                    spaces = ['13', '14', '12']
                 else:
                     return False
-        for space in board_state:
+        for space in spaces:
             if not self.is_empty(space, board_state):
                 return False
             elif self.is_enemy(space, is_black, board_state):
                 moves = self.possible_moves(board_state[space][2], space, 
                                             board_state)
-            for move in moves:
-                if move in spaces:
-                    return False
-                
-                else:
-                    continue
+                for move in moves:
+                    if move == spaces[0] or move == spaces[1]:
+                        return False
+                    
+                    else:
+                        continue
         return True
 
 
