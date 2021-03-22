@@ -2,12 +2,6 @@ from copy import deepcopy
 
 
 
-
-
-
-
-
-
 class Chess():
 
     def __init__(self):
@@ -44,7 +38,6 @@ class Chess():
             z += '    H  G  F  E  D  C  B  A '
         print(z)
 
-
     def move_piece(self, piece, c_coords, d_coords):
         """Move piece on board
 
@@ -55,9 +48,6 @@ class Chess():
         """
         self.current_state[d_coords][2] = piece 
         self.current_state[c_coords][2] = self.bs.empty
-    
-
-
 
     def in_check(self, is_black, board_state):
         """check if king is in check
@@ -65,6 +55,7 @@ class Chess():
         Args:
             is_black (bool): if king is black True; else False
             board_state (dict): dictionary representation of a board state
+
         Returns:
             bool: True if king in check; else False
         """
@@ -89,6 +80,7 @@ class Chess():
         Args:
             is_black (bool): if king being checked is black True; else False
             board_state (dict): dictionary representation of a board state
+
         Returns:
             bool: True if check mate, else False
         """
@@ -101,12 +93,10 @@ class Chess():
             king_space = self.bs.find_piece(self.bs.bk, is_black, board_state)
             king_spaces = self.bs.possible_moves(self.bs.bk, king_space, 
                                                  board_state)
-            
         else:
             king_space = self.bs.find_piece(self.bs.wk, is_black, board_state)
             king_spaces = self.bs.possible_moves(self.bs.wk, king_space, 
                                                  board_state)
-
         for coords in board_state:
             if is_black != self.bs.is_black(board_state[coords][2]):
                 mov += self.bs.possible_moves(board_state[coords][2], coords, 
@@ -194,9 +184,11 @@ class BoardState():
     
     def populate_start(self, r, c):
         """Populates pieces on board at start of game
+
         Args:
             r (string): row on chess board
             c (string): column on chess board
+
         Returns:
             Var equal to chess piece
         """
@@ -276,7 +268,6 @@ class BoardState():
         Returns:
             Bool: True if coordinates is valid; else False
         """
-
         x, y = self.str_coords_to_int(coords)
         if ((x >= 1 and x <= 8) and (y >= 1 and y <= 8)):
             return True
@@ -305,7 +296,7 @@ class BoardState():
             piece (string): unicode chess piece 
             c_coords (string): row x column 'rc'
             d_coords (string): row x column 'rc'
-        
+
         Returns:
             Dict: board_state with applied movement changes
         """
@@ -334,6 +325,7 @@ class BoardState():
             coords (string): row x column 'rc'
             is_black (bool): True if piece in movement is black; else False
             board_state (dict): dictionary representation of a board state
+
         Returns:
             Bool: If piece in bounds is same color as piece in coords True;
                   else False
@@ -350,6 +342,7 @@ class BoardState():
             coords (string): row x column 'rc'
             is_black (bool): True if piece in movement is black; else False
             board_state (dict): dictionary representation of a board state
+
         Returns:
             [type]: [description]
         """
@@ -365,6 +358,7 @@ class BoardState():
         Args:
             coords (string): row x column 'rc'
             board_state (dict): dictionary representation of a board state
+
         Returns:
             Bool: True if space is empty; else False
         """
@@ -395,6 +389,7 @@ class BoardState():
             piece (string): unicode representation of a chess piece
             is_black (bool): True if piece is black; else False
             board_state (dict): dictionary representation of a board state
+
         Returns:
             string: row x column 'rc' if piece on board; else returns False
         """
@@ -411,12 +406,12 @@ class BoardState():
             is_black (bool): if king to castle is black True, else False
             side (string): if king side 'king', if queen side 'queen'
             board_state (dict): state of the board to check
+
         Returns:
             bool: True if castling is valid, else False
         """
         if self.in_check(is_black, board_state):
             return False
-
         elif is_black:
             if side.lower() == 'king':
                 if self.b_king_side_castle:
@@ -426,7 +421,6 @@ class BoardState():
             elif side.lower() == 'queen':
                 if self.b_queen_side_castle:
                     spaces = ['84', '83', '82']
-
         elif not is_black:
             if side.lower() == 'king':
                 if self.w_king_side_castle:
@@ -446,11 +440,8 @@ class BoardState():
                 moves = self.possible_moves(board_state[space][2], space, 
                                             board_state)
                 for move in moves:
-                    
                     if move == spaces[0] or move == spaces[1]:
-
                         return False
-                    
                     else:
                         continue
             else:
@@ -469,7 +460,6 @@ class BoardState():
             if self.wk not in board_state['15'][2]:
                 self.w_king_side_castle = False
                 self.w_queen_side_castle = False
-
             elif self.wr not in board_state['11'][2]:
                 self.w_queen_side_castle = False
             elif self.wr not in board_state['18'][2]:
@@ -496,6 +486,7 @@ class BoardState():
             shift (tuple): amount to shift (row, column)
             is_black (bool): if piece in movement is black: True; else False
             board_state (dict): dictionary representation of a board state
+
         Returns:
             list: possible moves based on shift and coords
         """
@@ -576,7 +567,7 @@ class BoardState():
                 return True
             else:
                 return False
-    
+
     def possible_moves(self, piece, coords, board_state):
         """Given current board state check all possible moves
 
@@ -743,8 +734,6 @@ class BoardState():
                 z += (f'{b}\n')
             z += '    H  G  F  E  D  C  B  A '
         print(z)
-
-    
 
     def block_check(self, is_black, board_state):
         """check if friendly piece of king under attack can block
