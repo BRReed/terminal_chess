@@ -13,8 +13,11 @@ class Game():
     def list_moves(self, player, piece, c_coords):
         pass
 
-    def forfiet(self, player):
+    def resignation(self, player):
         pass
 
     def castle(self, player, dir):
+        pass
+    
+    def draw(self, player):
         pass
