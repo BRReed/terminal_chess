@@ -129,7 +129,8 @@ class BoardState():
         self.w_queen_side_castle = True
         self.b_king_side_castle = True
         self.b_queen_side_castle = True
-
+        self.w_en_passant = ['00', '00']
+        self.b_en_passant = ['00', '00']
     def assign_piece(self, is_black, piece):
         """create and return string of chess piece
 
@@ -399,6 +400,10 @@ class BoardState():
                 return space
         return False
 
+    def check_en_passant(self, is_black):
+        if is_black:
+            pass
+
     def check_castling(self, is_black, side, board_state):
         """Checks if king can castle 
 
@@ -559,11 +564,17 @@ class BoardState():
         elif piece == self.wp:
             if x2 - x1 == 1 and abs(y2 - y1) <= 1:
                 return True
+            elif c_coords[0] == '2' and abs(x2 - x1) == 2 and y1 == y2 and (
+                                     self.is_empty(d_coords, c.current_state)):
+                return True
             else:
                 return False
         # pawn black movement definitions
         elif piece == self.bp:
             if x1 - x2 == 1 and abs(y2 - y1) <= 1:
+                return True
+            elif c_coords[0] == '7' and abs(x1 - x2) == 2 and y1 == y2 and (
+                                     self.is_empty(d_coords, c.current_state)):
                 return True
             else:
                 return False
@@ -617,11 +628,14 @@ class BoardState():
             pawn_moves = []
             x, y = self.str_coords_to_int(coords)
             fwd = f'{x + 1}{y}'
+            fwd2 = f'{x + 2}{y}'
             diag_minus = f'{x + 1}{y - 1}'
             diag_plus = f'{x + 1}{y + 1}'
             try:
                 if self.is_empty(fwd, board_state):
-                    pawn_moves.append((1, 0))
+                    pawn_moves.append(fwd)
+                    if self.is_empty(fwd2, board_state):
+                        pawn_moves.append(fwd2)
             except KeyError:
                 pass
             try:
@@ -629,7 +643,7 @@ class BoardState():
                     pass
                 elif self.is_enemy(diag_minus, self.is_black(piece), 
                                    board_state):
-                    pawn_moves.append((1, -1))
+                    pawn_moves.append(diag_minus)
             except KeyError:
                 pass
             try:
@@ -637,22 +651,24 @@ class BoardState():
                     pass
                 elif self.is_enemy(diag_plus, self.is_black(piece), 
                                    board_state):
-                    pawn_moves.append((1, 1))
+                    pawn_moves.append(diag_plus)
             except KeyError:
                 pass
-            for shift in pawn_moves:
-                moves += self.moves_dir(coords, shift, self.is_black(piece), 
-                                        board_state)
+            for move in pawn_moves:
+                moves = pawn_moves
         # black pawn moves
         elif piece is self.bp:
             pawn_moves = []
             x, y = self.str_coords_to_int(coords)
             fwd = f'{x - 1}{y}'
+            fwd2 = f'{x - 2}{y}'
             diag_minus = f'{x - 1}{y - 1}'
             diag_plus = f'{x - 1}{y + 1}'
             try:
                 if self.is_empty(fwd, board_state):
-                    pawn_moves.append((-1, 0))
+                    pawn_moves.append(fwd)
+                    if self.is_empty(fwd2, board_state):
+                        pawn_moves.append(fwd2)
             except KeyError:
                 pass
             try:
@@ -661,7 +677,7 @@ class BoardState():
                 elif self.is_enemy(diag_minus, self.is_black(piece), 
                                    board_state):
 
-                    pawn_moves.append((-1, -1))
+                    pawn_moves.append(diag_minus)
             except KeyError:
                 pass
             try:
@@ -669,19 +685,15 @@ class BoardState():
                     pass
                 elif self.is_enemy(diag_plus, self.is_black(piece), 
                                    board_state):
-                    pawn_moves.append((-1, 1))
+                    pawn_moves.append(diag_plus)
             except KeyError:
                 pass
-            
-            for shift in pawn_moves:
-                moves += self.moves_dir(coords, shift, self.is_black(piece), 
-                                        board_state)
+            moves = pawn_moves
         m = moves.copy()
         for move in m:
             if not self.piece_movement(piece, coords, move):
                 moves.remove(move)
-        # add function for not putting self in check
-        return moves
+        return list(set(moves))
 
     def in_check(self, is_black, board_state):
         """check if king is in check
@@ -760,5 +772,15 @@ class BoardState():
             else:
                 continue
         return False
+
+
+c = Chess()
+c.move_piece(c.bs.bq, '84', '48')
+c.move_piece(c.bs.wp, '27', '47')
+c.move_piece(c.bs.wp, '26', '46')
+
+c.print_current_state('black')
+
+
 
 
