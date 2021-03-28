@@ -781,6 +781,35 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.b_king_side_castle == True
         assert c.bs.b_queen_side_castle == False
 
+class TestCheckEnPassant(unittest.TestCase):
+
+    def setUp(self):
+        reset_board()
+    
+    def tearDown(self):
+        c.bs.w_en_passant = [False, '']
+        c.bs.b_en_passant = [False, '']
+
+    def test_abs_not_2(self):
+        c.bs.check_en_passant(False, '22', '32', c.current_state)
+        assert c.bs.w_en_passant == [False, '']
+        assert c.bs.b_en_passant == [False, '']
+    
+    def test_y_minus_not_valid(self):
+        c.bs.check_en_passant(False, '21', '41', c.current_state)
+        assert c.bs.w_en_passant == [False, '']
+        assert c.bs.b_en_passant == [False, '']
+
+    def test_y_plus_not_valid(self):
+        c.bs.check_en_passant(True, '78', '58', c.current_state)
+        assert c.bs.w_en_passant == [False, '']
+        assert c.bs.b_en_passant == [False, '']
+    
+    def test_white_en_passant_true(self):
+        c.move_piece(c.bs.bp, '71', '41')
+        c.bs.check_en_passant(False, '22', '42', c.current_state)
+        assert c.bs.w_en_passant == [True, '32']
+        assert c.bs.b_en_passant == [False, '']
 
 
 

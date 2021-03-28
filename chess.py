@@ -404,36 +404,42 @@ class BoardState():
     def check_en_passant(self, is_black, c_coords, d_coords, board_state):
         x1, y1 = self.str_coords_to_int(c_coords)
         x2, y2 = self.str_coords_to_int(d_coords)
-        y_minus = f'{x1}{y2 - 1}'
-        y_plus = f'{x1}{y2 + 1}'
+        y_minus = f'{x2}{y2 - 1}'
+        y_plus = f'{x2}{y2 + 1}'
         if abs(x1 - x2) != 2:
+            print('didnt pass abs == 2')
             return
         if not self.coords_valid(y_minus):
+            print(f'y_minus not valid, y_minus = {y_minus}')
             pass
         elif not self.is_enemy(y_minus, is_black, board_state):
+            print(f'not enemy y_minus, is_black = {is_black}')
             pass
         elif not is_black:
             if board_state[y_minus][2] == self.bp:
+                print('board_state y_minus = black pawn')
                 self.w_en_passant = [True, f'{x1 + 1}{y1}']
                 return
         elif is_black:
             if board_state[y_minus][2] == self.wp:
+                print('board_state y_minus = white pawn')
                 self.b_en_passant = [True, f'{x1 - 1}{y1}']
                 return
         if not self.coords_valid(y_plus):
+            print(f'y_plus not valid, y_plus = {y_plus}')
             pass
         elif not self.is_enemy(y_plus, is_black, board_state):
+            print(f'not enemy y_plus, is_black = {is_black}')
             pass
         elif not is_black:
-            if board_state[y_plus][2] == self.bp:
+            if self.bp in board_state[y_plus][2]:
+                print('board_state y_plus = black pawn')
                 self.w_en_passant = [True, f'{x1 + 1}{y1}']
-                return
         elif is_black:
-            if board_state[y_plus][2] == self.wp:
+            if self.wp in board_state[y_plus][2]: #########
+                print('board_state y_plus = white pawn')
                 self.b_en_passant = [True, f'{x1 - 1}{y1}']
-                return
 
-            
 
 
     def check_castling(self, is_black, side, board_state):
