@@ -131,6 +131,7 @@ class BoardState():
         self.b_queen_side_castle = True
         self.w_en_passant = ['00', '00']
         self.b_en_passant = ['00', '00']
+
     def assign_piece(self, is_black, piece):
         """create and return string of chess piece
 
@@ -564,8 +565,7 @@ class BoardState():
         elif piece == self.wp:
             if x2 - x1 == 1 and abs(y2 - y1) <= 1:
                 return True
-            elif c_coords[0] == '2' and abs(x2 - x1) == 2 and y1 == y2 and (
-                                     self.is_empty(d_coords, c.current_state)):
+            elif c_coords[0] == '2' and abs(x2 - x1) == 2 and y1 == y2:
                 return True
             else:
                 return False
@@ -573,8 +573,7 @@ class BoardState():
         elif piece == self.bp:
             if x1 - x2 == 1 and abs(y2 - y1) <= 1:
                 return True
-            elif c_coords[0] == '7' and abs(x1 - x2) == 2 and y1 == y2 and (
-                                     self.is_empty(d_coords, c.current_state)):
+            elif c_coords[0] == '7' and abs(x1 - x2) == 2 and y1 == y2:
                 return True
             else:
                 return False
@@ -772,15 +771,6 @@ class BoardState():
             else:
                 continue
         return False
-
-
-c = Chess()
-c.move_piece(c.bs.bq, '84', '48')
-c.move_piece(c.bs.wp, '27', '47')
-c.move_piece(c.bs.wp, '26', '46')
-
-c.print_current_state('black')
-
 
 
 
