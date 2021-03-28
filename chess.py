@@ -129,8 +129,8 @@ class BoardState():
         self.w_queen_side_castle = True
         self.b_king_side_castle = True
         self.b_queen_side_castle = True
-        self.w_en_passant = ['00', '00']
-        self.b_en_passant = ['00', '00']
+        self.w_en_passant = [False, '']
+        self.b_en_passant = [False, '']
 
     def assign_piece(self, is_black, piece):
         """create and return string of chess piece
@@ -401,9 +401,40 @@ class BoardState():
                 return space
         return False
 
-    def check_en_passant(self, is_black):
-        if is_black:
+    def check_en_passant(self, is_black, c_coords, d_coords, board_state):
+        x1, y1 = self.str_coords_to_int(c_coords)
+        x2, y2 = self.str_coords_to_int(d_coords)
+        y_minus = f'{x1}{y2 - 1}'
+        y_plus = f'{x1}{y2 + 1}'
+        if abs(x1 - x2) != 2:
+            return
+        if not self.coords_valid(y_minus):
             pass
+        elif not self.is_enemy(y_minus, is_black, board_state):
+            pass
+        elif not is_black:
+            if board_state[y_minus][2] == self.bp:
+                self.w_en_passant = [True, f'{x1 + 1}{y1}']
+                return
+        elif is_black:
+            if board_state[y_minus][2] == self.wp:
+                self.b_en_passant = [True, f'{x1 - 1}{y1}']
+                return
+        if not self.coords_valid(y_plus):
+            pass
+        elif not self.is_enemy(y_plus, is_black, board_state):
+            pass
+        elif not is_black:
+            if board_state[y_plus][2] == self.bp:
+                self.w_en_passant = [True, f'{x1 + 1}{y1}']
+                return
+        elif is_black:
+            if board_state[y_plus][2] == self.wp:
+                self.b_en_passant = [True, f'{x1 - 1}{y1}']
+                return
+
+            
+
 
     def check_castling(self, is_black, side, board_state):
         """Checks if king can castle 
