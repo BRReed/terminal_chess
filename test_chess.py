@@ -66,7 +66,7 @@ class TestPieceMovement(unittest.TestCase):
         self.assertTrue(c.bs.piece_movement(c.bs.wp, '22', '33'))
 
         self.assertFalse(c.bs.piece_movement(c.bs.wp, '22', '23'))
-        self.assertFalse(c.bs.piece_movement(c.bs.wp, '22', '42'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wp, '22', '42'))
 
     def test_pawn_black_move(self):
         self.assertTrue(c.bs.piece_movement(c.bs.bp, '21', '11'))
@@ -511,8 +511,12 @@ class TestPossibleMoves(unittest.TestCase):
                                              [])
 
     def test_white_pawn_no_target(self):
-        self.assertEqual(c.bs.possible_moves(c.bs.wp, '21', c.current_state), 
-                                             ['31'])
+        actual_moves = c.bs.possible_moves(c.bs.wp, '21', c.current_state)
+        expected_moves = ['31', '41']
+        actual = Counter(actual_moves)
+        expected = Counter(expected_moves)
+        assert actual == expected
+        
     
     def test_white_pawn_blocked(self):
         c.move_piece(c.bs.bp, '71', '31')
@@ -522,7 +526,7 @@ class TestPossibleMoves(unittest.TestCase):
     def test_black_pawn_target(self):
         c.move_piece(c.bs.wp, '22', '62')
         actual_moves = c.bs.possible_moves(c.bs.bp, '71', c.current_state)
-        expected_moves = ['61', '62']
+        expected_moves = ['61', '62', '51']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
@@ -583,7 +587,8 @@ class TestPossibleMoves(unittest.TestCase):
 class TestBlockCheck(unittest.TestCase):
     def setUp(self):
         reset_board()
-    
+        self.test_passed = False
+
     def test_black_block_check_white_bishop(self):
         c.move_piece(c.bs.bp, '74', '54')
         c.move_piece(c.bs.wb, '13', '65')
@@ -613,22 +618,22 @@ class TestBlockCheck(unittest.TestCase):
         c.move_piece(c.bs.bp, '77', '57')
         self.assertFalse(c.bs.block_check(True, c.current_state))
 
-    def test_white_not_block_check_bishop_attacker(self):
-        c.move_piece(c.bs.bq, '84', '48')
-        c.move_piece(c.bs.wp, '27', '47')
-        c.move_piece(c.bs.wp, '26', '46')
+    def test_white_not_block_check_queen_attacker(self):
+        c.bs.move_piece(c.bs.bq, '84', '48', c.current_state)
+        c.bs.move_piece(c.bs.wp, '27', '47', c.current_state)
+        c.bs.move_piece(c.bs.wp, '26', '46', c.current_state)
         self.assertFalse(c.bs.block_check(False, c.current_state))
     
     def test_black_not_block_check_pawn_protect_attacker(self):
-        c.move_piece(c.bs.wp, '27', '67')
-        c.move_piece(c.bs.bp, '76', '66')
-        c.move_piece(c.bs.wp, '26', '76')
+        c.bs.move_piece(c.bs.wp, '27', '67', c.current_state)
+        c.bs.move_piece(c.bs.bp, '76', '66', c.current_state)
+        c.bs.move_piece(c.bs.wp, '26', '76', c.current_state)
         self.assertFalse(c.bs.block_check(True, c.current_state))
 
     def test_white_not_block_check_pawn_protect_attacker(self):
-        c.move_piece(c.bs.wp, '26', '36')
-        c.move_piece(c.bs.bp, '76', '26')
-        c.move_piece(c.bs.bp, '77', '37')
+        c.bs.move_piece(c.bs.wp, '26', '36', c.current_state)
+        c.bs.move_piece(c.bs.bp, '76', '26', c.current_state)
+        c.bs.move_piece(c.bs.bp, '77', '37', c.current_state)
         self.assertFalse(c.bs.block_check(False, c.current_state))
 
 class TestCheckCastling(unittest.TestCase):
@@ -776,7 +781,26 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.b_king_side_castle == True
         assert c.bs.b_queen_side_castle == False
 
+class TestCheckEnPassant(unittest.TestCase):
 
+    def setUp(self):
+        reset_board()
+    
+    def tearDown(self):
+        c.bs.w_en_passant = [False, '']
+        c.bs.b_en_passant = [False, '']
+
+    def test_white_en_passant_true(self):
+        c.move_piece(c.bs.bp, '71', '41')
+        c.bs.check_en_passant(False, '22', '42', c.current_state)
+        assert c.bs.w_en_passant == [True, '32']
+        assert c.bs.b_en_passant == [False, '']
+    
+    def test_black_en_passant_true(self):
+        c.move_piece(c.bs.wp, '21', '51')
+        c.bs.check_en_passant(True, '72', '52', c.current_state)
+        assert c.bs.w_en_passant == [False, '']
+        assert c.bs.b_en_passant == [True, '62']
 
 
 if __name__ == '__main__':
