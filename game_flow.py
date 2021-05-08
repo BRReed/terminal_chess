@@ -5,21 +5,28 @@ class Game():
         c = Chess()
 
     def start_game(self, player1, player2):
-        self.white = player1
-        self.black = player2
+        """assigns vars for start of game
+
+        Args:
+            player1 (dict): user: unique user id, color: unicode white
+            player2 ([type]): user: unique user id, color: unicode black
+        """
+        self.p1 = player1
+        self.p2 = player2
+
 
     def move(self, player, c_coords, d_coords):
         """allows player to move piece
 
         Args:
-            player ([type]): [description]
+            player (dict): [description]
             c_coords ([type]): [description]
             d_coords ([type]): [description]
 
         Returns:
             [type]: [description]
         """
-        
+        is_black = c.bs.is_black(player['color'])
         if not c.bs.check_coords(d_coords) or not c.bs.check_coords(c_coords):
             return False
         if not c.bs.coords_valid(d_coords) or not c.bs.coords_valid(c_coords):
@@ -32,12 +39,16 @@ class Game():
             return False
         if c.bs.is_black(piece) != c.bs.is_black(player):
             return False
+
         temp_board = copy(c.current_state)
         temp_board = c.bs.move_piece(piece, c_coords, d_coords, temp_board)
         if c.bs.in_check(c.bs.is_black(player), temp_board):
             return False
         if c.bs.piece_movement(piece, c_coords, d_coords):
+            c.bs.check_en_passant(is_black, c_coords, d_coords, 
+                c.current_state)
             c.move_piece(piece, c_coords, d_coords)
+            c.bs.check_castling_valid(c.current_state)
             return True
         else:
             return False
