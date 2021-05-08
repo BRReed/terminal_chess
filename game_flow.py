@@ -19,12 +19,12 @@ class Game():
         """allows player to move piece
 
         Args:
-            player (dict): [description]
-            c_coords ([type]): [description]
-            d_coords ([type]): [description]
+            player (dict): dictionary containing user, color
+            c_coords (str): row x column space in chessboard, start coords
+            d_coords (str): row x column space in chessboard, end coords
 
         Returns:
-            [type]: [description]
+            BOOL: True if move was allowed and completed, else False
         """
         if not c.bs.check_coords(d_coords) or not c.bs.check_coords(c_coords):
             return False
@@ -45,7 +45,7 @@ class Game():
         if c.bs.in_check(c.bs.is_black(player), temp_board):
             return False
         if c.bs.piece_movement(piece, c_coords, d_coords):
-            c.bs.check_en_passant(p_is_black, c_coords, d_coords, 
+            c.bs.check_en_passant(p_is_black, c_coords, d_coords,
                 c.current_state)
             c.move_piece(piece, c_coords, d_coords)
             c.bs.check_castling_valid(c.current_state)
