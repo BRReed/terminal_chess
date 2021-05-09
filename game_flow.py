@@ -63,7 +63,9 @@ class Game():
 
     def castle(self, player, dir):
         """allows player to castle"""
-        pass
+        p_is_black = c.bs.is_black(player['color'])
+        if p_is_black:
+            pass
     
     def draw(self, player):
         """allows player to call draw"""
