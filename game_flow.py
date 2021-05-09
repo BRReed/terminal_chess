@@ -71,22 +71,34 @@ class Game():
             bool: True if castling was allowed and completed, else False
         """
         p_is_black = c.bs.is_black(player['color'])
-        if side == 'queen' and p_is_black:
-            if not c.bs.b_queen_side_castle:
-                return False
-        elif side == 'king' and p_is_black:
-            if not c.bs.b_king_side_castle:
-                return False
-        elif side == 'queen' and not p_is_black:
-            if not c.bs.w_queen_side_castle:
-                return False
-        elif side == 'king' and not p_is_black:
-            if not c.bs.w_king_side_castle:
-                return False
+        if not castle_valid(p_is_black, side):
+            return False
         if c.bs.check_castling(p_is_black, side, c.current_state):
-            pass # add castle_move to game_logic.BoardState 
-            
-    
+            c.castle_move(p_is_black, side)
+            return True
+        else:
+            return False
+
+    def castle_valid(is_black, side):
+        """checks T/F castle vars in game_logic.BoardState 
+
+        Args:
+            is_black (bool): True if player is black, else False
+            side (str): 'queen' or 'king'
+        Returns:
+            bool: True if player can castle to that side, else False
+        """
+        if is_black:
+            if side == 'king':
+                return c.bs.b_king_side_castle
+            elif side == 'queen':
+                return c.bs.b_queen_side_castle
+        if not is_black:
+            if side == 'king':
+                return c.bs.w_king_side_castle
+            elif side == 'queen':
+                return c.bs.w_queen_side_castle
+
     def draw(self, player):
         """allows player to call draw"""
         pass
