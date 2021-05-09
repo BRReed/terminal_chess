@@ -18,5 +18,6 @@ TBD
 * Use long algebraic notation to move pieces
 * Movement format = starting square, ending square: `b2a3`
 * Castling king side enter: `0-0` castling queen side enter: `0-0-0`
-* To request a draw you can enter `draw` or `(=)`. Your opponent will have to
-  accept.
+* To request a draw you can enter `draw` or `(=)`. Your opponent will have to 
+  accept for the draw to go through
+* To resign enter `resign` or `xx`

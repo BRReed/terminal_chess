@@ -61,11 +61,31 @@ class Game():
         """allows player to resign"""
         pass
 
-    def castle(self, player, dir):
-        """allows player to castle"""
+    def castle(self, player, side):
+        """allows player to castle
+
+        Args:
+            player (dict): user: unique user id, color: unicode black or white
+            side (str): 'queen' or 'king'
+        Returns:
+            bool: True if castling was allowed and completed, else False
+        """
         p_is_black = c.bs.is_black(player['color'])
-        if p_is_black:
-            pass
+        if side == 'queen' and p_is_black:
+            if not c.bs.b_queen_side_castle:
+                return False
+        elif side == 'king' and p_is_black:
+            if not c.bs.b_king_side_castle:
+                return False
+        elif side == 'queen' and not p_is_black:
+            if not c.bs.w_queen_side_castle:
+                return False
+        elif side == 'king' and not p_is_black:
+            if not c.bs.w_king_side_castle:
+                return False
+        if c.bs.check_castling(p_is_black, side, c.current_state):
+            pass # add castle_move to game_logic.BoardState 
+            
     
     def draw(self, player):
         """allows player to call draw"""
