@@ -632,31 +632,31 @@ class BoardState():
     def check_en_passant(self, is_black, c_coords, d_coords, board_state):
         x1, y1 = self.str_coords_to_int(c_coords)
         x2, y2 = self.str_coords_to_int(d_coords)
-        y_minus = f'{x2 - 1}{y2}'
-        y_plus = f'{x2 + 1}{y2}'
-        if abs(x1 - x2) != 2:
+        x_minus = f'{x2 - 1}{y2}'
+        x_plus = f'{x2 + 1}{y2}'
+        if abs(y1 - y2) != 2:
             return
-        if not self.coords_valid(y_minus):
+        if not self.coords_valid(x_minus):
             pass
-        elif not self.is_enemy(y_minus, is_black, board_state):
+        elif not self.is_enemy(x_minus, is_black, board_state):
             pass
         elif not is_black:
-            if board_state[y_minus][2] == self.bp:
+            if board_state[x_minus][2] == self.bp:
                 self.w_en_passant = [True, f'{x1}{y1 + 1}']
                 return
         elif is_black:
-            if board_state[y_minus][2] == self.wp:
+            if board_state[x_minus][2] == self.wp:
                 self.b_en_passant = [True, f'{x1}{y1 - 1}']
                 return
-        if not self.coords_valid(y_plus):
+        if not self.coords_valid(x_plus):
             pass
-        elif not self.is_enemy(y_plus, is_black, board_state):
+        elif not self.is_enemy(x_plus, is_black, board_state):
             pass
         elif not is_black:
-            if self.bp in board_state[y_plus][2]:
+            if self.bp in board_state[x_plus][2]:
                 self.w_en_passant = [True, f'{x1}{y1 + 1}']
         elif is_black:
-            if self.wp in board_state[y_plus][2]:
+            if self.wp in board_state[x_plus][2]:
                 self.b_en_passant = [True, f'{x1}{y1 - 1}']
 
     def check_castling(self, is_black, side, board_state):

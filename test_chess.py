@@ -640,7 +640,8 @@ class TestBlockCheck(unittest.TestCase):
 
     def test_white_not_block_check_pawn_protect_attacker(self):
         c.bs.move_piece(c.bs.wp, '62', '63', c.current_state)
-        c.bs.move_piece(c.bs.bp, '67', '26', c.current_state)
+        c.bs.move_piece(c.bs.wp, '82', '83', c.current_state)
+        c.bs.move_piece(c.bs.bp, '67', '62', c.current_state)
         c.bs.move_piece(c.bs.bp, '77', '73', c.current_state)
         self.assertFalse(c.bs.block_check(False, c.current_state))
 
@@ -715,7 +716,7 @@ class TestCheckCastling(unittest.TestCase):
 
     def test_black_queen_side_king_move_space_attacked(self):
         c.move_piece(c.bs.bq, '48', '56')
-        c.move_piece(c.bs.bp, '74', '55')
+        c.move_piece(c.bs.bp, '47', '55')
         c.move_piece(c.bs.wq, '41', '43')
         c.move_piece(c.bs.bb, '38', '36')
         c.move_piece(c.bs.bn, '28', '16')
