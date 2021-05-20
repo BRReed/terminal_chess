@@ -17,21 +17,21 @@ class Chess():
         """
         z = ''
         if perspective == 'white':
-            for r in range(8, 0, -1):
-                b = f' {r} '
-                for c in range(1, 9):
-                    b += (self.current_state[f'{r}{c}'][0] +
-                        self.current_state[f'{r}{c}'][2] +
-                        self.current_state[f'{r}{c}'][1])
+            for c in range(8, 0, -1):
+                b = f' {c} '
+                for r in range(1, 9):
+                    b += (self.current_state[f'{c}{r}'][0] +
+                        self.current_state[f'{c}{r}'][2] +
+                        self.current_state[f'{c}{r}'][1])
                 z += (f'{b}\n')
             z += '    A  B  C  D  E  F  G  H '
         elif perspective == 'black':
-            for r in range(1, 9):
-                b = f' {r} '
-                for c in range(8, 0, -1):
-                    b += (self.current_state[f'{r}{c}'][0] +
-                        self.current_state[f'{r}{c}'][2] +
-                        self.current_state[f'{r}{c}'][1])
+            for c in range(1, 9):
+                b = f' {c} '
+                for r in range(8, 0, -1):
+                    b += (self.current_state[f'{c}{r}'][0] +
+                        self.current_state[f'{c}{r}'][2] +
+                        self.current_state[f'{c}{r}'][1])
                 z += (f'{b}\n')
             z += '    H  G  F  E  D  C  B  A '
         print(z)
@@ -814,3 +814,5 @@ class BoardState():
 
 
 
+c = Chess()
+c.print_current_state('white')
