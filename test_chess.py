@@ -851,6 +851,15 @@ class TestCastleMove(unittest.TestCase):
         assert king_actual == king_expected
         assert rook_actual == rook_expected
 
+class TestMovePiece(unittest.TestCase):
+    
+    def setUp(self):
+        reset_board()
+    
+    def test_move_white_bishop(self):
+        c.move_piece(c.bs.wb, '13', '36')
+        self.assertTrue(c.bs.is_empty('13', c.current_state))
+
 
 if __name__ == '__main__':
     c = Chess()
