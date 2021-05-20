@@ -17,18 +17,18 @@ class Chess():
         """
         z = ''
         if perspective == 'white':
-            for c in range(8, 0, -1):
-                b = f' {c} '
-                for r in range(1, 9):
+            for r in range(8, 0, -1):
+                b = f' {r} '
+                for c in range(1, 9):
                     b += (self.current_state[f'{c}{r}'][0] +
                         self.current_state[f'{c}{r}'][2] +
                         self.current_state[f'{c}{r}'][1])
                 z += (f'{b}\n')
             z += '    A  B  C  D  E  F  G  H '
         elif perspective == 'black':
-            for c in range(1, 9):
-                b = f' {c} '
-                for r in range(8, 0, -1):
+            for r in range(1, 9):
+                b = f' {r} '
+                for c in range(8, 0, -1):
                     b += (self.current_state[f'{c}{r}'][0] +
                         self.current_state[f'{c}{r}'][2] +
                         self.current_state[f'{c}{r}'][1])
@@ -186,7 +186,7 @@ class BoardState():
         """Create start game board state
         Vars:
             self.start_state:
-                keys = [rc] where row is r and column is c. Both represented 
+                keys = [cr] where row is r and column is c. Both represented 
                     by a number
                 values = (RGB BG colorcode, unicode chess piece,
                     colorcode reset)
@@ -194,17 +194,17 @@ class BoardState():
         start_state = {}
         for row in range(1, 9):
             for column in range(1, 9):
-                if (row + column) % 2 == 0:
-                    start_state[f'{row}{column}'] = [
+                if (column + row) % 2 == 0:
+                    start_state[f'{column}{row}'] = [
                         '\033[48;2;57;78;112m', '\033[0m',
-                        f'{self.populate_start(row, column)}']
+                        f'{self.populate_start(column, row)}']
                 else:
-                    start_state[f'{row}{column}'] = [
+                    start_state[f'{column}{row}'] = [
                         '\033[48;2;66;135;245m', '\033[0m',
-                        f'{self.populate_start(row, column)}']
+                        f'{self.populate_start(column, row)}']
         return start_state
     
-    def populate_start(self, r, c):
+    def populate_start(self, c, r):
         """Populates pieces on board at start of game
 
         Args:
@@ -226,7 +226,7 @@ class BoardState():
             elif c == 5:
                 return self.wk
             else:
-                print(f'well, this is bad r, c = {r}, {c}')
+                print(f'well, this is bad c, r = {c}, {r}')
                 return
         elif r == 2:
             return self.wp
@@ -244,7 +244,7 @@ class BoardState():
             elif c == 5:
                 return self.bk
             else:
-                print(f'well, this is bad r, c = {r}, {c}')
+                print(f'well, this is bad c, r = {c}, {r}')
         else:
             return '   '
 
@@ -812,3 +812,7 @@ class BoardState():
                 continue
         return False
 
+c = Chess()
+c.print_current_state('white')
+print(c.bs.is_empty('55', c.current_state))
+print(c.bs.is_empty('85', c.current_state))
