@@ -802,6 +802,11 @@ class TestCheckEnPassant(unittest.TestCase):
         assert c.bs.w_en_passant == [False, '']
         assert c.bs.b_en_passant == [True, '62']
 
+class TestCastleMove(unittest.TestCase):
+
+    def setUp(self):
+        reset_board()
+
 
 if __name__ == '__main__':
     c = Chess()
