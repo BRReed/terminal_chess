@@ -266,7 +266,7 @@ class BoardState():
         """checks if piece in coords is friendly
 
         Args:
-            coords (string): row x column 'rc'
+            coords (string): column x row 'cr'
             is_black (bool): True if piece in movement is black; else False
             board_state (dict): dictionary representation of a board state
 
@@ -283,7 +283,7 @@ class BoardState():
         """checks if piece in coords is enemy
 
         Args:
-            coords (string): row x column 'rc'
+            coords (string): column x row 'cr'
             is_black (bool): True if piece in movement is black; else False
             board_state (dict): dictionary representation of a board state
 
@@ -300,7 +300,7 @@ class BoardState():
         """checks if coords is empty
 
         Args:
-            coords (string): row x column 'rc'
+            coords (string): column x row 'cr'
             board_state (dict): dictionary representation of a board state
 
         Returns:
@@ -315,7 +315,7 @@ class BoardState():
         """check coords are integers
 
         Args:
-            coords (string): row x column 'rc'
+            coords (string): column x row 'cr'
 
         Returns:
             Bool: True if both positions in coords string are ints;
@@ -332,7 +332,7 @@ class BoardState():
         """change string coordinates into integers 
 
         Args:
-            coords (string): row x column 'rc'
+            coords (string): column x row 'cr'
 
         Returns:
             int : 0 position in coords
@@ -377,11 +377,11 @@ class BoardState():
         """adds a shift to coords
 
         Args:
-            coords (string): row x column 'rc'
+            coords (string): column x row 'cr'
             shift (tuple): amount to shift (row, column)
 
         Returns:
-            string: coords with shift applied 'rc'
+            string: coords with shift applied 'cr'
         """
         x, y = self.str_coords_to_int(coords)
         x += shift[0]
@@ -393,8 +393,8 @@ class BoardState():
 
         Args:
             piece (string): unicode chess piece 
-            c_coords (string): row x column 'rc'
-            d_coords (string): row x column 'rc'
+            c_coords (string): column x row 'cr'
+            d_coords (string): column x row 'cr'
 
         Returns:
             Dict: board_state with applied movement changes
@@ -407,8 +407,8 @@ class BoardState():
         """checks all possible moves for piece
 
         Args:
-            coords (string): row x column 'rc'
-            shift (tuple): amount to shift (row, column)
+            coords (string): column x row 'cr'
+            shift (tuple): amount to shift (column, row)
             is_black (bool): if piece in movement is black: True; else False
             board_state (dict): dictionary representation of a board state
 
@@ -482,17 +482,17 @@ class BoardState():
                 return False
         # pawn white movement definitions
         elif piece == self.wp:
-            if x2 - x1 == 1 and abs(y2 - y1) <= 1:
+            if y2 - y1 == 1 and abs(x2 - x1) <= 1:
                 return True
-            elif c_coords[0] == '2' and abs(x2 - x1) == 2 and y1 == y2:
+            elif c_coords[1] == '2' and abs(y2 - y1) == 2 and x1 == x2:
                 return True
             else:
                 return False
         # pawn black movement definitions
         elif piece == self.bp:
-            if x1 - x2 == 1 and abs(y2 - y1) <= 1:
+            if y1 - y2 == 1 and abs(x2 - x1) <= 1:
                 return True
-            elif c_coords[0] == '7' and abs(x1 - x2) == 2 and y1 == y2:
+            elif c_coords[1] == '7' and abs(y1 - y2) == 2 and x1 == x2:
                 return True
             else:
                 return False
@@ -545,9 +545,9 @@ class BoardState():
         elif piece is self.wp:
             pawn_moves = []
             x, y = self.str_coords_to_int(coords)
-            fwd = f'{x + 1}{y}'
-            fwd2 = f'{x + 2}{y}'
-            diag_minus = f'{x + 1}{y - 1}'
+            fwd = f'{x}{y + 1}'
+            fwd2 = f'{x}{y + 2}'
+            diag_minus = f'{x - 1}{y + 1}'
             diag_plus = f'{x + 1}{y + 1}'
             try:
                 if self.is_empty(fwd, board_state):
@@ -578,10 +578,10 @@ class BoardState():
         elif piece is self.bp:
             pawn_moves = []
             x, y = self.str_coords_to_int(coords)
-            fwd = f'{x - 1}{y}'
-            fwd2 = f'{x - 2}{y}'
+            fwd = f'{x}{y - 1}'
+            fwd2 = f'{x}{y - 2}'
             diag_minus = f'{x - 1}{y - 1}'
-            diag_plus = f'{x - 1}{y + 1}'
+            diag_plus = f'{x + 1}{y - 1}'
             try:
                 if self.is_empty(fwd, board_state):
                     pawn_moves.append(fwd)
@@ -632,8 +632,8 @@ class BoardState():
     def check_en_passant(self, is_black, c_coords, d_coords, board_state):
         x1, y1 = self.str_coords_to_int(c_coords)
         x2, y2 = self.str_coords_to_int(d_coords)
-        y_minus = f'{x2}{y2 - 1}'
-        y_plus = f'{x2}{y2 + 1}'
+        y_minus = f'{x2 - 1}{y2}'
+        y_plus = f'{x2 + 1}{y2}'
         if abs(x1 - x2) != 2:
             return
         if not self.coords_valid(y_minus):
@@ -642,11 +642,11 @@ class BoardState():
             pass
         elif not is_black:
             if board_state[y_minus][2] == self.bp:
-                self.w_en_passant = [True, f'{x1 + 1}{y1}']
+                self.w_en_passant = [True, f'{x1}{y1 + 1}']
                 return
         elif is_black:
             if board_state[y_minus][2] == self.wp:
-                self.b_en_passant = [True, f'{x1 - 1}{y1}']
+                self.b_en_passant = [True, f'{x1}{y1 - 1}']
                 return
         if not self.coords_valid(y_plus):
             pass
@@ -654,10 +654,10 @@ class BoardState():
             pass
         elif not is_black:
             if self.bp in board_state[y_plus][2]:
-                self.w_en_passant = [True, f'{x1 + 1}{y1}']
+                self.w_en_passant = [True, f'{x1}{y1 + 1}']
         elif is_black:
             if self.wp in board_state[y_plus][2]:
-                self.b_en_passant = [True, f'{x1 - 1}{y1}']
+                self.b_en_passant = [True, f'{x1}{y1 - 1}']
 
     def check_castling(self, is_black, side, board_state):
         """Checks if king can castle
@@ -675,21 +675,21 @@ class BoardState():
         elif is_black:
             if side.lower() == 'king':
                 if self.b_king_side_castle:
-                    spaces = ['86', '87']
+                    spaces = ['68', '78']
                 else:
                     return False
             elif side.lower() == 'queen':
                 if self.b_queen_side_castle:
-                    spaces = ['84', '83', '82']
+                    spaces = ['48', '38', '28']
         elif not is_black:
             if side.lower() == 'king':
                 if self.w_king_side_castle:
-                    spaces = ['16', '17']
+                    spaces = ['61', '71']
                 else:
                     return False
             elif side.lower() == 'queen':
                 if self.w_queen_side_castle:
-                    spaces = ['13', '14', '12']
+                    spaces = ['31', '41', '21']
                 else:
                     return False
         for space in spaces:
@@ -717,19 +717,19 @@ class BoardState():
             that direction that color is False
         """
         if self.w_king_side_castle or self.w_queen_side_castle:
-            if self.wk not in board_state['15'][2]:
+            if self.wk not in board_state['51'][2]:
                 self.w_king_side_castle = False
                 self.w_queen_side_castle = False
             elif self.wr not in board_state['11'][2]:
                 self.w_queen_side_castle = False
-            elif self.wr not in board_state['18'][2]:
+            elif self.wr not in board_state['81'][2]:
                 self.w_king_side_castle = False
 
         if self.b_king_side_castle or self.b_queen_side_castle:
-            if self.bk not in board_state['85'][2]:
+            if self.bk not in board_state['58'][2]:
                 self.b_king_side_castle = False
                 self.b_queen_side_castle = False
-            elif self.br not in board_state['81'][2]:
+            elif self.br not in board_state['18'][2]:
                 self.b_queen_side_castle = False
             if self.br not in board_state['88'][2]:
                 self.b_king_side_castle = False
