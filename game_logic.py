@@ -48,6 +48,12 @@ class Chess():
         self.current_state[c_coords][2] = self.bs.empty
 
     def castle_move(self, is_black, side):
+        """Moves king and rook based on is_black and side
+
+        Args:
+            is_black (bool): if piece is_black True, else False
+            side (string): king for king side castle, else queen
+        """
         if is_black:
             if side == 'king':
                 self.move_piece(self.bs.bk, '85', '87')
