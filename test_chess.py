@@ -819,9 +819,36 @@ class TestCastleMove(unittest.TestCase):
         c.castle_move(True, 'king')
         king_actual = find_pieces(c.bs.bk, True, c.current_state)
         king_expected = ['87']
-        assert king_actual == king_expected
         rook_actual = set(find_pieces(c.bs.br, True, c.current_state))
         rook_expected = set(['81', '86'])
+        assert king_actual == king_expected
+        assert rook_actual == rook_expected
+
+    def test_is_black_queen_side(self):
+        c.castle_move(True, 'queen')
+        king_actual = find_pieces(c.bs.bk, True, c.current_state)
+        king_expected = ['83']
+        rook_actual = set(find_pieces(c.bs.br, True, c.current_state))
+        rook_expected = set(['84', '88'])
+        assert king_actual == king_expected
+        assert rook_actual == rook_expected
+
+    def test_not_is_black_king_side(self):
+        c.castle_move(False, 'king')
+        king_actual = find_pieces(c.bs.wk, False, c.current_state)
+        king_expected = ['17']
+        rook_actual = set(find_pieces(c.bs.wr, False, c.current_state))
+        rook_expected = set(['11', '16'])
+        assert king_actual == king_expected
+        assert rook_actual == rook_expected
+
+    def test_not_is_black_queen_side(self):
+        c.castle_move(False, 'queen')
+        king_actual = find_pieces(c.bs.wk, False, c.current_state)
+        king_expected = ['13']
+        rook_actual = set(find_pieces(c.bs.wr, False, c.current_state))
+        rook_expected = set(['14', '18'])
+        assert king_actual == king_expected
         assert rook_actual == rook_expected
 
 
