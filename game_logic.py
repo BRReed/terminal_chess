@@ -41,8 +41,8 @@ class Chess():
 
         Args:
             piece (string): unicode chess piece 
-            c_coords (string): row x column 'rc'
-            d_coords (string): row x column 'rc'
+            c_coords (string): column x row 'cr'
+            d_coords (string): column x row 'cr'
         """
         self.current_state[d_coords][2] = piece 
         self.current_state[c_coords][2] = self.bs.empty
@@ -56,18 +56,18 @@ class Chess():
         """
         if is_black:
             if side == 'king':
-                self.move_piece(self.bs.bk, '85', '87')
-                self.move_piece(self.bs.br, '88', '86')
+                self.move_piece(self.bs.bk, '58', '78')
+                self.move_piece(self.bs.br, '88', '68')
             if side == 'queen':
-                self.move_piece(self.bs.bk, '85', '83')
-                self.move_piece(self.bs.br, '81', '84')
+                self.move_piece(self.bs.bk, '58', '38')
+                self.move_piece(self.bs.br, '18', '48')
         if not is_black:
             if side == 'king':
-                self.move_piece(self.bs.wk, '15', '17')
-                self.move_piece(self.bs.wr, '18', '16')
+                self.move_piece(self.bs.wk, '51', '71')
+                self.move_piece(self.bs.wr, '81', '61')
             if side == 'queen':
-                self.move_piece(self.bs.wk, '15', '13')
-                self.move_piece(self.bs.wr, '11', '14')
+                self.move_piece(self.bs.wk, '51', '31')
+                self.move_piece(self.bs.wr, '11', '41')
 
     def in_check(self, is_black, board_state):
         """check if king is in check
@@ -812,7 +812,3 @@ class BoardState():
                 continue
         return False
 
-
-
-c = Chess()
-c.print_current_state('white')
