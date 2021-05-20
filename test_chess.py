@@ -10,6 +10,14 @@ def reset_board():
     c.bs.b_king_side_castle = True
     c.bs.b_queen_side_castle = True
 
+def find_pieces(piece, is_black, board_state):
+    spaces = []
+    for space in board_state:
+        if piece in board_state[space][2] and (
+            is_black == c.bs.is_black(board_state[space][2])):
+            spaces.append(space)
+    return spaces
+
 class TestPieceMovement(unittest.TestCase):
 
     def setUp(self):
@@ -801,6 +809,56 @@ class TestCheckEnPassant(unittest.TestCase):
         c.bs.check_en_passant(True, '72', '52', c.current_state)
         assert c.bs.w_en_passant == [False, '']
         assert c.bs.b_en_passant == [True, '62']
+
+class TestCastleMove(unittest.TestCase):
+
+    def setUp(self):
+        reset_board()
+    
+    def test_is_black_king_side(self):
+        c.castle_move(True, 'king')
+        king_actual = find_pieces(c.bs.bk, True, c.current_state)
+        king_expected = ['87']
+        rook_actual = set(find_pieces(c.bs.br, True, c.current_state))
+        rook_expected = set(['81', '86'])
+        assert king_actual == king_expected
+        assert rook_actual == rook_expected
+
+    def test_is_black_queen_side(self):
+        c.castle_move(True, 'queen')
+        king_actual = find_pieces(c.bs.bk, True, c.current_state)
+        king_expected = ['83']
+        rook_actual = set(find_pieces(c.bs.br, True, c.current_state))
+        rook_expected = set(['84', '88'])
+        assert king_actual == king_expected
+        assert rook_actual == rook_expected
+
+    def test_not_is_black_king_side(self):
+        c.castle_move(False, 'king')
+        king_actual = find_pieces(c.bs.wk, False, c.current_state)
+        king_expected = ['17']
+        rook_actual = set(find_pieces(c.bs.wr, False, c.current_state))
+        rook_expected = set(['11', '16'])
+        assert king_actual == king_expected
+        assert rook_actual == rook_expected
+
+    def test_not_is_black_queen_side(self):
+        c.castle_move(False, 'queen')
+        king_actual = find_pieces(c.bs.wk, False, c.current_state)
+        king_expected = ['13']
+        rook_actual = set(find_pieces(c.bs.wr, False, c.current_state))
+        rook_expected = set(['14', '18'])
+        assert king_actual == king_expected
+        assert rook_actual == rook_expected
+
+class TestMovePiece(unittest.TestCase):
+    
+    def setUp(self):
+        reset_board()
+    
+    def test_move_white_bishop(self):
+        c.move_piece(c.bs.wb, '13', '36')
+        self.assertTrue(c.bs.is_empty('13', c.current_state))
 
 
 if __name__ == '__main__':
