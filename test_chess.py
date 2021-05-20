@@ -860,6 +860,16 @@ class TestMovePiece(unittest.TestCase):
     def test_move_white_bishop(self):
         c.move_piece(c.bs.wb, '31', '63')
         self.assertTrue(c.bs.is_empty('31', c.current_state))
+        wb = find_pieces(c.bs.wb, False, c.current_state)
+        assert '63' in wb
+        assert '55' not in wb
+    
+    def test_move_black_pawn(self):
+        c.move_piece(c.bs.bp, '17', '15')
+        self.assertTrue(c.bs.is_empty('17', c.current_state))
+        bp = find_pieces(c.bs.bp, True, c.current_state)
+        assert '15' in bp
+        assert '17' not in bp
 
 
 if __name__ == '__main__':

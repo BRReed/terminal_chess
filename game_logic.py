@@ -811,8 +811,3 @@ class BoardState():
             else:
                 continue
         return False
-
-c = Chess()
-c.print_current_state('white')
-print(c.bs.is_empty('55', c.current_state))
-print(c.bs.is_empty('85', c.current_state))
