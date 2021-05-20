@@ -10,6 +10,14 @@ def reset_board():
     c.bs.b_king_side_castle = True
     c.bs.b_queen_side_castle = True
 
+def find_pieces(piece, is_black, board_state):
+    spaces = []
+    for space in board_state:
+        if piece in board_state[space][2] and (
+            is_black == c.bs.is_black(board_state[space][2])):
+            spaces.append(space)
+    return spaces
+
 class TestPieceMovement(unittest.TestCase):
 
     def setUp(self):
@@ -806,6 +814,15 @@ class TestCastleMove(unittest.TestCase):
 
     def setUp(self):
         reset_board()
+    
+    def test_is_black_king_side(self):
+        c.castle_move(True, 'king')
+        king_actual = find_pieces(c.bs.bk, True, c.current_state)
+        king_expected = ['87']
+        assert king_actual == king_expected
+        rook_actual = set(find_pieces(c.bs.br, True, c.current_state))
+        rook_expected = set(['81', '86'])
+        assert rook_actual == rook_expected
 
 
 if __name__ == '__main__':
