@@ -24,66 +24,66 @@ class TestPieceMovement(unittest.TestCase):
         reset_board()
 
     def test_king_move(self):
-        self.assertTrue(c.bs.piece_movement(c.bs.wk, '22', '21'))
         self.assertTrue(c.bs.piece_movement(c.bs.wk, '22', '12'))
-        self.assertTrue(c.bs.piece_movement(c.bs.wk, '22', '13'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wk, '22', '21'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wk, '22', '31'))
         self.assertTrue(c.bs.piece_movement(c.bs.wk, '22', '32'))
         self.assertTrue(c.bs.piece_movement(c.bs.wk, '22', '33'))
         self.assertTrue(c.bs.piece_movement(c.bs.wk, '22', '11'))
 
-        self.assertFalse(c.bs.piece_movement(c.bs.wk, '22', '42'))
         self.assertFalse(c.bs.piece_movement(c.bs.wk, '22', '24'))
-        self.assertFalse(c.bs.piece_movement(c.bs.wk, '22', '43'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wk, '22', '42'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wk, '22', '34'))
         self.assertFalse(c.bs.piece_movement(c.bs.wk, '22', '44'))
 
     def test_queen_move(self):
         self.assertTrue(c.bs.piece_movement(c.bs.wq, '33', '77'))
         self.assertTrue(c.bs.piece_movement(c.bs.wq, '11', '88'))
         self.assertTrue(c.bs.piece_movement(c.bs.wq, '33', '38'))
-        self.assertTrue(c.bs.piece_movement(c.bs.wq, '33', '83'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wq, '33', '38'))
         
-        self.assertFalse(c.bs.piece_movement(c.bs.wq, '33', '25'))
-        self.assertFalse(c.bs.piece_movement(c.bs.wq, '11', '32'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wq, '33', '52'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wq, '11', '23'))
 
     def test_bishop_move(self):
         self.assertTrue(c.bs.piece_movement(c.bs.wb, '33', '77'))
-        self.assertTrue(c.bs.piece_movement(c.bs.wb, '34', '78'))
-        self.assertTrue(c.bs.piece_movement(c.bs.wb, '18', '81'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wb, '43', '87'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wb, '81', '18'))
 
-        self.assertFalse(c.bs.piece_movement(c.bs.wb, '11', '12'))
-        self.assertFalse(c.bs.piece_movement(c.bs.wb, '15', '32'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wb, '11', '21'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wb, '51', '23'))
 
     def test_knight_move(self):
-        self.assertTrue(c.bs.piece_movement(c.bs.wn, '11', '23'))
         self.assertTrue(c.bs.piece_movement(c.bs.wn, '11', '32'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wn, '11', '23'))
 
         self.assertFalse(c.bs.piece_movement(c.bs.wn, '11', '33'))
-        self.assertFalse(c.bs.piece_movement(c.bs.wn, '11', '87'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wn, '11', '78'))
 
     def test_rook_move(self):
         self.assertTrue(c.bs.piece_movement(c.bs.wr, '11', '17'))
         self.assertTrue(c.bs.piece_movement(c.bs.wr, '11', '71'))
 
-        self.assertFalse(c.bs.piece_movement(c.bs.wr, '11', '27'))
-        self.assertFalse(c.bs.piece_movement(c.bs.wr, '11', '56'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wr, '11', '72'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wr, '11', '65'))
 
     def test_pawn_white_move(self):
-        self.assertTrue(c.bs.piece_movement(c.bs.wp, '11', '21'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wp, '11', '12'))
         self.assertTrue(c.bs.piece_movement(c.bs.wp, '11', '22'))
-        self.assertTrue(c.bs.piece_movement(c.bs.wp, '22', '31'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wp, '22', '13'))
         self.assertTrue(c.bs.piece_movement(c.bs.wp, '22', '33'))
 
-        self.assertFalse(c.bs.piece_movement(c.bs.wp, '22', '23'))
-        self.assertTrue(c.bs.piece_movement(c.bs.wp, '22', '42'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wp, '22', '32'))
+        self.assertTrue(c.bs.piece_movement(c.bs.wp, '22', '24'))
 
     def test_pawn_black_move(self):
-        self.assertTrue(c.bs.piece_movement(c.bs.bp, '21', '11'))
+        self.assertTrue(c.bs.piece_movement(c.bs.bp, '12', '11'))
         self.assertTrue(c.bs.piece_movement(c.bs.bp, '22', '11'))
-        self.assertTrue(c.bs.piece_movement(c.bs.bp, '31', '22'))
+        self.assertTrue(c.bs.piece_movement(c.bs.bp, '13', '22'))
         self.assertTrue(c.bs.piece_movement(c.bs.bp, '33', '22'))
 
-        self.assertFalse(c.bs.piece_movement(c.bs.wp, '23', '22'))
-        self.assertFalse(c.bs.piece_movement(c.bs.wp, '42', '22'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wp, '32', '22'))
+        self.assertFalse(c.bs.piece_movement(c.bs.wp, '24', '22'))
 
 
 class TestCoordsValid(unittest.TestCase):
@@ -186,16 +186,16 @@ class TestCoordsNotEqual(unittest.TestCase):
 
     def test_coords_are_equal(self):
         self.assertFalse(c.bs.coords_not_equal('11', '11'))
-        self.assertFalse(c.bs.coords_not_equal('65', '65'))
-        self.assertFalse(c.bs.coords_not_equal('42', '42'))
-        self.assertFalse(c.bs.coords_not_equal('87', '87'))
-        self.assertFalse(c.bs.coords_not_equal('73', '73'))
+        self.assertFalse(c.bs.coords_not_equal('56', '56'))
+        self.assertFalse(c.bs.coords_not_equal('24', '24'))
+        self.assertFalse(c.bs.coords_not_equal('78', '78'))
+        self.assertFalse(c.bs.coords_not_equal('37', '37'))
 
     def test_coords_are_not_equal(self):
         self.assertTrue(c.bs.coords_not_equal('11', '22'))
-        self.assertTrue(c.bs.coords_not_equal('90', '91'))
-        self.assertTrue(c.bs.coords_not_equal('65', '54'))
-        self.assertTrue(c.bs.coords_not_equal('12', '21'))
+        self.assertTrue(c.bs.coords_not_equal('09', '19'))
+        self.assertTrue(c.bs.coords_not_equal('56', '45'))
+        self.assertTrue(c.bs.coords_not_equal('21', '12'))
 
 class TestCheckCoords(unittest.TestCase):
 
@@ -241,27 +241,27 @@ class TestIsFriendly(unittest.TestCase):
         reset_board()
 
     def test_black_to_black(self):
-        self.assertTrue(c.bs.is_friendly('87', c.bs.is_black(c.bs.bq),
+        self.assertTrue(c.bs.is_friendly('78', c.bs.is_black(c.bs.bq),
                                          c.current_state))
-        self.assertTrue(c.bs.is_friendly('71', c.bs.is_black(c.bs.bp),
+        self.assertTrue(c.bs.is_friendly('17', c.bs.is_black(c.bs.bp),
                                          c.current_state))
     
     def test_white_to_white(self):
-        self.assertTrue(c.bs.is_friendly('17', c.bs.is_black(c.bs.wq),
+        self.assertTrue(c.bs.is_friendly('71', c.bs.is_black(c.bs.wq),
                                          c.current_state))
-        self.assertTrue(c.bs.is_friendly('28', c.bs.is_black(c.bs.wk),
+        self.assertTrue(c.bs.is_friendly('82', c.bs.is_black(c.bs.wk),
                                          c.current_state))
 
     def test_black_to_white(self):
-        self.assertFalse(c.bs.is_friendly('17', c.bs.is_black(c.bs.bn),
+        self.assertFalse(c.bs.is_friendly('71', c.bs.is_black(c.bs.bn),
                                           c.current_state))
         self.assertFalse(c.bs.is_friendly('22', c.bs.is_black(c.bs.br),
                                           c.current_state))
 
     def test_white_to_black(self):
-        self.assertFalse(c.bs.is_friendly('87', c.bs.is_black(c.bs.wp),
+        self.assertFalse(c.bs.is_friendly('78', c.bs.is_black(c.bs.wp),
                                           c.current_state))
-        self.assertFalse(c.bs.is_friendly('72', c.bs.is_black(c.bs.wq),
+        self.assertFalse(c.bs.is_friendly('27', c.bs.is_black(c.bs.wq),
                                           c.current_state))
 
 class TestIsEnemy(unittest.TestCase):
@@ -271,27 +271,27 @@ class TestIsEnemy(unittest.TestCase):
         reset_board()
 
     def test_black_to_black(self):
-        self.assertFalse(c.bs.is_enemy('81', c.bs.is_black(c.bs.bk),
+        self.assertFalse(c.bs.is_enemy('18', c.bs.is_black(c.bs.bk),
                                        c.current_state))
-        self.assertFalse(c.bs.is_enemy('76', c.bs.is_black(c.bs.bq),
+        self.assertFalse(c.bs.is_enemy('67', c.bs.is_black(c.bs.bq),
                                        c.current_state))
 
     def test_white_to_white(self):
-        self.assertFalse(c.bs.is_enemy('12', c.bs.is_black(c.bs.wp),
+        self.assertFalse(c.bs.is_enemy('21', c.bs.is_black(c.bs.wp),
                                        c.current_state))
-        self.assertFalse(c.bs.is_enemy('26', c.bs.is_black(c.bs.wr),
+        self.assertFalse(c.bs.is_enemy('62', c.bs.is_black(c.bs.wr),
                                        c.current_state))
     
     def test_black_to_white(self):
-        self.assertTrue(c.bs.is_enemy('12', c.bs.is_black(c.bs.bn),
+        self.assertTrue(c.bs.is_enemy('21', c.bs.is_black(c.bs.bn),
                                       c.current_state))
-        self.assertTrue(c.bs.is_enemy('28', c.bs.is_black(c.bs.bb),
+        self.assertTrue(c.bs.is_enemy('82', c.bs.is_black(c.bs.bb),
                                       c.current_state))
 
     def test_white_to_black(self):
-        self.assertTrue(c.bs.is_enemy('86', c.bs.is_black(c.bs.wp),
+        self.assertTrue(c.bs.is_enemy('68', c.bs.is_black(c.bs.wp),
                                       c.current_state))
-        self.assertTrue(c.bs.is_enemy('74', c.bs.is_black(c.bs.wk),
+        self.assertTrue(c.bs.is_enemy('47', c.bs.is_black(c.bs.wk),
                                       c.current_state))
 
 class TestIsEmpty(unittest.TestCase):
@@ -301,12 +301,12 @@ class TestIsEmpty(unittest.TestCase):
         reset_board()
 
     def test_space_is_empty(self):
-        self.assertTrue(c.bs.is_empty('67', c.current_state))
-        self.assertTrue(c.bs.is_empty('43', c.current_state))
+        self.assertTrue(c.bs.is_empty('76', c.current_state))
+        self.assertTrue(c.bs.is_empty('34', c.current_state))
 
     def test_space_is_occupied(self):
-        self.assertFalse(c.bs.is_empty('14', c.current_state))
-        self.assertFalse(c.bs.is_empty('83', c.current_state))
+        self.assertFalse(c.bs.is_empty('41', c.current_state))
+        self.assertFalse(c.bs.is_empty('38', c.current_state))
 
 class TestAddCoords(unittest.TestCase):
     
@@ -332,114 +332,114 @@ class TestMovesDir(unittest.TestCase):
     def test_move_diag_rposi_cposi_black(self):
         self.assertEqual(c.bs.moves_dir('55', (1, 1), True, c.current_state),
                                      ['66'])
-        self.assertEqual(c.bs.moves_dir('31', (1, 1), True, c.current_state),
-                                     ['42', '53', '64'])
-        self.assertEqual(c.bs.moves_dir('47', (1, 1), True, c.current_state),
-                                     ['58'])
+        self.assertEqual(c.bs.moves_dir('13', (1, 1), True, c.current_state),
+                                     ['24', '35', '46'])
+        self.assertEqual(c.bs.moves_dir('74', (1, 1), True, c.current_state),
+                                     ['85'])
     
     def test_move_diag_rposi_cposi_white(self):
         self.assertEqual(c.bs.moves_dir('55', (1, 1), False, c.current_state),
                                      ['66', '77'])
-        self.assertEqual(c.bs.moves_dir('31', (1, 1), False, c.current_state),
-                                     ['42', '53', '64', '75'])
-        self.assertEqual(c.bs.moves_dir('47', (1, 1), False, c.current_state),
-                                     ['58'])
+        self.assertEqual(c.bs.moves_dir('13', (1, 1), False, c.current_state),
+                                     ['24', '35', '46', '57'])
+        self.assertEqual(c.bs.moves_dir('74', (1, 1), False, c.current_state),
+                                     ['85'])
 
     def test_move_diag_rposi_cneg_black(self):
-        self.assertEqual(c.bs.moves_dir('55', (1, -1), True, c.current_state),
-                                     ['64'])
-        self.assertEqual(c.bs.moves_dir('36', (1, -1), True, c.current_state),
-                                     ['45', '54', '63'])
-        self.assertEqual(c.bs.moves_dir('47', (1, -1), True, c.current_state),
-                                     ['56', '65'])
+        self.assertEqual(c.bs.moves_dir('55', (-1, 1), True, c.current_state),
+                                     ['46'])
+        self.assertEqual(c.bs.moves_dir('63', (-1, 1), True, c.current_state),
+                                     ['54', '45', '36'])
+        self.assertEqual(c.bs.moves_dir('74', (-1, 1), True, c.current_state),
+                                     ['65', '56'])
 
     def test_move_diag_rposi_cneg_white(self):
-        self.assertEqual(c.bs.moves_dir('55', (1, -1), False, c.current_state),
-                                     ['64', '73'])
-        self.assertEqual(c.bs.moves_dir('36', (1, -1), False, c.current_state),
-                                     ['45', '54', '63', '72'])
-        self.assertEqual(c.bs.moves_dir('47', (1, -1), False, c.current_state),
-                                     ['56', '65', '74'])
+        self.assertEqual(c.bs.moves_dir('55', (-1, 1), False, c.current_state),
+                                     ['46', '37'])
+        self.assertEqual(c.bs.moves_dir('63', (-1, 1), False, c.current_state),
+                                     ['54', '45', '36', '27'])
+        self.assertEqual(c.bs.moves_dir('74', (-1, 1), False, c.current_state),
+                                     ['65', '56', '47'])
 
     def test_move_diag_rneg_cneg_black(self):
         self.assertEqual(c.bs.moves_dir('44', (-1, -1), True, c.current_state),
                                      ['33', '22'])
-        self.assertEqual(c.bs.moves_dir('78', (-1, -1), True, c.current_state),
-                                     ['67', '56', '45', '34', '23'])
-        self.assertEqual(c.bs.moves_dir('31', (-1, -1), True, c.current_state),
+        self.assertEqual(c.bs.moves_dir('87', (-1, -1), True, c.current_state),
+                                     ['76', '65', '54', '43', '32'])
+        self.assertEqual(c.bs.moves_dir('13', (-1, -1), True, c.current_state),
                                      [])
     
     def test_move_diag_rneg_cneg_white(self):
         self.assertEqual(c.bs.moves_dir('44', (-1, -1), False,
                                         c.current_state), ['33'])
-        self.assertEqual(c.bs.moves_dir('78', (-1, -1), False, 
-                         c.current_state),['67', '56', '45', '34'])
-        self.assertEqual(c.bs.moves_dir('31', (-1, -1), False,
+        self.assertEqual(c.bs.moves_dir('87', (-1, -1), False, 
+                         c.current_state),['76', '65', '54', '43'])
+        self.assertEqual(c.bs.moves_dir('13', (-1, -1), False,
                          c.current_state), [])
 
     def test_move_vert_rneg_cconst_black(self):
-        self.assertEqual(c.bs.moves_dir('44', (-1, 0), True, c.current_state),
-                                     ['34', '24'])
-        self.assertEqual(c.bs.moves_dir('78', (-1, 0), True, c.current_state),
-                                     ['68', '58', '48', '38', '28'])
-        self.assertEqual(c.bs.moves_dir('31', (-1, 0), True, c.current_state),
-                                     ['21'])
+        self.assertEqual(c.bs.moves_dir('44', (0, -1), True, c.current_state),
+                                     ['43', '42'])
+        self.assertEqual(c.bs.moves_dir('87', (0, -1), True, c.current_state),
+                                     ['86', '85', '84', '83', '82'])
+        self.assertEqual(c.bs.moves_dir('13', (0, -1), True, c.current_state),
+                                     ['12'])
     
     def test_move_vert_rneg_cconst_white(self):
-        self.assertEqual(c.bs.moves_dir('44', (-1, 0), False, c.current_state),
-                                     ['34'])
-        self.assertEqual(c.bs.moves_dir('78', (-1, 0), False, c.current_state),
-                                     ['68', '58', '48', '38'])
-        self.assertEqual(c.bs.moves_dir('31', (-1, 0), False, c.current_state),
+        self.assertEqual(c.bs.moves_dir('44', (0, -1), False, c.current_state),
+                                     ['43'])
+        self.assertEqual(c.bs.moves_dir('87', (0, -1), False, c.current_state),
+                                     ['86', '85', '84', '83'])
+        self.assertEqual(c.bs.moves_dir('31', (0, -1), False, c.current_state),
                                      [])
 
     def test_move_vert_rposi_cconst_black(self):
-        self.assertEqual(c.bs.moves_dir('44', (1, 0), True, c.current_state),
-                                     ['54', '64'])
-        self.assertEqual(c.bs.moves_dir('78', (1, 0), True, c.current_state),
+        self.assertEqual(c.bs.moves_dir('44', (0, 1), True, c.current_state),
+                                     ['45', '46'])
+        self.assertEqual(c.bs.moves_dir('87', (0, 1), True, c.current_state),
                                      [])
-        self.assertEqual(c.bs.moves_dir('31', (1, 0), True, c.current_state),
-                                     ['41', '51', '61'])
+        self.assertEqual(c.bs.moves_dir('13', (0, 1), True, c.current_state),
+                                     ['14', '15', '16'])
     
     def test_move_vert_rposi_cconst_white(self):
-        self.assertEqual(c.bs.moves_dir('44', (1, 0), False, c.current_state),
-                                     ['54', '64', '74'])
-        self.assertEqual(c.bs.moves_dir('78', (1, 0), False, c.current_state),
+        self.assertEqual(c.bs.moves_dir('44', (0, 1), False, c.current_state),
+                                     ['45', '46', '47'])
+        self.assertEqual(c.bs.moves_dir('87', (0, 1), False, c.current_state),
                                      ['88'])
-        self.assertEqual(c.bs.moves_dir('31', (1, 0), False, c.current_state),
-                                     ['41', '51', '61', '71'])
+        self.assertEqual(c.bs.moves_dir('13', (0, 1), False, c.current_state),
+                                     ['14', '15', '16', '17'])
         
     def test_move_horz_rconst_cneg_black(self):
-        self.assertEqual(c.bs.moves_dir('31', (0, -1), True, c.current_state),
+        self.assertEqual(c.bs.moves_dir('13', (-1, 0), True, c.current_state),
                                      [])
-        self.assertEqual(c.bs.moves_dir('78', (0, -1), True, c.current_state),
+        self.assertEqual(c.bs.moves_dir('87', (-1, 0), True, c.current_state),
                                      [])
-        self.assertEqual(c.bs.moves_dir('44', (0, -1), True, c.current_state),
-                                     ['43', '42', '41'])
+        self.assertEqual(c.bs.moves_dir('44', (-1, 0), True, c.current_state),
+                                     ['34', '24', '14'])
 
     def test_move_horz_rconst_cneg_white(self):
-        self.assertEqual(c.bs.moves_dir('31', (0, -1), False, c.current_state),
+        self.assertEqual(c.bs.moves_dir('13', (-1, 0), False, c.current_state),
                                      [])
-        self.assertEqual(c.bs.moves_dir('78', (0, -1), False, c.current_state),
+        self.assertEqual(c.bs.moves_dir('87', (-1, 0), False, c.current_state),
                                      ['77'])
-        self.assertEqual(c.bs.moves_dir('44', (0, -1), False, c.current_state),
-                                     ['43', '42', '41'])
+        self.assertEqual(c.bs.moves_dir('44', (-1, 0), False, c.current_state),
+                                     ['34', '24', '14'])
 
     def test_move_horz_rconst_cposi_black(self):
-        self.assertEqual(c.bs.moves_dir('32', (0, 1), True, c.current_state),
-                                     ['33', '34', '35', '36', '37', '38'])
-        self.assertEqual(c.bs.moves_dir('76', (0, 1), True, c.current_state),
+        self.assertEqual(c.bs.moves_dir('23', (1, 0), True, c.current_state),
+                                     ['33', '43', '53', '63', '73', '83'])
+        self.assertEqual(c.bs.moves_dir('67', (1, 0), True, c.current_state),
                                      [])
-        self.assertEqual(c.bs.moves_dir('44', (0, 1), True, c.current_state),
-                                     ['45', '46', '47', '48'])
+        self.assertEqual(c.bs.moves_dir('44', (1, 0), True, c.current_state),
+                                     ['54', '64', '74', '84'])
 
     def test_move_horz_rconst_cposi_white(self):
-        self.assertEqual(c.bs.moves_dir('31', (0, 1), False, c.current_state),
-                                    ['32', '33', '34', '35', '36', '37', '38'])
-        self.assertEqual(c.bs.moves_dir('76', (0, 1), False, c.current_state),
+        self.assertEqual(c.bs.moves_dir('13', (1, 0), False, c.current_state),
+                                    ['23', '33', '43', '53', '63', '73', '83'])
+        self.assertEqual(c.bs.moves_dir('67', (1, 0), False, c.current_state),
                                     ['77'])
-        self.assertEqual(c.bs.moves_dir('44', (0, 1), False, c.current_state),
-                                    ['45', '46', '47', '48'])
+        self.assertEqual(c.bs.moves_dir('44', (1, 0), False, c.current_state),
+                                    ['54', '64', '74', '84'])
 
 class TestFindPiece(unittest.TestCase):
     
@@ -448,10 +448,10 @@ class TestFindPiece(unittest.TestCase):
 
     def test_find_white_queen(self):
         self.assertEqual(c.bs.find_piece(c.bs.wq, False, c.current_state), 
-                                         '14')
+                                         '41')
     
     def test_find_black_queen(self):
-        self.assertEqual(c.bs.find_piece(c.bs.bq, True, c.current_state), '84')
+        self.assertEqual(c.bs.find_piece(c.bs.bq, True, c.current_state), '48')
 
 class TestInCheck(unittest.TestCase):
 
@@ -459,28 +459,28 @@ class TestInCheck(unittest.TestCase):
         reset_board()
 
     def test_black_king_in_check_white_knight(self):
-        c.move_piece(c.bs.wn, '12', '64')
+        c.move_piece(c.bs.wn, '21', '46')
         self.assertTrue(c.in_check(True, c.current_state))
 
     def test_white_king_in_check_black_queen(self):
-        c.move_piece(c.bs.wp, '24', '34')
-        c.move_piece(c.bs.bq, '84', '51')
+        c.move_piece(c.bs.wp, '42', '43')
+        c.move_piece(c.bs.bq, '48', '15')
         self.assertTrue(c.in_check(False, c.current_state))
 
     def test_white_king_not_in_check(self):
         self.assertFalse(c.in_check(False, c.current_state))
-        c.move_piece(c.bs.br, '81', '35')
+        c.move_piece(c.bs.br, '18', '53')
         self.assertFalse(c.in_check(False, c.current_state))
-        c.move_piece(c.bs.bq, '84', '37')
+        c.move_piece(c.bs.bq, '48', '73')
         self.assertFalse(c.in_check(False, c.current_state))
-        c.move_piece(c.bs.bb, '86', '33')
+        c.move_piece(c.bs.bb, '68', '33')
         self.assertFalse(c.in_check(False, c.current_state))
 
     def test_black_king_not_in_check(self):
         self.assertFalse(c.in_check(True, c.current_state))
-        c.move_piece(c.bs.wb, '13', '67')
+        c.move_piece(c.bs.wb, '31', '76')
         self.assertFalse(c.in_check(True, c.current_state))
-        c.move_piece(c.bs.wq, '14', '65')
+        c.move_piece(c.bs.wq, '41', '56')
         self.assertFalse(c.in_check(True, c.current_state))
 
 class TestCheckMate(unittest.TestCase):
@@ -495,17 +495,17 @@ class TestCheckMate(unittest.TestCase):
         self.assertFalse(c.check_mate(False, c.current_state))
 
     def test_black_king_mate_white_knight(self):
-        c.move_piece(c.bs.wn, '12', '64')
+        c.move_piece(c.bs.wn, '21', '46')
         self.assertTrue(c.check_mate(True, c.current_state))
     
     def test_white_king_mate_black_knight(self):
-        c.move_piece(c.bs.bn, '82', '34')
+        c.move_piece(c.bs.bn, '28', '43')
         self.assertTrue(c.check_mate(False, c.current_state))
 
     def test_white_king_not_in_check_black_queen_attacking(self):
-        c.move_piece(c.bs.bq, '84', '51')
-        c.move_piece(c.bs.wp, '24', '34')
-        c.move_piece(c.bs.wp, '25', '35')
+        c.move_piece(c.bs.bq, '48', '15')
+        c.move_piece(c.bs.wp, '42', '43')
+        c.move_piece(c.bs.wp, '52', '53')
         self.assertFalse(c.check_mate(False, c.current_state))
     
     
@@ -515,79 +515,79 @@ class TestPossibleMoves(unittest.TestCase):
         reset_board()
 
     def test_white_king_no_moves(self):
-        self.assertEqual(c.bs.possible_moves(c.bs.wk, '15', c.current_state), 
+        self.assertEqual(c.bs.possible_moves(c.bs.wk, '51', c.current_state), 
                                              [])
 
     def test_white_pawn_no_target(self):
-        actual_moves = c.bs.possible_moves(c.bs.wp, '21', c.current_state)
-        expected_moves = ['31', '41']
+        actual_moves = c.bs.possible_moves(c.bs.wp, '12', c.current_state)
+        expected_moves = ['13', '14']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
         
     
     def test_white_pawn_blocked(self):
-        c.move_piece(c.bs.bp, '71', '31')
-        self.assertEqual(c.bs.possible_moves(c.bs.wp, '21', c.current_state),
+        c.move_piece(c.bs.bp, '17', '13')
+        self.assertEqual(c.bs.possible_moves(c.bs.wp, '12', c.current_state),
                                              [])
 
     def test_black_pawn_target(self):
-        c.move_piece(c.bs.wp, '22', '62')
-        actual_moves = c.bs.possible_moves(c.bs.bp, '71', c.current_state)
-        expected_moves = ['61', '62', '51']
+        c.move_piece(c.bs.wp, '22', '26')
+        actual_moves = c.bs.possible_moves(c.bs.bp, '17', c.current_state)
+        expected_moves = ['16', '26', '15']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
 
-    def test_white_queen_from_45(self):
-        c.move_piece(c.bs.wq, '14', '45')
-        actual_moves = c.bs.possible_moves(c.bs.wq, '45', c.current_state)
-        expected_moves = ['55', '65', '75', '35', '44', '43', '42', '41',
-                          '46', '47', '48', '34', '56', '67', '78', '36',
-                          '54', '63', '72']
+    def test_white_queen_from_54(self):
+        c.move_piece(c.bs.wq, '41', '54')
+        actual_moves = c.bs.possible_moves(c.bs.wq, '54', c.current_state)
+        expected_moves = ['55', '56', '57', '53', '44', '34', '24', '14',
+                          '64', '74', '84', '43', '65', '76', '87', '63',
+                          '45', '36', '27']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
     
-    def test_black_queen_from_52(self):
-        c.move_piece(c.bs.bq, '84', '52')
-        actual_moves = c.bs.possible_moves(c.bs.bq, '52', c.current_state)
-        expected_moves = ['51', '61', '62', '63', '53', '54', '55', '56', 
-                          '57', '58', '43', '34', '25', '42', '41', '32', 
+    def test_black_queen_from_25(self):
+        c.move_piece(c.bs.bq, '48', '25')
+        actual_moves = c.bs.possible_moves(c.bs.bq, '25', c.current_state)
+        expected_moves = ['15', '16', '26', '36', '35', '45', '55', '65', 
+                          '75', '85', '34', '43', '52', '24', '14', '23', 
                           '22']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
 
     def test_white_bishop_from_44(self):
-        c.move_piece(c.bs.wb, '13', '44')
+        c.move_piece(c.bs.wb, '31', '44')
         actual_moves = c.bs.possible_moves(c.bs.wb, '44', c.current_state)
-        expected_moves = ['33', '35', '53', '62', '71', '55', '66', '77']
+        expected_moves = ['33', '53', '35', '26', '17', '55', '66', '77']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
 
     def test_black_knight_from_33(self):
-        c.move_piece(c.bs.bn, '82', '33')
+        c.move_piece(c.bs.bn, '28', '33')
         actual_moves = c.bs.possible_moves(c.bs.bn, '33', c.current_state)
-        expected_moves = ['12', '14', '21', '25', '41', '45', '52', '54']
+        expected_moves = ['21', '41', '12', '52', '14', '54', '25', '45']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
 
-    def test_black_rook_from_56(self):
-        c.move_piece(c.bs.br, '88', '56')
-        actual_moves = c.bs.possible_moves(c.bs.br, '56', c.current_state)
-        expected_moves = ['66', '46', '36', '26', '57', '58', '55', '54', 
-                          '53', '52', '51']
+    def test_black_rook_from_65(self):
+        c.move_piece(c.bs.br, '88', '65')
+        actual_moves = c.bs.possible_moves(c.bs.br, '65', c.current_state)
+        expected_moves = ['66', '64', '63', '62', '75', '85', '55', '45', 
+                          '35', '25', '15']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
 
     def test_white_king_from_44(self):
-        c.move_piece(c.bs.wk, '15', '44')
+        c.move_piece(c.bs.wk, '51', '44')
         actual_moves = c.bs.possible_moves(c.bs.wk, '44', c.current_state)
-        expected_moves = ['53', '54', '55', '43', '45', '35', '34', '33']
+        expected_moves = ['35', '45', '55', '34', '54', '53', '43', '33']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
@@ -598,50 +598,51 @@ class TestBlockCheck(unittest.TestCase):
         self.test_passed = False
 
     def test_black_block_check_white_bishop(self):
-        c.move_piece(c.bs.bp, '74', '54')
-        c.move_piece(c.bs.wb, '13', '65')
+        c.move_piece(c.bs.bp, '47', '45')
+        c.move_piece(c.bs.wb, '31', '56')
         self.assertTrue(c.bs.block_check(True, c.current_state))
 
     def test_black_block_check_knight_takes_knight_attacker(self):
-        c.move_piece(c.bs.bp, '73', '53')
-        c.move_piece(c.bs.bp, '75', '55')
-        c.move_piece(c.bs.bn, '87', '75')
-        c.move_piece(c.bs.bn, '82', '52')
-        c.move_piece(c.bs.wn, '12', '64')
+        c.move_piece(c.bs.bp, '37', '35')
+        c.move_piece(c.bs.bp, '57', '55')
+        c.move_piece(c.bs.bn, '78', '57')
+        c.move_piece(c.bs.bn, '28', '25')
+        c.move_piece(c.bs.wn, '21', '46')
         self.assertTrue(c.bs.block_check(True, c.current_state))
 
     def test_black_block_check_king_takes_pawn_attacker(self):
-        c.move_piece(c.bs.wp, '21', '45') 
-        c.move_piece(c.bs.bk, '84', '54')
+        c.move_piece(c.bs.wp, '12', '54') 
+        c.move_piece(c.bs.bk, '48', '45')
         self.assertTrue(c.bs.block_check(True, c.current_state))
 
     def test_black_block_check_king_moves_away(self):
-        c.move_piece(c.bs.bk, '84', '54')
-        c.move_piece(c.bs.wq, '14', '34')
+        c.move_piece(c.bs.bk, '48', '45')
+        c.move_piece(c.bs.wq, '41', '43')
         self.assertTrue(c.bs.block_check(True, c.current_state))
 
     def test_black_not_block_check_queen_attacker(self):
-        c.move_piece(c.bs.wq, '14', '58')
-        c.move_piece(c.bs.bp, '76', '66')
-        c.move_piece(c.bs.bp, '77', '57')
+        c.move_piece(c.bs.wq, '41', '85')
+        c.move_piece(c.bs.bp, '67', '66')
+        c.move_piece(c.bs.bp, '77', '75')
         self.assertFalse(c.bs.block_check(True, c.current_state))
 
     def test_white_not_block_check_queen_attacker(self):
-        c.bs.move_piece(c.bs.bq, '84', '48', c.current_state)
-        c.bs.move_piece(c.bs.wp, '27', '47', c.current_state)
-        c.bs.move_piece(c.bs.wp, '26', '46', c.current_state)
+        c.bs.move_piece(c.bs.bq, '48', '84', c.current_state)
+        c.bs.move_piece(c.bs.wp, '72', '74', c.current_state)
+        c.bs.move_piece(c.bs.wp, '62', '64', c.current_state)
         self.assertFalse(c.bs.block_check(False, c.current_state))
     
     def test_black_not_block_check_pawn_protect_attacker(self):
-        c.bs.move_piece(c.bs.wp, '27', '67', c.current_state)
-        c.bs.move_piece(c.bs.bp, '76', '66', c.current_state)
-        c.bs.move_piece(c.bs.wp, '26', '76', c.current_state)
+        c.bs.move_piece(c.bs.wp, '72', '76', c.current_state)
+        c.bs.move_piece(c.bs.bp, '67', '66', c.current_state)
+        c.bs.move_piece(c.bs.wp, '62', '67', c.current_state)
         self.assertFalse(c.bs.block_check(True, c.current_state))
 
     def test_white_not_block_check_pawn_protect_attacker(self):
-        c.bs.move_piece(c.bs.wp, '26', '36', c.current_state)
-        c.bs.move_piece(c.bs.bp, '76', '26', c.current_state)
-        c.bs.move_piece(c.bs.bp, '77', '37', c.current_state)
+        c.bs.move_piece(c.bs.wp, '62', '63', c.current_state)
+        c.bs.move_piece(c.bs.wp, '82', '83', c.current_state)
+        c.bs.move_piece(c.bs.bp, '67', '62', c.current_state)
+        c.bs.move_piece(c.bs.bp, '77', '73', c.current_state)
         self.assertFalse(c.bs.block_check(False, c.current_state))
 
 class TestCheckCastling(unittest.TestCase):
@@ -661,72 +662,72 @@ class TestCheckCastling(unittest.TestCase):
         self.assertFalse(c.bs.check_castling(True, 'queen', c.current_state))
 
     def test_white_king_side_protected_free(self):
-        c.move_piece(c.bs.wb, '16', '36')
-        c.move_piece(c.bs.wn, '17', '38')
+        c.move_piece(c.bs.wb, '61', '63')
+        c.move_piece(c.bs.wn, '71', '83')
         self.assertTrue(c.bs.check_castling(False, 'king', c.current_state))
 
     def test_white_queen_side_protected_free(self):
-        c.move_piece(c.bs.wq, '14', '34')
-        c.move_piece(c.bs.wb, '13', '33')
-        c.move_piece(c.bs.wn, '12', '31')
+        c.move_piece(c.bs.wq, '41', '43')
+        c.move_piece(c.bs.wb, '31', '33')
+        c.move_piece(c.bs.wn, '21', '13')
         self.assertTrue(c.bs.check_castling(False, 'queen', c.current_state))
 
     def test_black_king_side_protected_free(self):
-        c.move_piece(c.bs.bb, '86', '66')
-        c.move_piece(c.bs.bn, '87', '68')
+        c.move_piece(c.bs.bb, '68', '66')
+        c.move_piece(c.bs.bn, '78', '86')
         self.assertTrue(c.bs.check_castling(True, 'king', c.current_state))
 
     def test_black_queen_side_protected_free(self):
-        c.move_piece(c.bs.bq, '84', '64')
-        c.move_piece(c.bs.bb, '83', '63')
-        c.move_piece(c.bs.bn, '82', '61')
+        c.move_piece(c.bs.bq, '48', '46')
+        c.move_piece(c.bs.bb, '38', '36')
+        c.move_piece(c.bs.bn, '28', '16')
         self.assertTrue(c.bs.check_castling(True, 'queen', c.current_state))
     
     def test_white_king_side_rook_attacked(self):
-        c.move_piece(c.bs.wb, '16', '36')
-        c.move_piece(c.bs.wn, '17', '35')
-        c.move_piece(c.bs.wp, '28', '37')
-        c.move_piece(c.bs.bp, '78', '67')
+        c.move_piece(c.bs.wb, '61', '63')
+        c.move_piece(c.bs.wn, '71', '53')
+        c.move_piece(c.bs.wp, '82', '73')
+        c.move_piece(c.bs.bp, '87', '76')
         self.assertTrue(c.bs.check_castling(False, 'king', c.current_state))
 
     def test_white_king_side_king_landing_space_attacked(self):
-        c.move_piece(c.bs.wb, '16', '36')
-        c.move_piece(c.bs.wn, '17', '35')
-        c.move_piece(c.bs.wp, '27', '46')
-        c.move_piece(c.bs.br, '88', '67')
+        c.move_piece(c.bs.wb, '61', '63')
+        c.move_piece(c.bs.wn, '71', '53')
+        c.move_piece(c.bs.wp, '72', '64')
+        c.move_piece(c.bs.br, '88', '76')
         self.assertFalse(c.bs.check_castling(False, 'king', c.current_state))
 
     def test_white_king_side_in_check(self):
-        c.move_piece(c.bs.wb, '16', '36')
-        c.move_piece(c.bs.wn, '17', '46')
-        c.move_piece(c.bs.wp, '28', '37')
-        c.move_piece(c.bs.bp, '78', '67')
-        c.move_piece(c.bs.wp, '25', '34')
-        c.move_piece(c.bs.br, '88', '65')
+        c.move_piece(c.bs.wb, '61', '63')
+        c.move_piece(c.bs.wn, '71', '64')
+        c.move_piece(c.bs.wp, '82', '73')
+        c.move_piece(c.bs.bp, '87', '76')
+        c.move_piece(c.bs.wp, '52', '43')
+        c.move_piece(c.bs.br, '88', '56')
         self.assertFalse(c.bs.check_castling(False, 'king', c.current_state))
     
     def test_white_queen_side_rook_attacked(self):
-        c.move_piece(c.bs.wq, '14', '34')
-        c.move_piece(c.bs.wb, '13', '33')
-        c.move_piece(c.bs.wn, '12', '43')
-        c.move_piece(c.bs.wp, '22', '31')
-        c.move_piece(c.bs.br, '88', '62')
+        c.move_piece(c.bs.wq, '41', '43')
+        c.move_piece(c.bs.wb, '31', '33')
+        c.move_piece(c.bs.wn, '21', '34')
+        c.move_piece(c.bs.wp, '22', '13')
+        c.move_piece(c.bs.br, '88', '26')
         self.assertTrue(c.bs.check_castling(False, 'queen', c.current_state))
 
     def test_black_queen_side_king_move_space_attacked(self):
-        c.move_piece(c.bs.bq, '84', '65')
-        c.move_piece(c.bs.bp, '74', '55')
-        c.move_piece(c.bs.wq, '14', '34')
-        c.move_piece(c.bs.bb, '83', '63')
-        c.move_piece(c.bs.bn, '82', '61')
+        c.move_piece(c.bs.bq, '48', '56')
+        c.move_piece(c.bs.bp, '47', '55')
+        c.move_piece(c.bs.wq, '41', '43')
+        c.move_piece(c.bs.bb, '38', '36')
+        c.move_piece(c.bs.bn, '28', '16')
         self.assertFalse(c.bs.check_castling(True, 'queen', c.current_state))
 
     def test_black_queen_side_rook_attacked(self):
-        c.move_piece(c.bs.bp, '72', '61')
-        c.move_piece(c.bs.bq, '84', '65')
-        c.move_piece(c.bs.bb, '83', '63')
-        c.move_piece(c.bs.bn, '82', '61')
-        c.move_piece(c.bs.wq, '14', '32')
+        c.move_piece(c.bs.bp, '27', '16')
+        c.move_piece(c.bs.bq, '48', '56')
+        c.move_piece(c.bs.bb, '38', '36')
+        c.move_piece(c.bs.bn, '28', '16')
+        c.move_piece(c.bs.wq, '41', '23')
         self.assertTrue(c.bs.check_castling(True, 'queen', c.current_state))
 
 class TestCheckCastlingValid(unittest.TestCase):
@@ -742,7 +743,7 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.b_queen_side_castle == True
     
     def white_king_moved(self):
-        c.move_piece(c.bs.wk, '15', '35')
+        c.move_piece(c.bs.wk, '51', '53')
         c.bs.check_castling_valid(c.current_state)
         assert c.bs.w_king_side_castle == False
         assert c.bs.w_queen_side_castle == False
@@ -750,7 +751,7 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.b_queen_side_castle == True
     
     def white_king_side_rook_moved(self):
-        c.move_piece(c.bs.wr, '88', '68')
+        c.move_piece(c.bs.wr, '88', '86')
         c.bs.check_castling_valid(c.current_state)
         assert c.bs.w_king_side_castle == False
         assert c.bs.w_queen_side_castle == True
@@ -758,7 +759,7 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.b_queen_side_castle == True
 
     def white_queen_side_rook_moved(self):
-        c.move_piece(c.bs.wr, '81', '61')
+        c.move_piece(c.bs.wr, '18', '16')
         c.bs.check_castling_valid(c.current_state)
         assert c.bs.w_king_side_castle == True
         assert c.bs.w_queen_side_castle == False
@@ -766,7 +767,7 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.b_queen_side_castle == True
 
     def black_king_moved(self):
-        c.move_piece(c.bs.bk, '85', '65')
+        c.move_piece(c.bs.bk, '58', '56')
         c.bs.check_castling_valid(c.current_state)
         assert c.bs.w_king_side_castle == True
         assert c.bs.w_queen_side_castle == True
@@ -774,7 +775,7 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.b_queen_side_castle == False
 
     def black_king_side_rook_moved(self):
-        c.move_piece(c.bs.br, '18', '38')
+        c.move_piece(c.bs.br, '81', '83')
         c.bs.check_castling_valid(c.current_state)
         assert c.bs.w_king_side_castle == True
         assert c.bs.w_queen_side_castle == True
@@ -782,7 +783,7 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.b_queen_side_castle == True
 
     def black_queen_side_rook_moved(self):
-        c.move_piece(c.bs.br, '11', '31')
+        c.move_piece(c.bs.br, '11', '13')
         c.bs.check_castling_valid(c.current_state)
         assert c.bs.w_king_side_castle == True
         assert c.bs.w_queen_side_castle == True
@@ -799,16 +800,16 @@ class TestCheckEnPassant(unittest.TestCase):
         c.bs.b_en_passant = [False, '']
 
     def test_white_en_passant_true(self):
-        c.move_piece(c.bs.bp, '71', '41')
-        c.bs.check_en_passant(False, '22', '42', c.current_state)
-        assert c.bs.w_en_passant == [True, '32']
+        c.move_piece(c.bs.bp, '17', '14')
+        c.bs.check_en_passant(False, '22', '24', c.current_state)
+        assert c.bs.w_en_passant == [True, '23']
         assert c.bs.b_en_passant == [False, '']
     
     def test_black_en_passant_true(self):
-        c.move_piece(c.bs.wp, '21', '51')
-        c.bs.check_en_passant(True, '72', '52', c.current_state)
+        c.move_piece(c.bs.wp, '12', '15')
+        c.bs.check_en_passant(True, '27', '25', c.current_state)
         assert c.bs.w_en_passant == [False, '']
-        assert c.bs.b_en_passant == [True, '62']
+        assert c.bs.b_en_passant == [True, '26']
 
 class TestCastleMove(unittest.TestCase):
 
@@ -818,36 +819,36 @@ class TestCastleMove(unittest.TestCase):
     def test_is_black_king_side(self):
         c.castle_move(True, 'king')
         king_actual = find_pieces(c.bs.bk, True, c.current_state)
-        king_expected = ['87']
+        king_expected = ['78']
         rook_actual = set(find_pieces(c.bs.br, True, c.current_state))
-        rook_expected = set(['81', '86'])
+        rook_expected = set(['18', '68'])
         assert king_actual == king_expected
         assert rook_actual == rook_expected
 
     def test_is_black_queen_side(self):
         c.castle_move(True, 'queen')
         king_actual = find_pieces(c.bs.bk, True, c.current_state)
-        king_expected = ['83']
+        king_expected = ['38']
         rook_actual = set(find_pieces(c.bs.br, True, c.current_state))
-        rook_expected = set(['84', '88'])
+        rook_expected = set(['48', '88'])
         assert king_actual == king_expected
         assert rook_actual == rook_expected
 
     def test_not_is_black_king_side(self):
         c.castle_move(False, 'king')
         king_actual = find_pieces(c.bs.wk, False, c.current_state)
-        king_expected = ['17']
+        king_expected = ['71']
         rook_actual = set(find_pieces(c.bs.wr, False, c.current_state))
-        rook_expected = set(['11', '16'])
+        rook_expected = set(['11', '61'])
         assert king_actual == king_expected
         assert rook_actual == rook_expected
 
     def test_not_is_black_queen_side(self):
         c.castle_move(False, 'queen')
         king_actual = find_pieces(c.bs.wk, False, c.current_state)
-        king_expected = ['13']
+        king_expected = ['31']
         rook_actual = set(find_pieces(c.bs.wr, False, c.current_state))
-        rook_expected = set(['14', '18'])
+        rook_expected = set(['41', '81'])
         assert king_actual == king_expected
         assert rook_actual == rook_expected
 
@@ -857,8 +858,8 @@ class TestMovePiece(unittest.TestCase):
         reset_board()
     
     def test_move_white_bishop(self):
-        c.move_piece(c.bs.wb, '13', '36')
-        self.assertTrue(c.bs.is_empty('13', c.current_state))
+        c.move_piece(c.bs.wb, '31', '63')
+        self.assertTrue(c.bs.is_empty('31', c.current_state))
 
 
 if __name__ == '__main__':
