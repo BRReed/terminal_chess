@@ -1,6 +1,6 @@
 import unittest
 from collections import Counter
-from chess import Chess, BoardState
+from game_logic import Chess
 
 
 def reset_board():

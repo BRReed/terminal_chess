@@ -47,21 +47,6 @@ class Chess():
         self.current_state[d_coords][2] = piece 
         self.current_state[c_coords][2] = self.bs.empty
 
-    def castle_move(is_black, side):
-        if is_black:
-            if side == 'king':
-                self.move_piece(bs.bk, '85', '87')
-                self.move_piece(bs.br, '88', '86')
-            if side == 'queen':
-                self.move_piece(bs.bk, '85', '83')
-                self.move_piece(bs.br, '81', '84')
-        if not is_black:
-            if side == 'king':
-                self.move_piece(bs.wk, '15', '17')
-                self.move_piece(bs.wr, '18', '16')
-            if side == 'queen':
-                self.move_piece(bs.wk, '15', '13')
-                self.move_piece(bs.wr, '11', '14')
 
     def in_check(self, is_black, board_state):
         """check if king is in check
