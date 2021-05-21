@@ -1,4 +1,5 @@
 from game_logic import Chess
+from copy import deepcopy
 
 class Game():
     def __init__(self):
@@ -42,7 +43,7 @@ class Game():
         if self.c.bs.is_black(piece) != p_is_black:
             return False
 
-        temp_board = self.c.current_state.copy()
+        temp_board = deepcopy(self.c.current_state)
         temp_board = self.c.bs.move_piece(piece, c_coords, d_coords, 
             temp_board)
         if self.c.bs.in_check(self.c.bs.is_black(player), temp_board):
