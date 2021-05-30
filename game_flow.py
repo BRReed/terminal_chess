@@ -20,7 +20,7 @@ class Game():
         """allows player to move piece
 
         Args:
-            player (dict): dictionary containing user, color
+            player (str): color of player pieces 'white' or 'black'
             c_coords (str): column x row space in chessboard, start coords
             d_coords (str): column x row space in chessboard, end coords
 
@@ -36,7 +36,7 @@ class Game():
         if not self.c.bs.coords_not_equal(c_coords, d_coords):
             return False
 
-        p_is_black = self.c.bs.is_black(player['color'])
+        p_is_black = self.c.bs.is_black(player)
         piece = self.c.current_state[c_coords][2]
         if piece == self.c.bs.empty:
             return False
