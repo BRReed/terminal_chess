@@ -36,7 +36,10 @@ class Game():
         if not self.c.bs.coords_not_equal(c_coords, d_coords):
             return False
 
-        p_is_black = self.c.bs.is_black(player)
+        if player == 'black':
+            p_is_black = True
+        else:
+            p_is_black = False
         piece = self.c.current_state[c_coords][2]
         if piece == self.c.bs.empty:
             return False
