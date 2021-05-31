@@ -1,6 +1,7 @@
 import unittest
 from collections import Counter
 from game_logic import Chess
+from game_flow import Game
 
 
 def reset_board():
@@ -10,6 +11,13 @@ def reset_board():
     c.bs.b_king_side_castle = True
     c.bs.b_queen_side_castle = True
 
+def reset_game_board():
+    g.c.current_state = c.bs.create_start_state()
+    g.c.bs.w_king_side_castle = True
+    g.c.bs.w_queen_side_castle = True
+    g.c.bs.b_king_side_castle = True
+    g.c.bs.b_queen_side_castle = True
+
 def find_pieces(piece, is_black, board_state):
     spaces = []
     for space in board_state:
@@ -18,7 +26,9 @@ def find_pieces(piece, is_black, board_state):
             spaces.append(space)
     return spaces
 
+
 class TestPieceMovement(unittest.TestCase):
+
 
     def setUp(self):
         reset_board()
@@ -41,7 +51,7 @@ class TestPieceMovement(unittest.TestCase):
         self.assertTrue(c.bs.piece_movement(c.bs.wq, '11', '88'))
         self.assertTrue(c.bs.piece_movement(c.bs.wq, '33', '38'))
         self.assertTrue(c.bs.piece_movement(c.bs.wq, '33', '38'))
-        
+
         self.assertFalse(c.bs.piece_movement(c.bs.wq, '33', '52'))
         self.assertFalse(c.bs.piece_movement(c.bs.wq, '11', '23'))
 
@@ -87,6 +97,7 @@ class TestPieceMovement(unittest.TestCase):
 
 
 class TestCoordsValid(unittest.TestCase):
+
 
     def setUp(self):
         reset_board()
@@ -156,7 +167,7 @@ class TestCoordsValid(unittest.TestCase):
         self.assertTrue(c.bs.coords_valid('86'))
         self.assertTrue(c.bs.coords_valid('87'))
         self.assertTrue(c.bs.coords_valid('88'))
-    
+
     def test_invalid_spaces(self):
         self.assertFalse(c.bs.coords_valid('00'))
         self.assertFalse(c.bs.coords_valid('01'))
@@ -179,7 +190,9 @@ class TestCoordsValid(unittest.TestCase):
         self.assertFalse(c.bs.coords_valid('98'))
         self.assertFalse(c.bs.coords_valid('99'))
 
+
 class TestCoordsNotEqual(unittest.TestCase):
+
 
     def setUp(self):
         reset_board()
@@ -197,7 +210,9 @@ class TestCoordsNotEqual(unittest.TestCase):
         self.assertTrue(c.bs.coords_not_equal('56', '45'))
         self.assertTrue(c.bs.coords_not_equal('21', '12'))
 
+
 class TestCheckCoords(unittest.TestCase):
+
 
     def setUp(self):
         reset_board()
@@ -205,19 +220,20 @@ class TestCheckCoords(unittest.TestCase):
     def test_ints(self):
         self.assertTrue(c.bs.check_coords('11'))
         self.assertTrue(c.bs.check_coords('99'))
-    
+
     def test_symb(self):
         self.assertFalse(c.bs.check_coords('1['))
         self.assertFalse(c.bs.check_coords('[3'))
         self.assertFalse(c.bs.check_coords('5?'))
         self.assertFalse(c.bs.check_coords('1/'))
         self.assertFalse(c.bs.check_coords('1\\'))
-    
+
     def test_alpha(self):
         self.assertFalse(c.bs.check_coords('1g'))
         self.assertFalse(c.bs.check_coords('h6'))
         self.assertFalse(c.bs.check_coords('jj'))
         self.assertFalse(c.bs.check_coords('l2'))
+
 
 class TestIsBlack(unittest.TestCase):
 
@@ -227,10 +243,10 @@ class TestIsBlack(unittest.TestCase):
 
     def test_black(self):
         self.assertTrue(c.bs.is_black('\033[38;2;0;0;0m'))
-    
+
     def test_white(self):
         self.assertFalse(c.bs.is_black('\033[38;2;255;255;255m'))
-    
+
     def test_empty(self):
         self.assertFalse(c.bs.is_black('   '))
 
@@ -245,7 +261,7 @@ class TestIsFriendly(unittest.TestCase):
                                          c.current_state))
         self.assertTrue(c.bs.is_friendly('17', c.bs.is_black(c.bs.bp),
                                          c.current_state))
-    
+
     def test_white_to_white(self):
         self.assertTrue(c.bs.is_friendly('71', c.bs.is_black(c.bs.wq),
                                          c.current_state))
@@ -264,8 +280,9 @@ class TestIsFriendly(unittest.TestCase):
         self.assertFalse(c.bs.is_friendly('27', c.bs.is_black(c.bs.wq),
                                           c.current_state))
 
+
 class TestIsEnemy(unittest.TestCase):
-    
+
 
     def setUp(self):
         reset_board()
@@ -281,7 +298,7 @@ class TestIsEnemy(unittest.TestCase):
                                        c.current_state))
         self.assertFalse(c.bs.is_enemy('62', c.bs.is_black(c.bs.wr),
                                        c.current_state))
-    
+
     def test_black_to_white(self):
         self.assertTrue(c.bs.is_enemy('21', c.bs.is_black(c.bs.bn),
                                       c.current_state))
@@ -294,8 +311,9 @@ class TestIsEnemy(unittest.TestCase):
         self.assertTrue(c.bs.is_enemy('47', c.bs.is_black(c.bs.wk),
                                       c.current_state))
 
+
 class TestIsEmpty(unittest.TestCase):
-    
+
 
     def setUp(self):
         reset_board()
@@ -308,8 +326,9 @@ class TestIsEmpty(unittest.TestCase):
         self.assertFalse(c.bs.is_empty('41', c.current_state))
         self.assertFalse(c.bs.is_empty('38', c.current_state))
 
+
 class TestAddCoords(unittest.TestCase):
-    
+
     def setUp(self):
         reset_board()
 
@@ -321,7 +340,6 @@ class TestAddCoords(unittest.TestCase):
         self.assertEqual(c.bs.add_coords('45', (-1, -3)), '32')
         self.assertEqual(c.bs.add_coords('86', (-4, 0)), '46')
 
-    
 
 class TestMovesDir(unittest.TestCase):
 
@@ -336,7 +354,7 @@ class TestMovesDir(unittest.TestCase):
                                      ['24', '35', '46'])
         self.assertEqual(c.bs.moves_dir('74', (1, 1), True, c.current_state),
                                      ['85'])
-    
+
     def test_move_diag_rposi_cposi_white(self):
         self.assertEqual(c.bs.moves_dir('55', (1, 1), False, c.current_state),
                                      ['66', '77'])
@@ -368,11 +386,11 @@ class TestMovesDir(unittest.TestCase):
                                      ['76', '65', '54', '43', '32'])
         self.assertEqual(c.bs.moves_dir('13', (-1, -1), True, c.current_state),
                                      [])
-    
+
     def test_move_diag_rneg_cneg_white(self):
         self.assertEqual(c.bs.moves_dir('44', (-1, -1), False,
                                         c.current_state), ['33'])
-        self.assertEqual(c.bs.moves_dir('87', (-1, -1), False, 
+        self.assertEqual(c.bs.moves_dir('87', (-1, -1), False,
                          c.current_state),['76', '65', '54', '43'])
         self.assertEqual(c.bs.moves_dir('13', (-1, -1), False,
                          c.current_state), [])
@@ -384,7 +402,7 @@ class TestMovesDir(unittest.TestCase):
                                      ['86', '85', '84', '83', '82'])
         self.assertEqual(c.bs.moves_dir('13', (0, -1), True, c.current_state),
                                      ['12'])
-    
+
     def test_move_vert_rneg_cconst_white(self):
         self.assertEqual(c.bs.moves_dir('44', (0, -1), False, c.current_state),
                                      ['43'])
@@ -400,7 +418,7 @@ class TestMovesDir(unittest.TestCase):
                                      [])
         self.assertEqual(c.bs.moves_dir('13', (0, 1), True, c.current_state),
                                      ['14', '15', '16'])
-    
+
     def test_move_vert_rposi_cconst_white(self):
         self.assertEqual(c.bs.moves_dir('44', (0, 1), False, c.current_state),
                                      ['45', '46', '47'])
@@ -408,7 +426,7 @@ class TestMovesDir(unittest.TestCase):
                                      ['88'])
         self.assertEqual(c.bs.moves_dir('13', (0, 1), False, c.current_state),
                                      ['14', '15', '16', '17'])
-        
+
     def test_move_horz_rconst_cneg_black(self):
         self.assertEqual(c.bs.moves_dir('13', (-1, 0), True, c.current_state),
                                      [])
@@ -441,19 +459,23 @@ class TestMovesDir(unittest.TestCase):
         self.assertEqual(c.bs.moves_dir('44', (1, 0), False, c.current_state),
                                     ['54', '64', '74', '84'])
 
+
 class TestFindPiece(unittest.TestCase):
-    
+
+
     def setUp(self):
         reset_board()
 
     def test_find_white_queen(self):
         self.assertEqual(c.bs.find_piece(c.bs.wq, False, c.current_state), 
                                          '41')
-    
+
     def test_find_black_queen(self):
         self.assertEqual(c.bs.find_piece(c.bs.bq, True, c.current_state), '48')
 
+
 class TestInCheck(unittest.TestCase):
+
 
     def setUp(self):
         reset_board()
@@ -483,21 +505,23 @@ class TestInCheck(unittest.TestCase):
         c.move_piece(c.bs.wq, '41', '56')
         self.assertFalse(c.in_check(True, c.current_state))
 
+
 class TestCheckMate(unittest.TestCase):
+
 
     def setUp(self):
         reset_board()
-    
+
     def test_black_king_not_mate(self):
         self.assertFalse(c.check_mate(True, c.current_state))
-    
+
     def test_white_king_not_mate(self):
         self.assertFalse(c.check_mate(False, c.current_state))
 
     def test_black_king_mate_white_knight(self):
         c.move_piece(c.bs.wn, '21', '46')
         self.assertTrue(c.check_mate(True, c.current_state))
-    
+
     def test_white_king_mate_black_knight(self):
         c.move_piece(c.bs.bn, '28', '43')
         self.assertTrue(c.check_mate(False, c.current_state))
@@ -507,15 +531,16 @@ class TestCheckMate(unittest.TestCase):
         c.move_piece(c.bs.wp, '42', '43')
         c.move_piece(c.bs.wp, '52', '53')
         self.assertFalse(c.check_mate(False, c.current_state))
-    
-    
+
 
 class TestPossibleMoves(unittest.TestCase):
+
+
     def setUp(self):
         reset_board()
 
     def test_white_king_no_moves(self):
-        self.assertEqual(c.bs.possible_moves(c.bs.wk, '51', c.current_state), 
+        self.assertEqual(c.bs.possible_moves(c.bs.wk, '51', c.current_state),
                                              [])
 
     def test_white_pawn_no_target(self):
@@ -524,8 +549,7 @@ class TestPossibleMoves(unittest.TestCase):
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
-        
-    
+
     def test_white_pawn_blocked(self):
         c.move_piece(c.bs.bp, '17', '13')
         self.assertEqual(c.bs.possible_moves(c.bs.wp, '12', c.current_state),
@@ -548,12 +572,12 @@ class TestPossibleMoves(unittest.TestCase):
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
         assert actual == expected
-    
+
     def test_black_queen_from_25(self):
         c.move_piece(c.bs.bq, '48', '25')
         actual_moves = c.bs.possible_moves(c.bs.bq, '25', c.current_state)
-        expected_moves = ['15', '16', '26', '36', '35', '45', '55', '65', 
-                          '75', '85', '34', '43', '52', '24', '14', '23', 
+        expected_moves = ['15', '16', '26', '36', '35', '45', '55', '65',
+                          '75', '85', '34', '43', '52', '24', '14', '23',
                           '22']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
@@ -578,7 +602,7 @@ class TestPossibleMoves(unittest.TestCase):
     def test_black_rook_from_65(self):
         c.move_piece(c.bs.br, '88', '65')
         actual_moves = c.bs.possible_moves(c.bs.br, '65', c.current_state)
-        expected_moves = ['66', '64', '63', '62', '75', '85', '55', '45', 
+        expected_moves = ['66', '64', '63', '62', '75', '85', '55', '45',
                           '35', '25', '15']
         actual = Counter(actual_moves)
         expected = Counter(expected_moves)
@@ -592,7 +616,10 @@ class TestPossibleMoves(unittest.TestCase):
         expected = Counter(expected_moves)
         assert actual == expected
 
+
 class TestBlockCheck(unittest.TestCase):
+
+
     def setUp(self):
         reset_board()
         self.test_passed = False
@@ -611,7 +638,7 @@ class TestBlockCheck(unittest.TestCase):
         self.assertTrue(c.bs.block_check(True, c.current_state))
 
     def test_black_block_check_king_takes_pawn_attacker(self):
-        c.move_piece(c.bs.wp, '12', '54') 
+        c.move_piece(c.bs.wp, '12', '54')
         c.move_piece(c.bs.bk, '48', '45')
         self.assertTrue(c.bs.block_check(True, c.current_state))
 
@@ -631,7 +658,7 @@ class TestBlockCheck(unittest.TestCase):
         c.bs.move_piece(c.bs.wp, '72', '74', c.current_state)
         c.bs.move_piece(c.bs.wp, '62', '64', c.current_state)
         self.assertFalse(c.bs.block_check(False, c.current_state))
-    
+
     def test_black_not_block_check_pawn_protect_attacker(self):
         c.bs.move_piece(c.bs.wp, '72', '76', c.current_state)
         c.bs.move_piece(c.bs.bp, '67', '66', c.current_state)
@@ -645,7 +672,10 @@ class TestBlockCheck(unittest.TestCase):
         c.bs.move_piece(c.bs.bp, '77', '73', c.current_state)
         self.assertFalse(c.bs.block_check(False, c.current_state))
 
+
 class TestCheckCastling(unittest.TestCase):
+
+
     def setUp(self):
         reset_board()
 
@@ -654,10 +684,10 @@ class TestCheckCastling(unittest.TestCase):
 
     def test_white_queen_side_spaces_occupied(self):
         self.assertFalse(c.bs.check_castling(False, 'queen', c.current_state))
-    
+
     def test_black_king_side_spaces_occupied(self):
         self.assertFalse(c.bs.check_castling(True, 'king', c.current_state))
-    
+
     def test_black_queen_side_spaces_occupied(self):
         self.assertFalse(c.bs.check_castling(True, 'queen', c.current_state))
 
@@ -682,7 +712,7 @@ class TestCheckCastling(unittest.TestCase):
         c.move_piece(c.bs.bb, '38', '36')
         c.move_piece(c.bs.bn, '28', '16')
         self.assertTrue(c.bs.check_castling(True, 'queen', c.current_state))
-    
+
     def test_white_king_side_rook_attacked(self):
         c.move_piece(c.bs.wb, '61', '63')
         c.move_piece(c.bs.wn, '71', '53')
@@ -705,7 +735,7 @@ class TestCheckCastling(unittest.TestCase):
         c.move_piece(c.bs.wp, '52', '43')
         c.move_piece(c.bs.br, '88', '56')
         self.assertFalse(c.bs.check_castling(False, 'king', c.current_state))
-    
+
     def test_white_queen_side_rook_attacked(self):
         c.move_piece(c.bs.wq, '41', '43')
         c.move_piece(c.bs.wb, '31', '33')
@@ -730,7 +760,9 @@ class TestCheckCastling(unittest.TestCase):
         c.move_piece(c.bs.wq, '41', '23')
         self.assertTrue(c.bs.check_castling(True, 'queen', c.current_state))
 
+
 class TestCheckCastlingValid(unittest.TestCase):
+
 
     def setUp(self):
         reset_board()
@@ -741,7 +773,7 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.w_queen_side_castle == True
         assert c.bs.b_king_side_castle == True
         assert c.bs.b_queen_side_castle == True
-    
+
     def white_king_moved(self):
         c.move_piece(c.bs.wk, '51', '53')
         c.bs.check_castling_valid(c.current_state)
@@ -749,7 +781,7 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.w_queen_side_castle == False
         assert c.bs.b_king_side_castle == True
         assert c.bs.b_queen_side_castle == True
-    
+
     def white_king_side_rook_moved(self):
         c.move_piece(c.bs.wr, '88', '86')
         c.bs.check_castling_valid(c.current_state)
@@ -790,11 +822,13 @@ class TestCheckCastlingValid(unittest.TestCase):
         assert c.bs.b_king_side_castle == True
         assert c.bs.b_queen_side_castle == False
 
+
 class TestCheckEnPassant(unittest.TestCase):
+
 
     def setUp(self):
         reset_board()
-    
+
     def tearDown(self):
         c.bs.w_en_passant = [False, '']
         c.bs.b_en_passant = [False, '']
@@ -804,18 +838,20 @@ class TestCheckEnPassant(unittest.TestCase):
         c.bs.check_en_passant(False, '22', '24', c.current_state)
         assert c.bs.w_en_passant == [True, '23']
         assert c.bs.b_en_passant == [False, '']
-    
+
     def test_black_en_passant_true(self):
         c.move_piece(c.bs.wp, '12', '15')
         c.bs.check_en_passant(True, '27', '25', c.current_state)
         assert c.bs.w_en_passant == [False, '']
         assert c.bs.b_en_passant == [True, '26']
 
+
 class TestCastleMove(unittest.TestCase):
+
 
     def setUp(self):
         reset_board()
-    
+
     def test_is_black_king_side(self):
         c.castle_move(True, 'king')
         king_actual = find_pieces(c.bs.bk, True, c.current_state)
@@ -852,18 +888,20 @@ class TestCastleMove(unittest.TestCase):
         assert king_actual == king_expected
         assert rook_actual == rook_expected
 
+
 class TestMovePiece(unittest.TestCase):
-    
+
+
     def setUp(self):
         reset_board()
-    
+
     def test_move_white_bishop(self):
         c.move_piece(c.bs.wb, '31', '63')
         self.assertTrue(c.bs.is_empty('31', c.current_state))
         wb = find_pieces(c.bs.wb, False, c.current_state)
         assert '63' in wb
         assert '55' not in wb
-    
+
     def test_move_black_pawn(self):
         c.move_piece(c.bs.bp, '17', '15')
         self.assertTrue(c.bs.is_empty('17', c.current_state))
@@ -872,6 +910,39 @@ class TestMovePiece(unittest.TestCase):
         assert '17' not in bp
 
 
+# Tests for move function in Game class in game_flow file
+class TestMove(unittest.TestCase):
+
+
+    def setUp(self):
+        reset_game_board()
+
+    def test_queen_side_white_knight_to_13(self):
+        g.move('white', '21', '13')
+        self.assertTrue(c.bs.is_empty('21', g.c.current_state))
+        self.assertFalse(c.bs.is_empty('13', g.c.current_state))
+
+    def test_queen_side_white_knight_to_33(self):
+        g.move('white', '21', '33')
+        g.c.print_current_state('white')
+        self.assertTrue(c.bs.is_empty('21', g.c.current_state))
+        self.assertFalse(c.bs.is_empty('33', g.c.current_state))
+        wn = find_pieces(c.bs.wn, False, g.c.current_state)
+        assert '33' in wn
+        assert '21' not in wn
+
+
+
+    def test_queen_side_white_bishop(self):
+        g.move('white', '22', '24')
+        self.assertTrue(c.bs.is_empty('22', g.c.current_state))
+        self.assertFalse(c.bs.is_empty('24', g.c.current_state))
+        g.move('white', '31', '13')
+        self.assertTrue(c.bs.is_empty('31', g.c.current_state))
+
+
+
 if __name__ == '__main__':
+    g = Game()
     c = Chess()
     unittest.main()
