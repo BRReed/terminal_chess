@@ -12,8 +12,8 @@ class Chess():
         """Creates printed representation of current chess board
 
         Args:
-            perspective (string): either 'black' or 'white' flips board 
-                to show proper perspective
+            perspective (string): either 'black' or 'white' flips board
+            to show proper perspective
         """
         z = ''
         if perspective == 'white':
@@ -40,11 +40,11 @@ class Chess():
         """Move piece on board
 
         Args:
-            piece (string): unicode chess piece 
+            piece (string): unicode chess piece
             c_coords (string): column x row 'cr'
             d_coords (string): column x row 'cr'
         """
-        self.current_state[d_coords][2] = piece 
+        self.current_state[d_coords][2] = piece
         self.current_state[c_coords][2] = self.bs.empty
 
     def castle_move(self, is_black, side):
@@ -111,11 +111,11 @@ class Chess():
         mov = []
         if is_black is True:
             king_space = self.bs.find_piece(self.bs.bk, is_black, board_state)
-            king_spaces = self.bs.possible_moves(self.bs.bk, king_space, 
+            king_spaces = self.bs.possible_moves(self.bs.bk, king_space,
                 board_state)
         else:
             king_space = self.bs.find_piece(self.bs.wk, is_black, board_state)
-            king_spaces = self.bs.possible_moves(self.bs.wk, king_space, 
+            king_spaces = self.bs.possible_moves(self.bs.wk, king_space,
                 board_state)
         for coords in board_state:
             if is_black != self.bs.is_black(board_state[coords][2]):
@@ -160,7 +160,7 @@ class BoardState():
             piece (string): accepts king, queen, rook, bishop, knight, pawn
 
         Returns:
-            string: (rgb code for color) + (unicode for piece) + (color reset) 
+            string: (rgb code for color) + (unicode for piece) + (color reset)
         """
         string = ''
         if is_black == True:
@@ -186,7 +186,7 @@ class BoardState():
         """Create start game board state
         Vars:
             self.start_state:
-                keys = [cr] where row is r and column is c. Both represented 
+                keys = [cr] where row is r and column is c. Both represented
                     by a number
                 values = (RGB BG colorcode, unicode chess piece,
                     colorcode reset)
@@ -203,7 +203,7 @@ class BoardState():
                         '\033[48;2;66;135;245m', '\033[0m',
                         f'{self.populate_start(column, row)}']
         return start_state
-    
+
     def populate_start(self, c, r):
         """Populates pieces on board at start of game
 
@@ -230,7 +230,7 @@ class BoardState():
                 return
         elif r == 2:
             return self.wp
-        elif r == 7: 
+        elif r == 7:
             return self.bp
         elif r == 8:
             if c == 1 or c == 8:
@@ -329,7 +329,7 @@ class BoardState():
         return True
 
     def str_coords_to_int(self, coords):
-        """change string coordinates into integers 
+        """change string coordinates into integers
 
         Args:
             coords (string): column x row 'cr'
@@ -392,14 +392,14 @@ class BoardState():
         """Move piece on board
 
         Args:
-            piece (string): unicode chess piece 
+            piece (string): unicode chess piece
             c_coords (string): column x row 'cr'
             d_coords (string): column x row 'cr'
 
         Returns:
             Dict: board_state with applied movement changes
         """
-        board_state[d_coords][2] = piece 
+        board_state[d_coords][2] = piece
         board_state[c_coords][2] = self.empty
         return board_state
 
@@ -511,35 +511,35 @@ class BoardState():
         # king moves
         if piece in [self.wk, self.bk]:
             for shift in diag:
-                moves += (self.moves_dir(coords, shift, self.is_black(piece), 
+                moves += (self.moves_dir(coords, shift, self.is_black(piece),
                     board_state))
             for shift in horz_vert:
-                moves += (self.moves_dir(coords, shift, self.is_black(piece), 
+                moves += (self.moves_dir(coords, shift, self.is_black(piece),
                     board_state))
         # queen moves
         elif piece in [self.wq, self.bq]:
             for shift in diag:
-                moves += (self.moves_dir(coords, shift, self.is_black(piece), 
+                moves += (self.moves_dir(coords, shift, self.is_black(piece),
                     board_state))
             for shift in horz_vert:
-                moves += (self.moves_dir(coords, shift, self.is_black(piece), 
+                moves += (self.moves_dir(coords, shift, self.is_black(piece),
                     board_state))
         # bishop moves
         elif piece in [self.wb, self.bb]:
             for shift in diag:
-                moves += self.moves_dir(coords, shift, self.is_black(piece), 
+                moves += self.moves_dir(coords, shift, self.is_black(piece),
                     board_state)
         # rook moves
         elif piece in [self.wr, self.br]:
             for shift in horz_vert:
-                moves += self.moves_dir(coords, shift, self.is_black(piece), 
+                moves += self.moves_dir(coords, shift, self.is_black(piece),
                     board_state)
         # knight moves
         elif piece in [self.wn, self.bn]:
-            knight_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1), 
+            knight_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1),
                 (1, 2), (1, -2), (-1, 2), (-1, -2)]
             for shift in knight_moves:
-                moves += self.moves_dir(coords, shift, self.is_black(piece), 
+                moves += self.moves_dir(coords, shift, self.is_black(piece),
                     board_state)
         # white pawn moves
         elif piece is self.wp:
@@ -559,7 +559,7 @@ class BoardState():
             try:
                 if self.is_empty(diag_minus, board_state):
                     pass
-                elif self.is_enemy(diag_minus, self.is_black(piece), 
+                elif self.is_enemy(diag_minus, self.is_black(piece),
                     board_state):
                     pawn_moves.append(diag_minus)
             except KeyError:
@@ -567,7 +567,7 @@ class BoardState():
             try:
                 if self.is_empty(diag_plus, board_state):
                     pass
-                elif self.is_enemy(diag_plus, self.is_black(piece), 
+                elif self.is_enemy(diag_plus, self.is_black(piece),
                     board_state):
                     pawn_moves.append(diag_plus)
             except KeyError:
@@ -592,7 +592,7 @@ class BoardState():
             try:
                 if self.is_empty(diag_minus, board_state):
                     pass
-                elif self.is_enemy(diag_minus, self.is_black(piece), 
+                elif self.is_enemy(diag_minus, self.is_black(piece),
                     board_state):
                     pawn_moves.append(diag_minus)
             except KeyError:
@@ -600,7 +600,7 @@ class BoardState():
             try:
                 if self.is_empty(diag_plus, board_state):
                     pass
-                elif self.is_enemy(diag_plus, self.is_black(piece), 
+                elif self.is_enemy(diag_plus, self.is_black(piece),
                     board_state):
                     pawn_moves.append(diag_plus)
             except KeyError:
@@ -697,7 +697,7 @@ class BoardState():
                 return False
         for space in board_state:
             if self.is_enemy(space, is_black, board_state):
-                moves = self.possible_moves(board_state[space][2], space, 
+                moves = self.possible_moves(board_state[space][2], space,
                     board_state)
                 for move in moves:
                     if move == spaces[0] or move == spaces[1]:
@@ -711,9 +711,9 @@ class BoardState():
     def check_castling_valid(self, board_state):
         """checks if king or rooks move from their spots
 
-            self.w_king_side_castle, self.w_queen_side_castle, 
+            self.w_king_side_castle, self.w_queen_side_castle,
             self.b_king_side_castle, self.b_queen_side_castle change based on
-            if king moves both vars of that color are False, if rook moves 
+            if king moves both vars of that color are False, if rook moves
             that direction that color is False
         """
         if self.w_king_side_castle or self.w_queen_side_castle:
@@ -750,7 +750,7 @@ class BoardState():
             king_space = self.find_piece(self.wk, is_black, board_state)
         for coords in board_state:
             if is_black != self.is_black(board_state[coords][2]):
-                mov += self.possible_moves(board_state[coords][2], coords, 
+                mov += self.possible_moves(board_state[coords][2], coords,
                     board_state)
 
         if king_space in mov:
@@ -762,7 +762,7 @@ class BoardState():
         """Creates printed representation of current chess board
 
         Args:
-            perspective (string): either 'black' or 'white' flips board 
+            perspective (string): either 'black' or 'white' flips board
                 to show proper perspective
         """
         z = ''
@@ -798,7 +798,7 @@ class BoardState():
         """
         for space in board_state:
             if is_black == self.is_black(board_state[space][2]):
-                moves = self.possible_moves(board_state[space][2], space, 
+                moves = self.possible_moves(board_state[space][2], space,
                     board_state)
                 for move in moves:
                     temp_board = deepcopy(board_state)

@@ -15,6 +15,16 @@ class Game():
         self.p1 = player1
         self.p2 = player2
 
+    def end_game(self, winner):
+        """ends current game
+        Args:
+            winner: (bool): True if winner is black, else False
+
+        """
+        if winner:
+            print("black wins")
+        else:
+            print("white wins")
 
     def move(self, player, c_coords, d_coords):
         """allows player to move piece
@@ -47,15 +57,20 @@ class Game():
             return False
 
         temp_board = deepcopy(self.c.current_state)
-        temp_board = self.c.bs.move_piece(piece, c_coords, d_coords, 
+        temp_board = self.c.bs.move_piece(piece, c_coords, d_coords,
             temp_board)
-        if self.c.bs.in_check(self.c.bs.is_black(player), temp_board):
+        if self.c.bs.in_check(p_is_black, temp_board):
             return False
         if self.c.bs.piece_movement(piece, c_coords, d_coords):
             self.c.bs.check_en_passant(p_is_black, c_coords, d_coords,
                 self.c.current_state)
             self.c.move_piece(piece, c_coords, d_coords)
             self.c.bs.check_castling_valid(self.c.current_state)
+            if self.c.bs.in_check(not p_is_black, self.c.current_state):
+                if self.c.check_mate(not p_is_black, self.c.current_state):
+                    self.end_game(p_is_black)
+                else:
+                    print('in check') # change to specify player in check
             return True
         else:
             return False
@@ -66,7 +81,11 @@ class Game():
 
     def resignation(self, player):
         """allows player to resign"""
-        pass
+        if self.c.bs.is_black(player['color']):
+            self.end_game(False)
+        else:
+            self.end_game(True)
+
 
     def castle(self, player, side):
         """allows player to castle
@@ -87,7 +106,7 @@ class Game():
             return False
 
     def castle_valid(self, is_black, side):
-        """checks T/F castle vars in game_logic.BoardState 
+        """checks T/F castle vars in game_logic.BoardState
 
         Args:
             is_black (bool): True if player is black, else False
@@ -113,3 +132,4 @@ class Game():
     def get_piece(self, player, piece):
         """takes player and piece, returns color piece"""
         pass
+
