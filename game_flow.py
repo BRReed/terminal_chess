@@ -59,9 +59,12 @@ class Game():
         temp_board = deepcopy(self.c.current_state)
         temp_board = self.c.bs.move_piece(piece, c_coords, d_coords,
             temp_board)
+        possible_moves = self.c.bs.possible_moves(piece, c_coords,
+                                                  self.c.current_state)
         if self.c.bs.in_check(p_is_black, temp_board):
             return False
-        if self.c.bs.piece_movement(piece, c_coords, d_coords):
+        if (self.c.bs.piece_movement(piece, c_coords, d_coords) and
+            d_coords in possible_moves):
             self.c.bs.check_en_passant(p_is_black, c_coords, d_coords,
                 self.c.current_state)
             self.c.move_piece(piece, c_coords, d_coords)
