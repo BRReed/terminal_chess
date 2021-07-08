@@ -659,6 +659,29 @@ class BoardState():
             if self.wp in board_state[x_plus][2]:
                 self.b_en_passant = [True, f'{x1}{y1 - 1}']
 
+    def check_promotion(self, is_black, board_state):
+        """Checks if pawn has reached eighth rank
+
+        Args:
+            is_black (bool): if pawn checking is black True, else False
+            board_state (dict): state of the board to check
+        
+        Returns:
+            bool: True if a pawn can be promoted, else False
+            string: if True 'xy' coords of pawn, else '00'
+        """
+        if is_black:
+            piece = self.bp
+            ranks = ['11', '21', '31', '41', '51', '61', '71', '81']
+        else:
+            piece = self.wp
+            ranks = ['18', '28', '38', '48', '58', '68', '78', '88']
+        
+        for rank in ranks:
+            if piece in board_state[rank]:
+                return True, rank
+        return False, '00'
+
     def check_castling(self, is_black, side, board_state):
         """Checks if king can castle
 
