@@ -542,7 +542,7 @@ class BoardState():
                 moves += self.moves_dir(coords, shift, self.is_black(piece),
                     board_state)
         # white pawn moves
-        elif piece is self.wp:
+        elif piece == self.wp:
             pawn_moves = []
             x, y = self.str_coords_to_int(coords)
             fwd = f'{x}{y + 1}'
@@ -575,7 +575,7 @@ class BoardState():
             for move in pawn_moves:
                 moves = pawn_moves
         # black pawn moves
-        elif piece is self.bp:
+        elif piece == self.bp:
             pawn_moves = []
             x, y = self.str_coords_to_int(coords)
             fwd = f'{x}{y - 1}'

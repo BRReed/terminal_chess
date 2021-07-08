@@ -916,6 +916,7 @@ class TestMove(unittest.TestCase):
 
     def setUp(self):
         reset_game_board()
+        reset_board()
 
     def test_queen_side_white_knight_to_13(self):
         g.move('white', '21', '13')
@@ -998,6 +999,21 @@ class TestMove(unittest.TestCase):
         assert '32' in br
         past_spaces = ['88', '86', '36']
         assert not any(space in past_spaces for space in br)
+
+
+class TestPromotion(unittest.TestCase):
+
+
+    def setUp(self):
+        reset_board()
+        reset_game_board()
+    
+    def test_black_pawn_11(self):
+        g.move('black', '17', '16')
+
+
+
+
 
 if __name__ == '__main__':
     g = Game()
