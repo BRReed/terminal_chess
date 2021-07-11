@@ -682,16 +682,17 @@ class BoardState():
                 return True, space
         return False, '00'
 
-    def promotion(self, space, piece, board_state):
+    def promotion(self, is_black, space, piece, board_state):
         """Changes piece in space to variable piece
 
         Args:
+            is_black(bool): if team is black True, else False
             space (str): two number 'xy' representation of a space on a chess
                          board
-            piece (str): name of piece to promote to 'queen', 'rook' etc
+            piece (str): unicode representation of a chess piece
             board_state (dict): state of chess board
         """
-        pass
+        
 
     def check_castling(self, is_black, side, board_state):
         """Checks if king can castle
