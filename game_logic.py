@@ -672,15 +672,26 @@ class BoardState():
         """
         if is_black:
             piece = self.bp
-            ranks = ['11', '21', '31', '41', '51', '61', '71', '81']
+            spaces = ['11', '21', '31', '41', '51', '61', '71', '81']
         else:
             piece = self.wp
-            ranks = ['18', '28', '38', '48', '58', '68', '78', '88']
+            spaces = ['18', '28', '38', '48', '58', '68', '78', '88']
         
-        for rank in ranks:
-            if piece in board_state[rank]:
-                return True, rank
+        for space in spaces:
+            if piece in board_state[space]:
+                return True, space
         return False, '00'
+
+    def promotion(self, space, piece, board_state):
+        """Changes piece in space to variable piece
+
+        Args:
+            space (str): two number 'xy' representation of a space on a chess
+                         board
+            piece (str): name of piece to promote to 'queen', 'rook' etc
+            board_state (dict): state of chess board
+        """
+        pass
 
     def check_castling(self, is_black, side, board_state):
         """Checks if king can castle
