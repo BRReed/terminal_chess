@@ -689,10 +689,28 @@ class BoardState():
             is_black(bool): if team is black True, else False
             space (str): two number 'xy' representation of a space on a chess
                          board
-            piece (str): unicode representation of a chess piece
+            piece (str): accepts queen, rook, bishop, knight
             board_state (dict): state of chess board
         """
-        
+        if is_black:
+            if piece == 'queen':
+                board_state[space][2] = self.bq
+            elif piece == 'rook':
+                board_state[space][2] = self.br
+            elif piece == 'bishop':
+                board_state[space][2] = self.bb
+            elif piece == 'knight':
+                board_state[space][2] = self.bn
+        else:
+            if piece == 'queen':
+                board_state[space][2] = self.wq
+            elif piece == 'rook':
+                board_state[space][2] = self.wr
+            elif piece == 'bishop':
+                board_state[space][2] = self.wb
+            elif piece == 'knight':
+                board_state[space][2] = self.wn
+
 
     def check_castling(self, is_black, side, board_state):
         """Checks if king can castle
