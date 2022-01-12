@@ -916,6 +916,7 @@ class TestMove(unittest.TestCase):
 
     def setUp(self):
         reset_game_board()
+        reset_board()
 
     def test_queen_side_white_knight_to_13(self):
         g.move('white', '21', '13')
@@ -998,6 +999,43 @@ class TestMove(unittest.TestCase):
         assert '32' in br
         past_spaces = ['88', '86', '36']
         assert not any(space in past_spaces for space in br)
+
+
+class TestCheckPromotion(unittest.TestCase):
+
+
+    def setUp(self):
+        reset_board()
+        reset_game_board()
+    
+    def test_black_pawn_11(self):
+        g.move('black', '17', '15')
+        g.move('black', '15', '14')
+        g.move('black', '14', '13')
+        g.move('black', '13', '22')
+        g.move('black', '22', '11')
+        check_bool, check_space = c.bs.check_promotion(True, g.c.current_state)
+        assert [check_bool, check_space] == [True, '11']
+
+    def test_white_pawn_78(self):
+        g.move('white', '52', '53')
+        g.move('white', '53', '54')
+        g.move('white', '54', '55')
+        g.move('white', '55', '56')
+        g.move('white', '56', '67')
+        g.move('white', '67', '78')
+        check_bool, check_space = c.bs.check_promotion(False, g.c.current_state)
+        assert [check_bool, check_space] == [True, '78']
+
+    def test_white_false(self):
+        check_bool, check_space = c.bs.check_promotion(False, g.c.current_state)
+        assert [check_bool, check_space] == [False, '00']
+
+    def test_black_false(self):
+        check_bool, check_space = c.bs.check_promotion(True, g.c.current_state)
+        assert [check_bool, check_space] == [False, '00']
+
+
 
 if __name__ == '__main__':
     g = Game()

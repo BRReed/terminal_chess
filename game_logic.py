@@ -542,7 +542,7 @@ class BoardState():
                 moves += self.moves_dir(coords, shift, self.is_black(piece),
                     board_state)
         # white pawn moves
-        elif piece is self.wp:
+        elif piece == self.wp:
             pawn_moves = []
             x, y = self.str_coords_to_int(coords)
             fwd = f'{x}{y + 1}'
@@ -575,7 +575,7 @@ class BoardState():
             for move in pawn_moves:
                 moves = pawn_moves
         # black pawn moves
-        elif piece is self.bp:
+        elif piece == self.bp:
             pawn_moves = []
             x, y = self.str_coords_to_int(coords)
             fwd = f'{x}{y - 1}'
@@ -658,6 +658,59 @@ class BoardState():
         elif is_black:
             if self.wp in board_state[x_plus][2]:
                 self.b_en_passant = [True, f'{x1}{y1 - 1}']
+
+    def check_promotion(self, is_black, board_state):
+        """Checks if pawn has reached eighth rank
+
+        Args:
+            is_black (bool): if pawn checking is black True, else False
+            board_state (dict): state of the board to check
+        
+        Returns:
+            bool: True if a pawn can be promoted, else False
+            string: if True 'xy' coords of pawn, else '00'
+        """
+        if is_black:
+            piece = self.bp
+            spaces = ['11', '21', '31', '41', '51', '61', '71', '81']
+        else:
+            piece = self.wp
+            spaces = ['18', '28', '38', '48', '58', '68', '78', '88']
+        
+        for space in spaces:
+            if piece in board_state[space]:
+                return True, space
+        return False, '00'
+
+    def promotion(self, is_black, space, piece, board_state):
+        """Changes piece in space to variable piece
+
+        Args:
+            is_black(bool): if team is black True, else False
+            space (str): two number 'xy' representation of a space on a chess
+                         board
+            piece (str): accepts queen, rook, bishop, knight
+            board_state (dict): state of chess board
+        """
+        if is_black:
+            if piece == 'queen':
+                board_state[space][2] = self.bq
+            elif piece == 'rook':
+                board_state[space][2] = self.br
+            elif piece == 'bishop':
+                board_state[space][2] = self.bb
+            elif piece == 'knight':
+                board_state[space][2] = self.bn
+        else:
+            if piece == 'queen':
+                board_state[space][2] = self.wq
+            elif piece == 'rook':
+                board_state[space][2] = self.wr
+            elif piece == 'bishop':
+                board_state[space][2] = self.wb
+            elif piece == 'knight':
+                board_state[space][2] = self.wn
+
 
     def check_castling(self, is_black, side, board_state):
         """Checks if king can castle
