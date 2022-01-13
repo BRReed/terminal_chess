@@ -39,6 +39,7 @@ Please enter 1 to create an account, or 2 if you already have one.
             sign_in_or_up = input(">")
             if sign_in_or_up not in (1, 2):
                 i += 1
+                print("You must enter the number '1' or the number '2'.")
                 continue
         except:
             i += 1
