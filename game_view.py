@@ -1,5 +1,10 @@
+from sys import argv
 
-
+def cleanup_ip(ipInfo):
+    cleanIP = f"{ipInfo}"
+    cleanIP = cleanIP.strip("['")
+    cleanIP = cleanIP.split(" ")
+    sign_in(cleanIP[0])
 
 
 def welcome_screen():
@@ -27,14 +32,16 @@ Welcome to
 
     """)
 
-def sign_in():
+def sign_in(userIP):
+    welcome_screen()
     print("""
 Please enter 1 to create an account, or 2 if you already have one.
     """)
     i = 0
     while True:
         if i >= 10:
-            exit_game()
+            exit_game(userIP)
+            break
         try:
             sign_in_or_up = input(">")
             if sign_in_or_up not in (1, 2):
@@ -45,7 +52,9 @@ Please enter 1 to create an account, or 2 if you already have one.
             i += 1
             pass
 
-def exit_game():
+def exit_game(userIP):
+    print(userIP)
     pass # close ssh connection, time user out for 20 minutes
 
-welcome_screen()
+
+cleanup_ip(argv[1:])
