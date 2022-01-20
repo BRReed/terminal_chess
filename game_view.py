@@ -1,4 +1,5 @@
-from sys import argv
+from sys import argv, exit
+import json
 
 def cleanup_ip(ipInfo):
     cleanIP = f"{ipInfo}"
@@ -40,7 +41,7 @@ Please enter 1 to create an account, or 2 if you already have one.
     i = 0
     while True:
         if i >= 10:
-            exit_game(userIP)
+            exit_game(userIP, True)
             break
         try:
             sign_in_or_up = input(">")
@@ -52,9 +53,21 @@ Please enter 1 to create an account, or 2 if you already have one.
             i += 1
             pass
 
-def exit_game(userIP):
-    print(userIP)
-    pass # close ssh connection, time user out for 20 minutes
+def exit_game(userIP, ban, reason="None"):
+    """exits out of chess program
+
+    Args:
+        userIP (string): the IP of the user
+        ban (bool): True if user is banned, else False
+        reason (string): description of ban
+    """
+    if ban:
+        with open('ban_list.json') as f:
+            data = json.load(f)
+        data['to_ban'].append({userIP: reason})
+        with open('ban_list.json', 'w') as f:
+            json.dump(data, f)
+    exit()
 
 
 cleanup_ip(argv[1:])
