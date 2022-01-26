@@ -68,11 +68,25 @@ def exit_game(userIP, ban, reason="None"):
     exit()
 
 def get_json_info(fileName):
+    """get information in a json file
+
+    Args:
+        fileName (str): a json file
+
+    Returns:
+        (dict): contents of the json file
+    """
     with open(fileName) as f:
         data = json.load(f)
     return data
 
 def write_to_json(fileName, data):
+    """writes to a json file
+
+    Args:
+        fileName (str): a json file
+        data (dict): new contents of the json file
+    """
     with open(fileName, 'w') as f:
         json.dump(data, f)
 
