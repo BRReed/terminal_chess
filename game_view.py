@@ -62,12 +62,21 @@ def exit_game(userIP, ban, reason="None"):
         reason (string): description of ban
     """
     if ban:
-        with open('ban_list.json') as f:
-            data = json.load(f)
-        data['to_ban'].append({userIP: reason})
-        with open('ban_list.json', 'w') as f:
-            json.dump(data, f)
+        banList = get_json_info('ban_list.json')
+        banList['to_ban'].append({userIP: reason})
+        write_to_json('ban_list.json', banList)
     exit()
+
+def get_json_info(fileName):
+    with open(fileName) as f:
+        data = json.load(f)
+    return data
+
+def write_to_json(fileName, data):
+    with open(fileName, 'w') as f:
+        json.dump(data, f)
+
+
 
 
 cleanup_ip(argv[1:])
