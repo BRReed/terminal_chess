@@ -41,7 +41,7 @@ Please enter 1 to create an account, or 2 if you already have one.
     i = 0
     while True:
         if i >= 10:
-            exit_game(userIP, True)
+            exit_game(userIP, True, "Too many unsuccessful login attempts")
             break
         try:
             sign_in_or_up = input(">")
@@ -49,6 +49,7 @@ Please enter 1 to create an account, or 2 if you already have one.
                 i += 1
                 print("You must enter the number '1' or the number '2'.")
                 continue
+        
         except:
             i += 1
             pass
