@@ -2,6 +2,7 @@ import unittest
 from collections import Counter
 from game_logic import Chess
 from game_flow import Game
+import game_view as gv
 
 
 def reset_board():
@@ -1034,6 +1035,9 @@ class TestCheckPromotion(unittest.TestCase):
     def test_black_false(self):
         check_bool, check_space = c.bs.check_promotion(True, g.c.current_state)
         assert [check_bool, check_space] == [False, '00']
+
+
+# game_view.py tests below
 
 
 

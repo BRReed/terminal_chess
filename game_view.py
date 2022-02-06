@@ -35,7 +35,7 @@ Welcome to
 
 
 def get_info(userIP):
-    """
+    """start log in or account set up process for user
     
     """
     welcome_screen()
@@ -65,6 +65,7 @@ Please enter 1 to create an account, or 2 if you already have one.
     else:
         print("unknown error getting user input")
         exit()
+    # choose_game() 
 
 
 def get_input(userIP):
@@ -80,7 +81,34 @@ def get_input(userIP):
 
 
 def create_account(userIP):
-    pass
+    """take user input to create account 
+
+    Args:
+        userIP (str): ip of user
+    """
+    print("Please enter your desired username.")
+    data = get_json_info('users.json')
+    while True:
+        uname = get_input(userIP)
+        if uname not in data:
+            break
+        else:
+            print("Sorry that user name already exists. Please choose another.")
+    print("""
+Please enter your desired password. DO NOT ENTER A PASSWORD YOU HAVE USED OR 
+INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER. 
+    """)
+    while True:
+        p1 = get_input(userIP)
+        print("Please enter your password again")
+        p2 = get_input(userIP)
+        if p1 == p2:
+            break
+        else:
+            print("Sorry, passwords do not match. Please try again")
+    new_data = {uname: {'pw': p1}}
+    write_to_json('users.json', new_data)
+
 
 
 def sign_in(userIP):
