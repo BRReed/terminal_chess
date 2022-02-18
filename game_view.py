@@ -115,8 +115,25 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
 
 
 def sign_in(userIP):
-    pass
-    #bcrypt.verify(pw, hash)
+    print("Please enter your username.")
+    data = get_json_info('users.json')
+    while True:
+        uname = get_input(userIP)
+        if uname in data:
+            hashedpw = data[uname]['hashedpw']
+            break
+        else:
+            print("Sorry, that username isn't found in our system.")
+            #FUTURE: enter create account to create account
+    print("Please enter your password.")
+    while True:
+        pw = get_input(userIP)
+        if bcrypt.verify(pw, hashedpw):
+            break
+        else:
+            print("Sorry, password does not match username")
+            #FUTURE: count and timeout for 20 minutes after 5 attempts
+
 
 
 def exit_game(userIP, ban, reason="None"):
