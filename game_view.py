@@ -1,5 +1,7 @@
-from sys import argv, exit
+from getpass import getpass
 import json
+from passlib.hash import bcrypt
+from sys import argv, exit
 
 def cleanup_ip(ipInfo):
     cleanIP = f"{ipInfo}"
@@ -99,20 +101,22 @@ Please enter your desired password. DO NOT ENTER A PASSWORD YOU HAVE USED OR
 INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER. 
     """)
     while True:
-        p1 = get_input(userIP)
+        p1 = getpass(prompt=">")
         print("Please enter your password again")
-        p2 = get_input(userIP)
+        p2 = getpass(prompt=">")
         if p1 == p2:
             break
         else:
             print("Sorry, passwords do not match. Please try again")
-    new_data = {uname: {'pw': p1}}
+    hashed_pw = bcrypt.hash(p1)
+    new_data = {uname: {'hashedpw': hashed_pw}}
     write_to_json('users.json', new_data)
 
 
 
 def sign_in(userIP):
     pass
+    #bcrypt.verify(pw, hash)
 
 
 def exit_game(userIP, ban, reason="None"):
