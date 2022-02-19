@@ -112,6 +112,7 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
     #new_data = {uname: {'hashedpw': hashed_pw}}
     data[uname] = {'hashedpw': hashed_pw, 'currentgames': []}
     write_to_json('users.json', data)
+    table_of_contents(uname, userIP)
 
 
 
@@ -134,6 +135,23 @@ def sign_in(userIP):
         else:
             print("Sorry, password does not match username")
             #FUTURE: count and timeout for 20 minutes after 5 attempts
+    table_of_contents(uname, userIP)
+
+
+def table_of_contents(uname, userIP):
+    """contents menu for signed in users
+
+    Args:
+        uname (string): the name of the verified user
+    """
+    print("""
+Enter the corresponding numbers to select menu item
+
+1. Display Rules
+2. Display Commands
+3. Display Current Games
+    """)
+    choice = get_input(userIP)
 
 
 
