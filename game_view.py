@@ -109,8 +109,9 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
         else:
             print("Sorry, passwords do not match. Please try again")
     hashed_pw = bcrypt.hash(p1)
-    new_data = {uname: {'hashedpw': hashed_pw}}
-    write_to_json('users.json', new_data)
+    #new_data = {uname: {'hashedpw': hashed_pw}}
+    data[uname] = {'hashedpw': hashed_pw, 'currentgames': []}
+    write_to_json('users.json', data)
 
 
 
