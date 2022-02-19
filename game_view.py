@@ -151,9 +151,36 @@ Enter the corresponding numbers to select menu item
 2. Display Commands
 3. Display Current Games
     """)
-    choice = get_input(userIP)
+    while True:
+        choice = get_input(userIP)
+        if choice in ['1', '2', '3']:
+            break
+        else:
+            print("Please choose from the list")
+    if choice == '1':
+        rules()
+    elif choice == '2':
+        commands()
+    elif choice == '3':
+        choose_game(uname)
 
+def rules():
+    """prints rules
+    """
+    pass
 
+def commands():
+    """prints commands
+    """
+    pass
+
+def choose_game(uname):
+    """shows user their current games
+
+    Args:
+        uname (string): username of verified user
+    """
+    pass
 
 def exit_game(userIP, ban, reason="None"):
     """exits out of chess program
