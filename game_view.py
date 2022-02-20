@@ -76,9 +76,16 @@ def get_input(userIP):
     Returns:
         (str): input from the user
     """
-    i = input(">")
-    if i == "exit":
-        exit_game(userIP, False)
+    while True:
+        print("Enter 'exit' to exit, or 'commands' for commands")
+        i = input(">")
+        if i == "exit":
+            exit_game(userIP, False)
+        elif i == "commands":
+            commands()
+            return
+        else:
+            break
     return i
 
 
@@ -112,7 +119,7 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
     #new_data = {uname: {'hashedpw': hashed_pw}}
     data[uname] = {'hashedpw': hashed_pw, 'currentgames': []}
     write_to_json('users.json', data)
-    table_of_contents(uname, userIP)
+    display_games(uname, userIP)
 
 
 
@@ -135,44 +142,35 @@ def sign_in(userIP):
         else:
             print("Sorry, password does not match username")
             #FUTURE: count and timeout for 20 minutes after 5 attempts
-    table_of_contents(uname, userIP)
+    display_games(uname, userIP)
 
 
-def table_of_contents(uname, userIP):
-    """contents menu for signed in users
+def display_games(uname, userIP):
+    """display games user is participating in
 
     Args:
         uname (string): the name of the verified user
     """
     print("""
-Enter the corresponding numbers to select menu item
-
-1. Display Rules
-2. Display Commands
-3. Display Current Games
+Enter the corresponding number for the game you wish to play
     """)
-    while True:
-        choice = get_input(userIP)
-        if choice in ['1', '2', '3']:
-            break
-        else:
-            print("Please choose from the list")
-    if choice == '1':
-        rules()
-    elif choice == '2':
-        commands()
-    elif choice == '3':
-        choose_game(uname)
-
-def rules():
-    """prints rules
-    """
-    pass
+    
 
 def commands():
     """prints commands
     """
-    pass
+print("""
+** At Any time you can enter "rules" to display the rules of chess, 
+   "commands" to display the commands available to you, or "exit" to exit the 
+   program
+
+* Use long algebraic notation to move pieces
+* Movement format = starting square, ending square: `b2a3`
+* Castling king side enter: `0-0` castling queen side enter: `0-0-0`
+* To request a draw you can enter `draw` or `(=)`. Your opponent will have to 
+  accept for the draw to go through
+* To resign enter `resign` or `xx`
+""")
 
 def choose_game(uname):
     """shows user their current games
