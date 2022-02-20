@@ -153,7 +153,23 @@ def display_games(uname, userIP):
     """
     print("""
 Enter the corresponding number for the game you wish to play
+or '0' to create a new game
     """)
+    i=1
+    game_list = ['create']
+    data = get_json_info('users.json')
+    games = data[uname]["currentgames"]
+    for game in games:
+        if game['black'] != uname:
+            opponent = game['black']
+        else:
+            opponent = game['white']
+        gameID = game['gameID']
+        game_list.append(gameID)
+        print(f'{i}. {gameID} vs {opponent}')
+        i+=1
+    # user enters number, 0 goes to create game, otherwise load gameID at 
+    # corresponding number
     
 
 def commands():
@@ -172,13 +188,7 @@ print("""
 * To resign enter `resign` or `xx`
 """)
 
-def choose_game(uname):
-    """shows user their current games
 
-    Args:
-        uname (string): username of verified user
-    """
-    pass
 
 def exit_game(userIP, ban, reason="None"):
     """exits out of chess program
