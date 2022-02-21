@@ -142,7 +142,11 @@ def sign_in(userIP):
         else:
             print("Sorry, password does not match username")
             #FUTURE: count and timeout for 20 minutes after 5 attempts
-    display_games(uname, userIP)
+    game_choice = display_games(uname, userIP)
+    if game_choice == 'create':
+        create_game(uname)
+    else:
+        load_game(game_choice)
 
 
 def display_games(uname, userIP):
@@ -170,7 +174,24 @@ or '0' to create a new game
         i+=1
     # user enters number, 0 goes to create game, otherwise load gameID at 
     # corresponding number
+    while True:
+        game_choice = get_input(userIP)
+        if game_choice.isnumeric() and int(game_choice) <= (i-1):
+            print('cool')
+            break
+        else:
+            print('You entered a value that is out of bounds, please try again')
+    return game_list[int(game_choice)]
+
+
+def create_game(uname):
+    # create new instance of chess game, opponent = None? 
+    pass
     
+def load_game(gameID):
+    # loads game from gameID
+    pass
+
 
 def commands():
     """prints commands
