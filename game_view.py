@@ -3,14 +3,32 @@ import json
 from passlib.hash import bcrypt
 from sys import argv, exit
 
+
+
+def main(ipInfo):
+    userIP = cleanup_ip(ipInfo)
+    welcome_screen()
+    get_info(userIP)
+
+
 def cleanup_ip(ipInfo):
+    """cleans IP info gained from argv
+
+    Args:
+        ipInfo (str): IP info of connected user
+
+    Returns:
+        (str): basic IP info of connected user
+    """
     cleanIP = f"{ipInfo}"
     cleanIP = cleanIP.strip("['")
     cleanIP = cleanIP.split(" ")
-    get_info(cleanIP[0])
+    return cleanIP[0]
 
 
 def welcome_screen():
+    """prints "CHESS in the terminal" in ascii fonts
+    """
 
     print("""
 Welcome to
@@ -40,26 +58,25 @@ def get_info(userIP):
     """start log in or account set up process for user
     
     """
-    welcome_screen()
     print("""
-Please enter 1 to create an account, or 2 if you already have one.
+Enter:
+1. Create an account
+2. Sign in
     """)
     i = 0
     while True:
         if i >= 10:
             exit_game(userIP, True, "Too many unsuccessful get info attempts")
-        try:
-            sign_in_up = get_input(userIP)
-            if sign_in_up not in ("1", "2"):
-                i += 1
-                print("You must enter the number '1' or the number '2'.")
-                continue
-            else:
-                break
-        
-        except:
+
+        sign_in_up = get_input(userIP)
+        if sign_in_up not in ("1", "2"):
             i += 1
+            print("You must enter the number '1' or the number '2'.")
+            i+=1
             continue
+        else:
+            break
+
     if sign_in_up == "1":
         create_account(userIP)
     elif sign_in_up == "2":
@@ -80,10 +97,10 @@ def get_input(userIP):
         print("Enter 'exit' to exit, or 'commands' for commands")
         i = input(">")
         if i == "exit":
-            exit_game(userIP, False)
+            exit_game(userIP, False, "hey")
         elif i == "commands":
             commands()
-            return
+            continue
         else:
             break
     return i
@@ -120,7 +137,6 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
     data[uname] = {'hashedpw': hashed_pw, 'currentgames': []}
     write_to_json('users.json', data)
     display_games(uname, userIP)
-
 
 
 def sign_in(userIP):
@@ -194,9 +210,9 @@ def load_game(gameID):
 
 
 def commands():
-    """prints commands
+    """prints commands to terminal
     """
-print("""
+    print("""
 ** At Any time you can enter "rules" to display the rules of chess, 
    "commands" to display the commands available to you, or "exit" to exit the 
    program
@@ -253,4 +269,4 @@ def write_to_json(fileName, data):
 
 
 
-cleanup_ip(argv[1:])
+main(argv[1:])
