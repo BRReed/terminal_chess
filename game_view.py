@@ -1,3 +1,4 @@
+from game_flow import Game
 from getpass import getpass
 import json
 from passlib.hash import bcrypt
@@ -8,7 +9,8 @@ from sys import argv, exit
 def main(ipInfo):
     userIP = cleanup_ip(ipInfo)
     welcome_screen()
-    get_info(userIP)
+    uname = get_info(userIP)
+    create_game(uname)
 
 
 def cleanup_ip(ipInfo):
@@ -78,13 +80,13 @@ Enter:
             break
 
     if sign_in_up == "1":
-        create_account(userIP)
+        uname = create_account(userIP)
     elif sign_in_up == "2":
-        sign_in(userIP)
+        uname = sign_in(userIP)
     else:
         print("unknown error getting user input")
         exit()
-    # choose_game() 
+    return uname
 
 
 def get_input(userIP):
@@ -136,7 +138,6 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
     #new_data = {uname: {'hashedpw': hashed_pw}}
     data[uname] = {'hashedpw': hashed_pw, 'currentgames': []}
     write_to_json('users.json', data)
-    display_games(uname, userIP)
 
 
 def sign_in(userIP):
@@ -158,11 +159,7 @@ def sign_in(userIP):
         else:
             print("Sorry, password does not match username")
             #FUTURE: count and timeout for 20 minutes after 5 attempts
-    game_choice = display_games(uname, userIP)
-    if game_choice == 'create':
-        create_game(uname)
-    else:
-        load_game(game_choice)
+    return uname
 
 
 def display_games(uname, userIP):
@@ -193,17 +190,37 @@ or '0' to create a new game
     while True:
         game_choice = get_input(userIP)
         if game_choice.isnumeric() and int(game_choice) <= (i-1):
-            print('cool')
+            create_game(uname)
             break
         else:
             print('You entered a value that is out of bounds, please try again')
     return game_list[int(game_choice)]
 
 
+
 def create_game(uname):
-    # create new instance of chess game, opponent = None? 
-    pass
-    
+    """creates new instance of a chess game
+
+    Args:
+        uname (str): users name
+    """
+    g = Game()
+    new_game = g.create_new_game()
+    games_data = get_json_info('currentgames.json')
+    game_ID = games_data["nextID"]
+    games_data['waitForOpponent'].append({
+        "gameID": game_ID, 
+        "gameState": new_game,
+        "white": uname,
+        "black": None,
+        "turn": "white"})
+    games_data["nextID"] = game_ID + 1
+    write_to_json('currentgames.json', games_data)
+    user_games_data = get_json_info('users.json')
+    user_games_data[uname]["currentgames"].append(game_ID)
+    write_to_json('users.json', user_games_data)
+
+
 def load_game(gameID):
     # loads game from gameID
     pass
@@ -265,6 +282,7 @@ def write_to_json(fileName, data):
     """
     with open(fileName, 'w') as f:
         json.dump(data, f)
+    return
 
 
 
