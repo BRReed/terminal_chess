@@ -10,7 +10,7 @@ def main(ipInfo):
     userIP = cleanup_ip(ipInfo)
     welcome_screen()
     uname = get_info(userIP)
-    create_game(uname)
+    display_games(uname, userIP)
 
 
 def cleanup_ip(ipInfo):
@@ -199,7 +199,7 @@ or '0' to create a new game
 
 
 def create_game(uname):
-    """creates new instance of a chess game
+    """creates new instance of a chess game saving in user info.
 
     Args:
         uname (str): users name
