@@ -222,6 +222,11 @@ def create_game(uname):
 
 
 def load_game(gameID):
+    """gets game info using gameID
+
+    Args:
+        gameID (str): reference number for existing game
+    """
     # loads game from gameID
     pass
 
