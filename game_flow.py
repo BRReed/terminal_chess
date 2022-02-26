@@ -5,6 +5,9 @@ class Game():
     def __init__(self):
         self.c = Chess()
 
+    def create_new_game(self):
+        return self.c.current_state
+
     def start_game(self, player1, player2):
         """assigns vars for start of game
 
