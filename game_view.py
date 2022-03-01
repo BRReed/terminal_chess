@@ -10,7 +10,11 @@ def main(ipInfo):
     userIP = cleanup_ip(ipInfo)
     welcome_screen()
     uname = get_info(userIP)
-    display_games(uname, userIP)
+    gameChoice = display_games(uname, userIP)
+    g = Game()
+    g.c.current_state = gameChoice['gameState']
+    g.c.print_current_state('white')
+    
 
 
 def cleanup_ip(ipInfo):
@@ -178,15 +182,28 @@ or '0' to create a new game
     games = user_data[uname]["currentgames"]
     games_data = get_json_info('currentgames.json')
     for game in games:
-        pass
+        if game in games_data['waitForOpponent']:
+            game_list.append(games_data['waitForOpponent'][game])
+            if games_data['waitForOpponent'][game]['white'] != uname:
+                opp = games_data['waitForOpponent'][game]['white']
+            else:
+                opp = games_data['waitForOpponent'][game]['black']
+            print(f'{i}. ID: {game} vs {opp}')
+            i+=1
+        elif game in games_data['inProgress']:
+            print(f'{i}. {game}')
+            i+=1
+            game_list.append(games_data['inProgress'][game])
+        else:
+            print('error, gameID does not exist in stored games data')
 
-        i+=1
     # user enters number, 0 goes to create game, otherwise load gameID at 
     # corresponding number
     while True:
         game_choice = get_input(userIP)
         if game_choice.isnumeric() and int(game_choice) <= (i-1):
-            create_game(uname)
+            if game_choice == 0:
+                create_game()
             break
         else:
             print('You entered a value that is out of bounds, please try again')
@@ -205,7 +222,7 @@ def create_game(uname):
     games_data = get_json_info('currentgames.json')
     game_ID = games_data["nextID"]
     games_data['waitForOpponent'][game_ID] = {
-        "gameID": game_ID, 
+        "gameID": str(game_ID), 
         "gameState": new_game,
         "white": uname,
         "black": None,
@@ -213,7 +230,7 @@ def create_game(uname):
     games_data["nextID"] = game_ID + 1
     write_to_json('currentgames.json', games_data)
     user_games_data = get_json_info('users.json')
-    user_games_data[uname]["currentgames"].append(game_ID)
+    user_games_data[uname]["currentgames"].append(str(game_ID))
     write_to_json('users.json', user_games_data)
 
 
@@ -227,10 +244,10 @@ def load_game(gameID):
         (dict): game info in dict form
     """
     data = get_json_info['currentgames.json']
-    if gameID in data['waitForOpponent'].keys():
+    if gameID in data['waitForOpponent']:
         return data['waitForOpponent'][gameID]
-    elif gameID in data['inProgress'].keys():
-        return data['inProgress'].keys()
+    elif gameID in data['inProgress']:
+        return data['inProgress'][gameID]
 
 
 def commands():
