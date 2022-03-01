@@ -174,16 +174,12 @@ or '0' to create a new game
     """)
     i=1
     game_list = ['create']
-    data = get_json_info('users.json')
-    games = data[uname]["currentgames"]
+    user_data = get_json_info('users.json')
+    games = user_data[uname]["currentgames"]
+    games_data = get_json_info('currentgames.json')
     for game in games:
-        if game['black'] != uname:
-            opponent = game['black']
-        else:
-            opponent = game['white']
-        gameID = game['gameID']
-        game_list.append(gameID)
-        print(f'{i}. {gameID} vs {opponent}')
+        pass
+
         i+=1
     # user enters number, 0 goes to create game, otherwise load gameID at 
     # corresponding number
