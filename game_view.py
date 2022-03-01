@@ -208,7 +208,7 @@ def create_game(uname):
     new_game = g.create_new_game()
     games_data = get_json_info('currentgames.json')
     game_ID = games_data["nextID"]
-    games_data[game_ID] = {
+    games_data['waitForOpponent'][game_ID] = {
         "gameID": game_ID, 
         "gameState": new_game,
         "white": uname,
@@ -226,9 +226,15 @@ def load_game(gameID):
 
     Args:
         gameID (str): reference number for existing game
+    
+    Returns:
+        (dict): game info in dict form
     """
-    # loads game from gameID
-    pass
+    data = get_json_info['currentgames.json']
+    if gameID in data['waitForOpponent'].keys():
+        return data['waitForOpponent'][gameID]
+    elif gameID in data['inProgress'].keys():
+        return data['inProgress'].keys()
 
 
 def commands():
