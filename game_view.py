@@ -10,7 +10,8 @@ def main(ipInfo):
     userIP = cleanup_ip(ipInfo)
     welcome_screen()
     uname = get_info(userIP)
-    gameChoice = display_games(uname, userIP)
+    gameList = display_games(uname, userIP)
+    gameChoice = choose_game(userIP, gameList)
     g = load_game(gameChoice)
     g.c.print_current_state('white')
 
@@ -194,9 +195,20 @@ or '0' to create a new game
             game_list.append(games_data['inProgress'][game])
         else:
             print('error, gameID does not exist in stored games data')
+    return game_list
 
-    # user enters number, 0 goes to create game, otherwise load gameID at 
-    # corresponding number
+
+def choose_game(userIP, game_list):
+    """takes a list of gameID's and returns gameID user chooses
+
+    Args:
+        userIP (str): IP of user
+        game_list (list): list of valid gameID's
+
+    Returns:
+        str: gameID the user chose
+    """
+    i = len(game_list)
     while True:
         game_choice = get_input(userIP)
         if game_choice.isnumeric() and int(game_choice) <= (i-1):
@@ -231,20 +243,19 @@ def create_game(uname):
     user_games_data[uname]["currentgames"].append(str(game_ID))
     write_to_json('users.json', user_games_data)
 
-# change load_game and display_games so that they work together
+
 def load_game(gameID):
     """gets game info using gameID
 
     Args:
-        gameID (str): reference number for existing game
+        gameID (dict): reference number for existing game
     
     Returns:
-        (dict): game info in dict form
+        (obj): game object
     """
     g = Game()
     g.c.current_state = gameID['gameState']
     return g
-
 
 
 def commands():
