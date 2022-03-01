@@ -208,12 +208,12 @@ def create_game(uname):
     new_game = g.create_new_game()
     games_data = get_json_info('currentgames.json')
     game_ID = games_data["nextID"]
-    games_data['waitForOpponent'].append({
+    games_data[game_ID] = {
         "gameID": game_ID, 
         "gameState": new_game,
         "white": uname,
         "black": None,
-        "turn": "white"})
+        "turn": "white"}
     games_data["nextID"] = game_ID + 1
     write_to_json('currentgames.json', games_data)
     user_games_data = get_json_info('users.json')
