@@ -11,10 +11,9 @@ def main(ipInfo):
     welcome_screen()
     uname = get_info(userIP)
     gameChoice = display_games(uname, userIP)
-    g = Game()
-    g.c.current_state = gameChoice['gameState']
+    g = load_game(gameChoice)
     g.c.print_current_state('white')
-    
+
 
 
 def cleanup_ip(ipInfo):
@@ -139,7 +138,6 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
         else:
             print("Sorry, passwords do not match. Please try again")
     hashed_pw = bcrypt.hash(p1)
-    #new_data = {uname: {'hashedpw': hashed_pw}}
     data[uname] = {'hashedpw': hashed_pw, 'currentgames': []}
     write_to_json('users.json', data)
 
@@ -233,7 +231,7 @@ def create_game(uname):
     user_games_data[uname]["currentgames"].append(str(game_ID))
     write_to_json('users.json', user_games_data)
 
-
+# change load_game and display_games so that they work together
 def load_game(gameID):
     """gets game info using gameID
 
@@ -243,11 +241,10 @@ def load_game(gameID):
     Returns:
         (dict): game info in dict form
     """
-    data = get_json_info['currentgames.json']
-    if gameID in data['waitForOpponent']:
-        return data['waitForOpponent'][gameID]
-    elif gameID in data['inProgress']:
-        return data['inProgress'][gameID]
+    g = Game()
+    g.c.current_state = gameID['gameState']
+    return g
+
 
 
 def commands():
