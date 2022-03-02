@@ -250,6 +250,12 @@ def create_game(uname):
     write_to_json('users.json', user_games_data)
     return games_data['wait_for_opponent'][game_id]
 
+def join_open_game(uname):
+    # list games that have been opened by other players
+    # show game maker's name
+    # need to add as option when create / display games choice is made
+    pass 
+
 
 def load_game(game_id):
     """gets game info using game_id
