@@ -10,9 +10,9 @@ def main(ip_info):
     user_ip = cleanup_ip(ip_info)
     welcome_screen()
     uname = get_info(user_ip)
-    gameList = display_games(uname, user_ip)
-    gameChoice = choose_game(user_ip, gameList)
-    g = load_game(gameChoice)
+    game_list = display_games(uname, user_ip)
+    game_choice = choose_game(user_ip, game_list)
+    g = load_game(game_choice)
 
 
 
