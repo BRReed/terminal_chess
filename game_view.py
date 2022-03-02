@@ -8,11 +8,16 @@ from sys import argv, exit
 
 def main(ip_info):
     user_ip = cleanup_ip(ip_info)
+
     welcome_screen()
+
     uname = get_info(user_ip)
+
     game_list = display_games(uname, user_ip)
-    game_choice = choose_game(user_ip, game_list)
+
+    game_choice = choose_game(user_ip, uname, game_list)
     g = load_game(game_choice)
+
 
 
 
@@ -197,7 +202,7 @@ or '0' to create a new game
     return game_list
 
 
-def choose_game(user_ip, game_list):
+def choose_game(user_ip, uname, game_list):
     """takes a list of game_id's and returns game_id user chooses
 
     Args:
@@ -211,8 +216,10 @@ def choose_game(user_ip, game_list):
     while True:
         game_choice = get_input(user_ip)
         if game_choice.isnumeric() and int(game_choice) <= (i-1):
-            if game_choice == 0:
-                create_game()
+            if int(game_choice) == 0:
+                new_id = create_game(uname)
+                game_list.append(new_id)
+                game_choice = (len(game_list) - 1)
             break
         else:
             print('You entered a value that is out of bounds, please try again')
@@ -241,6 +248,7 @@ def create_game(uname):
     user_games_data = get_json_info('users.json')
     user_games_data[uname]["currentgames"].append(str(game_id))
     write_to_json('users.json', user_games_data)
+    return games_data['wait_for_opponent'][game_id]
 
 
 def load_game(game_id):
@@ -290,28 +298,28 @@ def exit_game(user_ip, ban, reason="None"):
     exit()
 
 
-def get_json_info(fileName):
+def get_json_info(file_name):
     """get information in a json file
 
     Args:
-        fileName (str): a json file
+        file_name (str): a json file
 
     Returns:
         (dict): contents of the json file
     """
-    with open(fileName) as f:
+    with open(file_name) as f:
         data = json.load(f)
     return data
 
 
-def write_to_json(fileName, data):
+def write_to_json(file_name, data):
     """writes to a json file
 
     Args:
-        fileName (str): a json file
+        file_name (str): a json file
         data (dict): new contents of the json file
     """
-    with open(fileName, 'w') as f:
+    with open(file_name, 'w') as f:
         json.dump(data, f)
     return
 
