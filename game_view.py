@@ -10,7 +10,10 @@ def main(ipInfo):
     userIP = cleanup_ip(ipInfo)
     welcome_screen()
     uname = get_info(userIP)
-    display_games(uname, userIP)
+    gameList = display_games(uname, userIP)
+    gameChoice = choose_game(userIP, gameList)
+    g = load_game(gameChoice)
+
 
 
 def cleanup_ip(ipInfo):
@@ -135,7 +138,6 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
         else:
             print("Sorry, passwords do not match. Please try again")
     hashed_pw = bcrypt.hash(p1)
-    #new_data = {uname: {'hashedpw': hashed_pw}}
     data[uname] = {'hashedpw': hashed_pw, 'currentgames': []}
     write_to_json('users.json', data)
 
@@ -174,23 +176,43 @@ or '0' to create a new game
     """)
     i=1
     game_list = ['create']
-    data = get_json_info('users.json')
-    games = data[uname]["currentgames"]
+    user_data = get_json_info('users.json')
+    games = user_data[uname]["currentgames"]
+    games_data = get_json_info('currentgames.json')
     for game in games:
-        if game['black'] != uname:
-            opponent = game['black']
+        if game in games_data['waitForOpponent']:
+            game_list.append(games_data['waitForOpponent'][game])
+            if games_data['waitForOpponent'][game]['white'] != uname:
+                opp = games_data['waitForOpponent'][game]['white']
+            else:
+                opp = games_data['waitForOpponent'][game]['black']
+            print(f'{i}. ID: {game} vs {opp}')
+            i+=1
+        elif game in games_data['inProgress']:
+            print(f'{i}. {game}')
+            i+=1
+            game_list.append(games_data['inProgress'][game])
         else:
-            opponent = game['white']
-        gameID = game['gameID']
-        game_list.append(gameID)
-        print(f'{i}. {gameID} vs {opponent}')
-        i+=1
-    # user enters number, 0 goes to create game, otherwise load gameID at 
-    # corresponding number
+            print('error, gameID does not exist in stored games data')
+    return game_list
+
+
+def choose_game(userIP, game_list):
+    """takes a list of gameID's and returns gameID user chooses
+
+    Args:
+        userIP (str): IP of user
+        game_list (list): list of valid gameID's
+
+    Returns:
+        str: gameID the user chose
+    """
+    i = len(game_list)
     while True:
         game_choice = get_input(userIP)
         if game_choice.isnumeric() and int(game_choice) <= (i-1):
-            create_game(uname)
+            if game_choice == 0:
+                create_game()
             break
         else:
             print('You entered a value that is out of bounds, please try again')
@@ -208,22 +230,31 @@ def create_game(uname):
     new_game = g.create_new_game()
     games_data = get_json_info('currentgames.json')
     game_ID = games_data["nextID"]
-    games_data['waitForOpponent'].append({
-        "gameID": game_ID, 
+    games_data['waitForOpponent'][game_ID] = {
+        "gameID": str(game_ID), 
         "gameState": new_game,
         "white": uname,
         "black": None,
-        "turn": "white"})
+        "turn": "white"}
     games_data["nextID"] = game_ID + 1
     write_to_json('currentgames.json', games_data)
     user_games_data = get_json_info('users.json')
-    user_games_data[uname]["currentgames"].append(game_ID)
+    user_games_data[uname]["currentgames"].append(str(game_ID))
     write_to_json('users.json', user_games_data)
 
 
 def load_game(gameID):
-    # loads game from gameID
-    pass
+    """gets game info using gameID
+
+    Args:
+        gameID (dict): reference number for existing game
+    
+    Returns:
+        (obj): game object
+    """
+    g = Game()
+    g.c.current_state = gameID['gameState']
+    return g
 
 
 def commands():
