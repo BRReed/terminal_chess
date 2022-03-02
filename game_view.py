@@ -13,7 +13,6 @@ def main(ipInfo):
     gameList = display_games(uname, userIP)
     gameChoice = choose_game(userIP, gameList)
     g = load_game(gameChoice)
-    g.c.print_current_state('white')
 
 
 
