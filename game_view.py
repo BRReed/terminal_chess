@@ -25,10 +25,10 @@ def cleanup_ip(ip_info):
     Returns:
         (str): basic IP info of connected user
     """
-    cleanIP = f"{ip_info}"
-    cleanIP = cleanIP.strip("['")
-    cleanIP = cleanIP.split(" ")
-    return cleanIP[0]
+    clean_ip = f"{ip_info}"
+    clean_ip = clean_ip.strip("['")
+    clean_ip = clean_ip.split(" ")
+    return clean_ip[0]
 
 
 def welcome_screen():
@@ -229,17 +229,17 @@ def create_game(uname):
     g = Game()
     new_game = g.create_new_game()
     games_data = get_json_info('currentgames.json')
-    game_ID = games_data["nextID"]
-    games_data['waitForOpponent'][game_ID] = {
-        "gameID": str(game_ID), 
+    game_id = games_data["nextID"]
+    games_data['waitForOpponent'][game_id] = {
+        "gameID": str(game_id), 
         "gameState": new_game,
         "white": uname,
         "black": None,
         "turn": "white"}
-    games_data["nextID"] = game_ID + 1
+    games_data["nextID"] = game_id + 1
     write_to_json('currentgames.json', games_data)
     user_games_data = get_json_info('users.json')
-    user_games_data[uname]["currentgames"].append(str(game_ID))
+    user_games_data[uname]["currentgames"].append(str(game_id))
     write_to_json('users.json', user_games_data)
 
 
