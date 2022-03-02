@@ -180,32 +180,32 @@ or '0' to create a new game
     games = user_data[uname]["currentgames"]
     games_data = get_json_info('currentgames.json')
     for game in games:
-        if game in games_data['waitForOpponent']:
-            game_list.append(games_data['waitForOpponent'][game])
-            if games_data['waitForOpponent'][game]['white'] != uname:
-                opp = games_data['waitForOpponent'][game]['white']
+        if game in games_data['wait_for_opponent']:
+            game_list.append(games_data['wait_for_opponent'][game])
+            if games_data['wait_for_opponent'][game]['white'] != uname:
+                opp = games_data['wait_for_opponent'][game]['white']
             else:
-                opp = games_data['waitForOpponent'][game]['black']
+                opp = games_data['wait_for_opponent'][game]['black']
             print(f'{i}. ID: {game} vs {opp}')
             i+=1
-        elif game in games_data['inProgress']:
+        elif game in games_data['in_progress']:
             print(f'{i}. {game}')
             i+=1
-            game_list.append(games_data['inProgress'][game])
+            game_list.append(games_data['in_progress'][game])
         else:
-            print('error, gameID does not exist in stored games data')
+            print('error, game_id does not exist in stored games data')
     return game_list
 
 
 def choose_game(user_ip, game_list):
-    """takes a list of gameID's and returns gameID user chooses
+    """takes a list of game_id's and returns game_id user chooses
 
     Args:
         user_ip (str): IP of user
-        game_list (list): list of valid gameID's
+        game_list (list): list of valid game_id's
 
     Returns:
-        str: gameID the user chose
+        str: game_id the user chose
     """
     i = len(game_list)
     while True:
@@ -229,31 +229,31 @@ def create_game(uname):
     g = Game()
     new_game = g.create_new_game()
     games_data = get_json_info('currentgames.json')
-    game_id = games_data["nextID"]
-    games_data['waitForOpponent'][game_id] = {
-        "gameID": str(game_id), 
+    game_id = games_data["next_id"]
+    games_data['wait_for_opponent'][game_id] = {
+        "game_id": str(game_id), 
         "gameState": new_game,
         "white": uname,
         "black": None,
         "turn": "white"}
-    games_data["nextID"] = game_id + 1
+    games_data["next_id"] = game_id + 1
     write_to_json('currentgames.json', games_data)
     user_games_data = get_json_info('users.json')
     user_games_data[uname]["currentgames"].append(str(game_id))
     write_to_json('users.json', user_games_data)
 
 
-def load_game(gameID):
-    """gets game info using gameID
+def load_game(game_id):
+    """gets game info using game_id
 
     Args:
-        gameID (dict): reference number for existing game
+        game_id (dict): reference number for existing game
     
     Returns:
         (obj): game object
     """
     g = Game()
-    g.c.current_state = gameID['gameState']
+    g.c.current_state = game_id['gameState']
     return g
 
 
