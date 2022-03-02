@@ -6,29 +6,34 @@ from sys import argv, exit
 
 
 
-def main(ipInfo):
-    userIP = cleanup_ip(ipInfo)
+def main(ip_info):
+    user_ip = cleanup_ip(ip_info)
+
     welcome_screen()
-    uname = get_info(userIP)
-    gameList = display_games(uname, userIP)
-    gameChoice = choose_game(userIP, gameList)
-    g = load_game(gameChoice)
+
+    uname = get_info(user_ip)
+
+    game_list = display_games(uname, user_ip)
+
+    game_choice = choose_game(user_ip, uname, game_list)
+    g = load_game(game_choice)
 
 
 
-def cleanup_ip(ipInfo):
+
+def cleanup_ip(ip_info):
     """cleans IP info gained from argv
 
     Args:
-        ipInfo (str): IP info of connected user
+        ip_info (str): IP info of connected user
 
     Returns:
         (str): basic IP info of connected user
     """
-    cleanIP = f"{ipInfo}"
-    cleanIP = cleanIP.strip("['")
-    cleanIP = cleanIP.split(" ")
-    return cleanIP[0]
+    clean_ip = f"{ip_info}"
+    clean_ip = clean_ip.strip("['")
+    clean_ip = clean_ip.split(" ")
+    return clean_ip[0]
 
 
 def welcome_screen():
@@ -59,7 +64,7 @@ Welcome to
     """)
 
 
-def get_info(userIP):
+def get_info(user_ip):
     """start log in or account set up process for user
     
     """
@@ -71,9 +76,9 @@ Enter:
     i = 0
     while True:
         if i >= 10:
-            exit_game(userIP, True, "Too many unsuccessful get info attempts")
+            exit_game(user_ip, True, "Too many unsuccessful get info attempts")
 
-        sign_in_up = get_input(userIP)
+        sign_in_up = get_input(user_ip)
         if sign_in_up not in ("1", "2"):
             i += 1
             print("You must enter the number '1' or the number '2'.")
@@ -83,16 +88,16 @@ Enter:
             break
 
     if sign_in_up == "1":
-        uname = create_account(userIP)
+        uname = create_account(user_ip)
     elif sign_in_up == "2":
-        uname = sign_in(userIP)
+        uname = sign_in(user_ip)
     else:
         print("unknown error getting user input")
         exit()
     return uname
 
 
-def get_input(userIP):
+def get_input(user_ip):
     """returns string entered by user. if input is "exit" program will exit 
 
     Returns:
@@ -102,7 +107,7 @@ def get_input(userIP):
         print("Enter 'exit' to exit, or 'commands' for commands")
         i = input(">")
         if i == "exit":
-            exit_game(userIP, False, "hey")
+            exit_game(user_ip, False, "hey")
         elif i == "commands":
             commands()
             continue
@@ -111,16 +116,16 @@ def get_input(userIP):
     return i
 
 
-def create_account(userIP):
+def create_account(user_ip):
     """take user input to create account 
 
     Args:
-        userIP (str): ip of user
+        user_ip (str): ip of user
     """
     print("Please enter your desired username.")
     data = get_json_info('users.json')
     while True:
-        uname = get_input(userIP)
+        uname = get_input(user_ip)
         if uname not in data:
             break
         else:
@@ -142,11 +147,11 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
     write_to_json('users.json', data)
 
 
-def sign_in(userIP):
+def sign_in(user_ip):
     print("Please enter your username.")
     data = get_json_info('users.json')
     while True:
-        uname = get_input(userIP)
+        uname = get_input(user_ip)
         if uname in data:
             hashedpw = data[uname]['hashedpw']
             break
@@ -155,7 +160,7 @@ def sign_in(userIP):
             #FUTURE: enter create account to create account
     print("Please enter your password.")
     while True:
-        pw = get_input(userIP)
+        pw = get_input(user_ip)
         if bcrypt.verify(pw, hashedpw):
             break
         else:
@@ -164,7 +169,7 @@ def sign_in(userIP):
     return uname
 
 
-def display_games(uname, userIP):
+def display_games(uname, user_ip):
     """display games user is participating in
 
     Args:
@@ -180,39 +185,41 @@ or '0' to create a new game
     games = user_data[uname]["currentgames"]
     games_data = get_json_info('currentgames.json')
     for game in games:
-        if game in games_data['waitForOpponent']:
-            game_list.append(games_data['waitForOpponent'][game])
-            if games_data['waitForOpponent'][game]['white'] != uname:
-                opp = games_data['waitForOpponent'][game]['white']
+        if game in games_data['wait_for_opponent']:
+            game_list.append(games_data['wait_for_opponent'][game])
+            if games_data['wait_for_opponent'][game]['white'] != uname:
+                opp = games_data['wait_for_opponent'][game]['white']
             else:
-                opp = games_data['waitForOpponent'][game]['black']
+                opp = games_data['wait_for_opponent'][game]['black']
             print(f'{i}. ID: {game} vs {opp}')
             i+=1
-        elif game in games_data['inProgress']:
+        elif game in games_data['in_progress']:
             print(f'{i}. {game}')
             i+=1
-            game_list.append(games_data['inProgress'][game])
+            game_list.append(games_data['in_progress'][game])
         else:
-            print('error, gameID does not exist in stored games data')
+            print('error, game_id does not exist in stored games data')
     return game_list
 
 
-def choose_game(userIP, game_list):
-    """takes a list of gameID's and returns gameID user chooses
+def choose_game(user_ip, uname, game_list):
+    """takes a list of game_id's and returns game_id user chooses
 
     Args:
-        userIP (str): IP of user
-        game_list (list): list of valid gameID's
+        user_ip (str): IP of user
+        game_list (list): list of valid game_id's
 
     Returns:
-        str: gameID the user chose
+        str: game_id the user chose
     """
     i = len(game_list)
     while True:
-        game_choice = get_input(userIP)
+        game_choice = get_input(user_ip)
         if game_choice.isnumeric() and int(game_choice) <= (i-1):
-            if game_choice == 0:
-                create_game()
+            if int(game_choice) == 0:
+                new_id = create_game(uname)
+                game_list.append(new_id)
+                game_choice = (len(game_list) - 1)
             break
         else:
             print('You entered a value that is out of bounds, please try again')
@@ -229,31 +236,32 @@ def create_game(uname):
     g = Game()
     new_game = g.create_new_game()
     games_data = get_json_info('currentgames.json')
-    game_ID = games_data["nextID"]
-    games_data['waitForOpponent'][game_ID] = {
-        "gameID": str(game_ID), 
+    game_id = games_data["next_id"]
+    games_data['wait_for_opponent'][game_id] = {
+        "game_id": str(game_id), 
         "gameState": new_game,
         "white": uname,
         "black": None,
         "turn": "white"}
-    games_data["nextID"] = game_ID + 1
+    games_data["next_id"] = game_id + 1
     write_to_json('currentgames.json', games_data)
     user_games_data = get_json_info('users.json')
-    user_games_data[uname]["currentgames"].append(str(game_ID))
+    user_games_data[uname]["currentgames"].append(str(game_id))
     write_to_json('users.json', user_games_data)
+    return games_data['wait_for_opponent'][game_id]
 
 
-def load_game(gameID):
-    """gets game info using gameID
+def load_game(game_id):
+    """gets game info using game_id
 
     Args:
-        gameID (dict): reference number for existing game
+        game_id (dict): reference number for existing game
     
     Returns:
         (obj): game object
     """
     g = Game()
-    g.c.current_state = gameID['gameState']
+    g.c.current_state = game_id['gameState']
     return g
 
 
@@ -275,43 +283,43 @@ def commands():
 
 
 
-def exit_game(userIP, ban, reason="None"):
+def exit_game(user_ip, ban, reason="None"):
     """exits out of chess program
 
     Args:
-        userIP (string): the IP of the user
+        user_ip (string): the IP of the user
         ban (bool): True if user is banned, else False
         reason (string): description of ban
     """
     if ban:
         banList = get_json_info('ban_list.json')
-        banList['to_ban'].append({userIP: reason})
+        banList['to_ban'].append({user_ip: reason})
         write_to_json('ban_list.json', banList)
     exit()
 
 
-def get_json_info(fileName):
+def get_json_info(file_name):
     """get information in a json file
 
     Args:
-        fileName (str): a json file
+        file_name (str): a json file
 
     Returns:
         (dict): contents of the json file
     """
-    with open(fileName) as f:
+    with open(file_name) as f:
         data = json.load(f)
     return data
 
 
-def write_to_json(fileName, data):
+def write_to_json(file_name, data):
     """writes to a json file
 
     Args:
-        fileName (str): a json file
+        file_name (str): a json file
         data (dict): new contents of the json file
     """
-    with open(fileName, 'w') as f:
+    with open(file_name, 'w') as f:
         json.dump(data, f)
     return
 
