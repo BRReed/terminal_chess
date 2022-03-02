@@ -6,8 +6,8 @@ from sys import argv, exit
 
 
 
-def main(ipInfo):
-    userIP = cleanup_ip(ipInfo)
+def main(ip_info):
+    userIP = cleanup_ip(ip_info)
     welcome_screen()
     uname = get_info(userIP)
     gameList = display_games(uname, userIP)
@@ -16,16 +16,16 @@ def main(ipInfo):
 
 
 
-def cleanup_ip(ipInfo):
+def cleanup_ip(ip_info):
     """cleans IP info gained from argv
 
     Args:
-        ipInfo (str): IP info of connected user
+        ip_info (str): IP info of connected user
 
     Returns:
         (str): basic IP info of connected user
     """
-    cleanIP = f"{ipInfo}"
+    cleanIP = f"{ip_info}"
     cleanIP = cleanIP.strip("['")
     cleanIP = cleanIP.split(" ")
     return cleanIP[0]
