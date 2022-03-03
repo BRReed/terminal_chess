@@ -13,9 +13,10 @@ def main(ip_info):
 
     uname = get_info(user_ip)
 
-    game_list = display_games(uname, user_ip)
+    game_list = display_games(uname)
 
     game_choice = choose_game(user_ip, uname, game_list)
+
     g = load_game(game_choice)
 
 
@@ -169,11 +170,13 @@ def sign_in(user_ip):
     return uname
 
 
-def display_games(uname, user_ip):
+def display_games(uname):
     """display games user is participating in
 
     Args:
         uname (string): the name of the verified user
+    Returns:
+        list of available games
     """
     print("""
 Enter the corresponding number for the game you wish to play
@@ -182,24 +185,64 @@ or '0' to create a new game
     i=1
     game_list = ['create']
     user_data = get_json_info('users.json')
-    games = user_data[uname]["currentgames"]
+    user_games = user_data[uname]['currentgames']
     games_data = get_json_info('currentgames.json')
-    for game in games:
+    for game in user_games:
+        wait_games = []
+        playing_games = []
         if game in games_data['wait_for_opponent']:
-            game_list.append(games_data['wait_for_opponent'][game])
-            if games_data['wait_for_opponent'][game]['white'] != uname:
-                opp = games_data['wait_for_opponent'][game]['white']
-            else:
-                opp = games_data['wait_for_opponent'][game]['black']
-            print(f'{i}. ID: {game} vs {opp}')
-            i+=1
+            wait_games.append(games_data['wait_for_opponent'][game])
         elif game in games_data['in_progress']:
-            print(f'{i}. {game}')
-            i+=1
-            game_list.append(games_data['in_progress'][game])
+            playing_games.append(games_data['in_progress'][game])
         else:
-            print('error, game_id does not exist in stored games data')
+            print("error matching user game to current games data")
+    if wait_games:
+        print("These are the games you're waiting for an opponent:\n")
+        for game in wait_games:
+            game_list.append(game)
+            if game['turn'] == 'white':
+                print(f"{i}. ID: {game['game_id']} You can move before your " +
+                "opponent joins!")
+            else:
+                print(f"{i}. ID: {game['game_id']} You've already moved.")
+            i+=1
+    if playing_games:
+        print("These are your games in progress:\n")
+        for game in playing_games:
+            game_list.append(game)
+            if game['white'] != uname:
+                opp = game['white']
+            elif game['white'] == uname:
+                opp = game['black']
+            else:
+                print("error matching user name to opponents in current " +
+                "games data")
+            if game['turn'] == uname:
+                print(f"{i}. ID: {game['game_id']} vs {opp}. It's your turn")
+            elif game['turn'] == opp:
+                print(f"{i}. ID: {game['game_id']} vs {opp}. It's {opp}'s turn")
+            i+=1
+    for game in games_data['wait_for_opponent']:
+        join_games = []
+        if games_data['wait_for_opponent'][game]['white'] != uname:
+            join_games.append(games_data['wait_for_opponent'][game])
+    if join_games:
+        print("These are other users games looking for an opponent:\n")
+        for game in join_games:
+            game_list.append(game)
+            opp = game['white']
+            if game['turn'] != 'white':
+                print(f"{i}. ID: {game['game_id']} vs {opp}. {opp} has " +
+                "already made thier first move!")
+            elif game['turn'] == 'white':
+                print(f"{i}. ID: {game['game_id']} vs {opp}. {opp} hasn't " +
+                "made their first move.")
     return game_list
+
+
+
+
+
 
 
 def choose_game(user_ip, uname, game_list):
@@ -250,11 +293,6 @@ def create_game(uname):
     write_to_json('users.json', user_games_data)
     return games_data['wait_for_opponent'][game_id]
 
-def join_open_game(uname):
-    # list games that have been opened by other players
-    # show game maker's name
-    # need to add as option when create / display games choice is made
-    pass 
 
 
 def load_game(game_id):
@@ -275,9 +313,8 @@ def commands():
     """prints commands to terminal
     """
     print("""
-** At Any time you can enter "rules" to display the rules of chess, 
-   "commands" to display the commands available to you, or "exit" to exit the 
-   program
+** At Any time you can enter "commands" to display the commands available to 
+   you, or "exit" to exit the program
 
 * Use long algebraic notation to move pieces
 * Movement format = starting square, ending square: `b2a3`
@@ -331,5 +368,5 @@ def write_to_json(file_name, data):
 
 
 
-
+# join_open_game('fart')
 main(argv[1:])
