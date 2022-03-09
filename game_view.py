@@ -187,9 +187,10 @@ or '0' to create a new game
     user_data = get_json_info('users.json')
     user_games = user_data[uname]['currentgames']
     games_data = get_json_info('currentgames.json')
+    wait_games = []
+    playing_games = []
+    join_games = []
     for game in user_games:
-        wait_games = []
-        playing_games = []
         if game in games_data['wait_for_opponent']:
             wait_games.append(games_data['wait_for_opponent'][game])
         elif game in games_data['in_progress']:
@@ -212,18 +213,23 @@ or '0' to create a new game
             game_list.append(game)
             if game['white'] != uname:
                 opp = game['white']
+                opp_color = 'white'
+                user_color = 'black'
             elif game['white'] == uname:
+                opp_color = 'black'
+                user_color = 'white'
                 opp = game['black']
             else:
                 print("error matching user name to opponents in current " +
                 "games data")
-            if game['turn'] == uname:
+            if game['turn'] == user_color:
                 print(f"{i}. ID: {game['game_id']} vs {opp}. It's your turn")
-            elif game['turn'] == opp:
+            elif game['turn'] == opp_color:
                 print(f"{i}. ID: {game['game_id']} vs {opp}. It's {opp}'s turn")
+            else:
+                print("Error with user/opp config")
             i+=1
     for game in games_data['wait_for_opponent']:
-        join_games = []
         if games_data['wait_for_opponent'][game]['white'] != uname:
             join_games.append(games_data['wait_for_opponent'][game])
     if join_games:
@@ -367,6 +373,4 @@ def write_to_json(file_name, data):
     return
 
 
-
-# join_open_game('fart')
 main(argv[1:])
