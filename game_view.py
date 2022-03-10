@@ -13,10 +13,13 @@ def main(ip_info):
 
     uname = get_info(user_ip)
 
-    game_list = display_games(uname, user_ip)
+    game_list = display_games(uname)
 
     game_choice = choose_game(user_ip, uname, game_list)
-    g = load_game(game_choice)
+
+    check_game_info(game_choice, uname)
+
+    g = load_game(game_choice, uname)
 
 
 
@@ -145,6 +148,7 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
     hashed_pw = bcrypt.hash(p1)
     data[uname] = {'hashedpw': hashed_pw, 'currentgames': []}
     write_to_json('users.json', data)
+    return uname
 
 
 def sign_in(user_ip):
@@ -169,11 +173,13 @@ def sign_in(user_ip):
     return uname
 
 
-def display_games(uname, user_ip):
+def display_games(uname):
     """display games user is participating in
 
     Args:
         uname (string): the name of the verified user
+    Returns:
+        list of available games
     """
     print("""
 Enter the corresponding number for the game you wish to play
@@ -182,24 +188,91 @@ or '0' to create a new game
     i=1
     game_list = ['create']
     user_data = get_json_info('users.json')
-    games = user_data[uname]["currentgames"]
+    user_games = user_data[uname]['currentgames']
     games_data = get_json_info('currentgames.json')
-    for game in games:
+    wait_games = []
+    playing_games = []
+    join_games = []
+    for game in user_games:
         if game in games_data['wait_for_opponent']:
-            game_list.append(games_data['wait_for_opponent'][game])
-            if games_data['wait_for_opponent'][game]['white'] != uname:
-                opp = games_data['wait_for_opponent'][game]['white']
-            else:
-                opp = games_data['wait_for_opponent'][game]['black']
-            print(f'{i}. ID: {game} vs {opp}')
-            i+=1
+            wait_games.append(games_data['wait_for_opponent'][game])
         elif game in games_data['in_progress']:
-            print(f'{i}. {game}')
-            i+=1
-            game_list.append(games_data['in_progress'][game])
+            playing_games.append(games_data['in_progress'][game])
         else:
-            print('error, game_id does not exist in stored games data')
+            print("error matching user game to current games data")
+    if wait_games:
+        print("These are the games you're waiting for an opponent:\n")
+        for game in wait_games:
+            game_list.append(game)
+            if game['turn'] == 'white':
+                print(f"{i}. ID: {game['game_id']} You can move before your " +
+                "opponent joins!")
+            else:
+                print(f"{i}. ID: {game['game_id']} You've already moved.")
+            i+=1
+    if playing_games:
+        print("These are your games in progress:\n")
+        for game in playing_games:
+            game_list.append(game)
+            if game['white'] != uname:
+                opp = game['white']
+                opp_color = 'white'
+                user_color = 'black'
+            elif game['white'] == uname:
+                opp_color = 'black'
+                user_color = 'white'
+                opp = game['black']
+            else:
+                print("error matching user name to opponents in current " +
+                "games data")
+            if game['turn'] == user_color:
+                print(f"{i}. ID: {game['game_id']} vs {opp}. It's your turn")
+            elif game['turn'] == opp_color:
+                print(f"{i}. ID: {game['game_id']} vs {opp}. It's {opp}'s turn")
+            else:
+                print("Error with user/opp config")
+            i+=1
+    for game in games_data['wait_for_opponent']:
+        if games_data['wait_for_opponent'][game]['white'] != uname:
+            join_games.append(games_data['wait_for_opponent'][game])
+    if join_games:
+        print("These are other users games looking for an opponent:\n")
+        for game in join_games:
+            game_list.append(game)
+            opp = game['white']
+            if game['turn'] != 'white':
+                print(f"{i}. ID: {game['game_id']} vs {opp}. {opp} has " +
+                "already made thier first move!")
+            elif game['turn'] == 'white':
+                print(f"{i}. ID: {game['game_id']} vs {opp}. {opp} hasn't " +
+                "made their first move.")
     return game_list
+
+
+
+def check_game_info(game_dict, uname):
+    """checks game information that uname is participating member of game and
+    if not, adds the game to uname's currentgames and moves game from 
+    waiting for opponent to in progress
+
+    Args:
+        game_dict (dict): game information
+        uname (string): user name of player
+    """
+    if game_dict['white'] == uname or game_dict['black'] == uname:
+        return
+    elif game_dict['black'] == None:
+        game_dict['black'] = uname
+        g = game_dict["game_id"]
+        games_data = get_json_info('currentgames.json')
+        games_data['in_progress'][g] = game_dict
+        games_data['wait_for_opponent'].pop(g)
+        write_to_json('currentgames.json', games_data)
+        user_data = get_json_info('users.json')
+        user_data[uname]['currentgames'].append(g)
+        write_to_json('users.json', user_data)
+
+
 
 
 def choose_game(user_ip, uname, game_list):
@@ -251,7 +324,8 @@ def create_game(uname):
     return games_data['wait_for_opponent'][game_id]
 
 
-def load_game(game_id):
+
+def load_game(game_id, uname):
     """gets game info using game_id
 
     Args:
@@ -269,9 +343,8 @@ def commands():
     """prints commands to terminal
     """
     print("""
-** At Any time you can enter "rules" to display the rules of chess, 
-   "commands" to display the commands available to you, or "exit" to exit the 
-   program
+** At Any time you can enter "commands" to display the commands available to 
+   you, or "exit" to exit the program
 
 * Use long algebraic notation to move pieces
 * Movement format = starting square, ending square: `b2a3`
@@ -322,8 +395,5 @@ def write_to_json(file_name, data):
     with open(file_name, 'w') as f:
         json.dump(data, f)
     return
-
-
-
 
 main(argv[1:])
