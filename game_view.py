@@ -17,7 +17,9 @@ def main(ip_info):
 
     game_choice = choose_game(user_ip, uname, game_list)
 
-    g = load_game(game_choice)
+    check_game_info(game_choice, uname)
+
+    g = load_game(game_choice, uname)
 
 
 
@@ -183,7 +185,6 @@ def display_games(uname):
 Enter the corresponding number for the game you wish to play
 or '0' to create a new game
     """)
-    print(uname, " display_games first thing") ################################
     i=1
     game_list = ['create']
     user_data = get_json_info('users.json')
@@ -249,6 +250,27 @@ or '0' to create a new game
 
 
 
+def check_game_info(game_dict, uname):
+    """checks game information that uname is participating member of game and
+    if not, adds the game to uname's currentgames and moves game from 
+    waiting for opponent to in progress
+
+    Args:
+        game_dict (dict): game information
+        uname (string): user name of player
+    """
+    if game_dict['white'] == uname or game_dict['black'] == uname:
+        return
+    elif game_dict['black'] == None:
+        game_dict['black'] = uname
+        g = game_dict["game_id"]
+        games_data = get_json_info('currentgames.json')
+        games_data['in_progress'][g] = game_dict
+        games_data['wait_for_opponent'].pop(g)
+        write_to_json('currentgames.json', games_data)
+        user_data = get_json_info('users.json')
+        user_data[uname]['currentgames'].append(g)
+        write_to_json('users.json', user_data)
 
 
 
@@ -303,7 +325,7 @@ def create_game(uname):
 
 
 
-def load_game(game_id):
+def load_game(game_id, uname):
     """gets game info using game_id
 
     Args:
@@ -373,6 +395,5 @@ def write_to_json(file_name, data):
     with open(file_name, 'w') as f:
         json.dump(data, f)
     return
-
 
 main(argv[1:])
