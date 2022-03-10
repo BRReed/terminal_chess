@@ -146,6 +146,7 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
     hashed_pw = bcrypt.hash(p1)
     data[uname] = {'hashedpw': hashed_pw, 'currentgames': []}
     write_to_json('users.json', data)
+    return uname
 
 
 def sign_in(user_ip):
@@ -182,6 +183,7 @@ def display_games(uname):
 Enter the corresponding number for the game you wish to play
 or '0' to create a new game
     """)
+    print(uname, " display_games first thing") ################################
     i=1
     game_list = ['create']
     user_data = get_json_info('users.json')
