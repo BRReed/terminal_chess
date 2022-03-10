@@ -17,9 +17,11 @@ def main(ip_info):
 
     game_choice = choose_game(user_ip, uname, game_list)
 
-    check_game_info(game_choice, uname)
+    perspective = check_game_info(game_choice, uname)
 
     g = load_game(game_choice, uname)
+
+    g.c.print_current_state(perspective)
 
 
 
@@ -258,9 +260,13 @@ def check_game_info(game_dict, uname):
     Args:
         game_dict (dict): game information
         uname (string): user name of player
+    Returns:
+        str: perspective of user on selected game
     """
-    if game_dict['white'] == uname or game_dict['black'] == uname:
-        return
+    if game_dict['white'] == uname:
+        return 'white'
+    elif game_dict['black'] == uname:
+        return 'black'
     elif game_dict['black'] == None:
         game_dict['black'] = uname
         g = game_dict["game_id"]
@@ -271,6 +277,10 @@ def check_game_info(game_dict, uname):
         user_data = get_json_info('users.json')
         user_data[uname]['currentgames'].append(g)
         write_to_json('users.json', user_data)
+        return 'black'
+    else:
+        print("Error user not in game")
+    
 
 
 
