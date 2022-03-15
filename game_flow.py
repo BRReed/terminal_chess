@@ -135,7 +135,8 @@ class Game():
         """allows player to call draw"""
         pass
 
-    def get_piece(self, player, piece):
-        """takes player and piece, returns color piece"""
+    def input_parse(self, is_black, text):
+        """Calls method based on player input
+        """
         pass
 

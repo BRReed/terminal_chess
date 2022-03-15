@@ -12,16 +12,22 @@ def main(ip_info):
     welcome_screen()
 
     uname = get_info(user_ip)
+    while True:
 
-    game_list = display_games(uname)
+        game_list = display_games(uname)
 
-    game_choice = choose_game(user_ip, uname, game_list)
+        game_choice = choose_game(user_ip, uname, game_list)
 
-    perspective = check_game_info(game_choice, uname)
+        turn = game_choice['turn']
 
-    g = load_game(game_choice, uname)
+        perspective = check_game_info(game_choice, uname)
 
-    g.c.print_current_state(perspective)
+        g = load_game(game_choice, uname)
+
+        g.c.print_current_state(perspective)
+        if game_choice[turn] == uname:
+            pass
+
 
 
 
