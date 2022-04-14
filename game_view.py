@@ -30,11 +30,21 @@ def main(ip_info):
         # get input
         # check against valid commands and if input[0] is alpha etc
         user_turn = (game_choice[turn] == uname)
+        is_black = (game_choice['black'] == uname)
         if user_turn:
+            valid_commands = ["0-0", "0-0-0", "draw", "(=)", "resign", "xx"]
             print("It's your turn.")
         else:
             print("It's your opponent's turn. You can still draw or resign.")
-        
+            valid_commands = ["draw", "(=)", "resign", "xx"]
+        user_move = input(">")
+        if user_move in valid_commands:
+            # do command
+            pass
+        #elif check_move(user_move): gameflow/input_parse?
+            # confirm input is in a0b1 format
+            # 
+        #    pass
 
 
 
