@@ -12,6 +12,8 @@ def main(ip_info):
     welcome_screen()
 
     uname = get_info(user_ip)
+
+    valid_commands = ["0-0", "0-0-0", "draw", "(=)", "resign", "xx"]
     while True:
 
         game_list = display_games(uname)
@@ -25,8 +27,14 @@ def main(ip_info):
         g = load_game(game_choice, uname)
 
         g.c.print_current_state(perspective)
-        if game_choice[turn] == uname:
-            pass
+        # get input
+        # check against valid commands and if input[0] is alpha etc
+        user_turn = (game_choice[turn] == uname)
+        if user_turn:
+            print("It's your turn.")
+        else:
+            print("It's your opponent's turn. You can still draw or resign.")
+        
 
 
 
