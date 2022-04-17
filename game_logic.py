@@ -416,7 +416,6 @@ class BoardState():
         alpha_c0 = chess_ranks[index_c0]
         alpha_c2 = chess_ranks[index_c2]
         alpha_coords = f"{alpha_c0}{coords[1]}{alpha_c2}{coords[3]}"
-
         return alpha_coords
 
     def move_piece(self, piece, c_coords, d_coords, board_state):
@@ -895,6 +894,3 @@ class BoardState():
             else:
                 continue
         return False
-
-c = Chess()
-print(c.bs.alpha_coords_to_nums('t3d5'))
