@@ -13,7 +13,6 @@ def main(ip_info):
 
     uname = get_info(user_ip)
 
-    valid_commands = ["0-0", "0-0-0", "draw", "(=)", "resign", "xx"]
     while True:
 
         game_list = display_games(uname)
@@ -27,8 +26,6 @@ def main(ip_info):
         g = load_game(game_choice, uname)
 
         g.c.print_current_state(perspective)
-        # get input
-        # check against valid commands and if input[0] is alpha etc
         user_turn = (game_choice[turn] == uname)
         is_black = (game_choice['black'] == uname)
         if user_turn:
@@ -41,7 +38,9 @@ def main(ip_info):
         if user_move in valid_commands:
             print(f"OH SHIT THIS WORKS {user_move}")
         else:
-            print(f"this didnt work {user_move}")
+            pass
+
+            
         #elif check_move(user_move): gameflow/input_parse?
             # confirm input is in a0b1 format
             # 

@@ -2,7 +2,7 @@ import unittest
 from collections import Counter
 from game_logic import Chess
 from game_flow import Game
-import game_view as gv
+# import game_view as gv
 
 
 def reset_board():
@@ -1035,6 +1035,59 @@ class TestCheckPromotion(unittest.TestCase):
     def test_black_false(self):
         check_bool, check_space = c.bs.check_promotion(True, g.c.current_state)
         assert [check_bool, check_space] == [False, '00']
+
+class TestAlphaCoordsToNums(unittest.TestCase):
+
+    def setUp(self):
+        reset_board()
+        reset_game_board()
+    
+    def test_valid_coords(self):
+        assert c.bs.alpha_coords_to_nums("a1b1") == "1121"
+        assert c.bs.alpha_coords_to_nums("b1b1") == "2121"
+        assert c.bs.alpha_coords_to_nums("c1b1") == "3121"
+        assert c.bs.alpha_coords_to_nums("d1b1") == "4121"
+        assert c.bs.alpha_coords_to_nums("e1b1") == "5121"
+        assert c.bs.alpha_coords_to_nums("f1b1") == "6121"
+        assert c.bs.alpha_coords_to_nums("g1b1") == "7121"
+        assert c.bs.alpha_coords_to_nums("h1b1") == "8121"
+        assert c.bs.alpha_coords_to_nums("a1a1") == "1111"
+        assert c.bs.alpha_coords_to_nums("a1c1") == "1131"
+        assert c.bs.alpha_coords_to_nums("a1d1") == "1141"
+        assert c.bs.alpha_coords_to_nums("a1e1") == "1151"
+        assert c.bs.alpha_coords_to_nums("a1f1") == "1161"
+        assert c.bs.alpha_coords_to_nums("a1g1") == "1171"
+        assert c.bs.alpha_coords_to_nums("a1h1") == "1181"
+        assert c.bs.alpha_coords_to_nums("a2b1") == "1221"
+        assert c.bs.alpha_coords_to_nums("a3b1") == "1321"
+        assert c.bs.alpha_coords_to_nums("a4b1") == "1421"
+        assert c.bs.alpha_coords_to_nums("a5b1") == "1521"
+        assert c.bs.alpha_coords_to_nums("a6b1") == "1621"
+        assert c.bs.alpha_coords_to_nums("a7b1") == "1721"
+        assert c.bs.alpha_coords_to_nums("a8b1") == "1821"
+        assert c.bs.alpha_coords_to_nums("a1b2") == "1122"
+        assert c.bs.alpha_coords_to_nums("a1b3") == "1123"
+        assert c.bs.alpha_coords_to_nums("a1b4") == "1124"
+        assert c.bs.alpha_coords_to_nums("a1b5") == "1125"
+        assert c.bs.alpha_coords_to_nums("a1b6") == "1126"
+        assert c.bs.alpha_coords_to_nums("a1b7") == "1127"
+        assert c.bs.alpha_coords_to_nums("a1b8") == "1128"
+
+    def test_invalid_coords(self):
+        assert c.bs.alpha_coords_to_nums("t1b1") == False
+        assert c.bs.alpha_coords_to_nums("adb1") == False
+        assert c.bs.alpha_coords_to_nums("a1bv") == False
+        assert c.bs.alpha_coords_to_nums("31b1") == False
+        assert c.bs.alpha_coords_to_nums("a161") == False
+        assert c.bs.alpha_coords_to_nums("!1b1") == False
+        assert c.bs.alpha_coords_to_nums("a%b1") == False
+    
+    def test_invalid_length(self):
+        assert c.bs.alpha_coords_to_nums("a1b1a") == False
+        assert c.bs.alpha_coords_to_nums("a") == False
+        assert c.bs.alpha_coords_to_nums("a2") == False
+        assert c.bs.alpha_coords_to_nums("a1b") == False
+        assert c.bs.alpha_coords_to_nums("a1b1a3b3") == False
 
 
 # game_view.py tests below

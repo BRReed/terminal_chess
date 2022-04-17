@@ -388,6 +388,37 @@ class BoardState():
         y += shift[1]
         return f'{x}{y}'
 
+    def alpha_coords_to_nums(self, coords):
+        """takes coordinates and changes alphas into equivalent numbers
+        so that: "b3h5" is returned as "2385".
+        If argument does not follow this format return False
+
+        Args:
+            coords (str): 2 coordinates of a chess board "a1b2" 
+
+        Returns:
+            str or bool: False if req. params not met, else coords as all nums
+        """
+        if len(coords) != 4:
+            return False
+        chess_files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+        chess_ranks = ['1', '2', '3', '4', '5', '6', '7', '8']
+        x1 = coords[0]
+        y1 = coords[1]
+        x2 = coords[2]
+        y2 = coords[3]
+        if x1 not in chess_files or x2 not in chess_files:
+            return False
+        if y1 not in chess_ranks or y2 not in chess_ranks:
+            return False
+        index_c0 = chess_files.index(x1)
+        index_c2 = chess_files.index(x2)
+        alpha_c0 = chess_ranks[index_c0]
+        alpha_c2 = chess_ranks[index_c2]
+        alpha_coords = f"{alpha_c0}{coords[1]}{alpha_c2}{coords[3]}"
+
+        return alpha_coords
+
     def move_piece(self, piece, c_coords, d_coords, board_state):
         """Move piece on board
 
@@ -865,3 +896,5 @@ class BoardState():
                 continue
         return False
 
+c = Chess()
+print(c.bs.alpha_coords_to_nums('t3d5'))
