@@ -39,8 +39,9 @@ def main(ip_info):
             valid_commands = ["draw", "(=)", "resign", "xx"]
         user_move = input(">")
         if user_move in valid_commands:
-            # do command
-            pass
+            print(f"OH SHIT THIS WORKS {user_move}")
+        else:
+            print(f"this didnt work {user_move}")
         #elif check_move(user_move): gameflow/input_parse?
             # confirm input is in a0b1 format
             # 
