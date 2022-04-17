@@ -29,15 +29,30 @@ def main(ip_info):
         user_turn = (game_choice[turn] == uname)
         is_black = (game_choice['black'] == uname)
         user_input = input(">")
+
         if not user_turn:
             valid_commands = ["(=)", "draw", "xx", "resign"]
             input_valid = validate_command(g, turn, user_input, valid_commands)
         elif user_turn:
             valid_commands = ["(=)", "draw", "xx", "resign", "0-0", "0-0-0"]
             input_valid = validate_command(g, turn, user_input, valid_commands)
+
         if not input_valid:
-            print("Sorry, but that is not a valid command")
+            print("Sorry, that is not a valid command")
             continue
+        if user_input in ["0-0", "0-0-0"]:
+            if user_input == "0-0":
+                side = "king"
+            if user_input == "0-0-0":
+                side = "queen"
+            valid_castle = g.castle(is_black, side)
+            if not valid_castle:
+                print(f"Castling is not valid in {side}'s direction")
+            elif valid_castle:
+                g.c.print_current_state(perspective)
+                continue
+
+
 
 
 
