@@ -24,12 +24,13 @@ TBD
 
 ## Powershell configure:
 
-* run `intl.cpl` in console
-* click `Administrative` tab
-* click `Change system locale...` button
-* check `Beta: Use Unicode UTF-8` box
-* click `OK`
+* Run `intl.cpl` in console
+* Click `Administrative` tab
+* Click `Change system locale...` button
+* Check `Beta: Use Unicode UTF-8` box
+* Click `OK`
 * Restart machine
 * Once restarted run `Set-ItemProperty HKCU:\Console VirtualTerminalLevel -Type DWORD 1`
-* change default font to `DejaVu Sans Mono`
+* Change default font to `DejaVu Sans Mono`
 * Open a new console for changes to take affect
+* Play
