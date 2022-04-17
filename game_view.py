@@ -28,25 +28,26 @@ def main(ip_info):
         g.c.print_current_state(perspective)
         user_turn = (game_choice[turn] == uname)
         is_black = (game_choice['black'] == uname)
-        if user_turn:
-            valid_commands = ["0-0", "0-0-0", "draw", "(=)", "resign", "xx"]
-            print("It's your turn.")
-        else:
-            print("It's your opponent's turn. You can still draw or resign.")
-            valid_commands = ["draw", "(=)", "resign", "xx"]
-        user_move = input(">")
-        if user_move in valid_commands:
-            print(f"OH SHIT THIS WORKS {user_move}")
-        else:
-            pass
-
-            
-        #elif check_move(user_move): gameflow/input_parse?
-            # confirm input is in a0b1 format
-            # 
-        #    pass
+        user_input = input(">")
+        if not user_turn:
+            valid_commands = ["(=)", "draw", "xx", "resign"]
+            input_valid = validate_command(g, turn, user_input, valid_commands)
+        elif user_turn:
+            valid_commands = ["(=)", "draw", "xx", "resign", "0-0", "0-0-0"]
+            input_valid = validate_command(g, turn, user_input, valid_commands)
+        if not input_valid:
+            print("Sorry, but that is not a valid command")
+            continue
 
 
+
+
+def validate_command(g, user_turn, user_input, valid_commands):
+    if user_input in valid_commands:
+        return True
+    if user_turn:
+        return g.c.bs.alpha_coords_to_nums(user_input)
+    return False
 
 
 
