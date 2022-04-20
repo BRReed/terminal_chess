@@ -52,10 +52,8 @@ def main(ip_info):
                     print(f"Castling is not valid in {side}'s direction")
                     continue
                 elif valid_castle:
-                    #move pieces (helper function to determine spaces pieces move)
                     g.c.print_current_state(perspective)
                     data = get_json_info('currentgames.json')
-                    
                     #open, change game state, change turn, save
                     break
         
