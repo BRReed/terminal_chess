@@ -92,7 +92,6 @@ class Game():
         else:
             self.end_game(True)
 
-
     def castle(self, player, side):
         """allows player to castle
 
@@ -130,6 +129,9 @@ class Game():
                 return self.c.bs.w_king_side_castle
             elif side == 'queen':
                 return self.c.bs.w_queen_side_castle
+
+    def castle_move(self, is_black, side, board_state):
+        pass # is_black true if black, side queen or king str, board_state dic rep of board
 
     def draw(self, player):
         """allows player to call draw"""
