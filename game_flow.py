@@ -92,20 +92,19 @@ class Game():
         else:
             self.end_game(True)
 
-    def castle(self, player, side):
+    def castle(self, is_black, side):
         """allows player to castle
 
         Args:
-            player (dict): user: unique user id, color: unicode black or white
+            is_black (bool): True if player is black, else False
             side (str): 'queen' or 'king'
         Returns:
             bool: True if castling was allowed and completed, else False
         """
-        p_is_black = self.c.bs.is_black(player['color'])
-        if not self.castle_valid(p_is_black, side):
+        if not self.castle_valid(is_black, side):
             return False
-        if self.c.bs.check_castling(p_is_black, side, self.c.current_state):
-            self.c.castle_move(p_is_black, side)
+        if self.c.bs.check_castling(is_black, side, self.c.current_state):
+            self.c.castle_move(is_black, side)
             return True
         else:
             return False
