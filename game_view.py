@@ -28,10 +28,15 @@ def main(ip_info):
         g.c.print_current_state(perspective)
         user_turn = (game_choice[turn] == uname)
         is_black = (game_choice['black'] == uname)
+        if is_black:
+            opponent = game_choice['white']
+        else:
+            opponent = game_choice['black']
         
         while True:
+            move = False
             user_input = get_input(user_ip)
-
+            # add "change game" command to exit out of specific game while loop
             if not user_turn:
                 valid_commands = ["(=)", "draw", "xx", "resign"]
                 input_valid = validate_command(g, turn, user_input, valid_commands)
@@ -53,9 +58,14 @@ def main(ip_info):
                     continue
                 elif valid_castle:
                     g.c.print_current_state(perspective)
-                    data = get_json_info('currentgames.json')
-                    #open, change game state, change turn, save
-                    break
+                    move = True
+            if move == True:
+                data = get_json_info('currentgames.json')
+                data[game_choice['gameState']] = g.c.current_state
+                data[game_choice['turn']] = opponent
+                write_to_json('currentgames.json', data)
+                g.c.print_current_state(perspective)
+                break
         
 
 
