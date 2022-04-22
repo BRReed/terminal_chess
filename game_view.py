@@ -34,25 +34,12 @@ def main(ip_info):
             opponent = game_choice['black']
 
         while True:
-            move = False
             user_input = get_input(user_ip)
-            input_valid = g.input_parse(user_turn, user_input)
+            input_valid, move, msg, = g.input_parse(is_black, user_turn, user_input)
 
             if not input_valid:
-                print("Sorry, that is not a valid command")
+                print(msg)
                 continue
-            if user_input in ["0-0", "0-0-0"]:
-                if user_input == "0-0":
-                    side = "king"
-                if user_input == "0-0-0":
-                    side = "queen"
-                valid_castle = g.castle(is_black, side)
-                if not valid_castle:
-                    print(f"Castling is not valid in {side}'s direction")
-                    continue
-                elif valid_castle:
-                    g.c.print_current_state(perspective)
-                    move = True
             if move == True:
                 data = get_json_info('currentgames.json')
                 data[game_choice['gameState']] = g.c.current_state
