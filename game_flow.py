@@ -133,8 +133,37 @@ class Game():
         """allows player to call draw"""
         pass
 
-    def input_parse(self, is_black, text):
+    def input_parse(self, user_turn, user_input):
         """Calls method based on player input
         """
-        pass
+        if not user_turn:
+            valid_commands = ["(=)", "draw", "xx", "resign", "back"]
+        elif user_turn:
+            valid_commands = ["(=)", "draw", "xx", "resign", "back", "0-0", "0-0-0"]
+        input_valid = self.validate_command(user_turn, user_input, valid_commands)
+        if not input_valid:
+            return False
+        # if input valid parse text
+            
+            
+
+    def validate_command(self, user_turn, user_input, valid_commands):
+        """Returns True if user input is valid, else returns False
+
+        Args:
+            g (cls): instance of a game
+            user_turn (bool): if it is the user's turn True, else False
+            user_input (str): input from user
+            valid_commands (list): list of valid commands aside from coords
+
+        Returns:
+            bool: True if input is valid, else False
+        """
+        if user_input in valid_commands:
+            return True
+        if user_turn:
+            return self.c.bs.alpha_coords_to_nums(user_input)
+        return False
+
+
 
