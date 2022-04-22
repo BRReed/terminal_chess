@@ -35,6 +35,8 @@ def main(ip_info):
 
         while True:
             user_input = get_input(user_ip)
+            if user_input == 'back':
+                break
             input_valid, move, msg, = g.input_parse(is_black, user_turn, user_input)
 
             if not input_valid:
