@@ -133,7 +133,7 @@ class Game():
         """allows player to call draw"""
         pass
 
-    def input_parse(self, user_turn, user_input):
+    def input_parse(self, is_black, user_turn, user_input):
         """Calls method based on player input
         """
         if not user_turn:
@@ -143,6 +143,21 @@ class Game():
         input_valid = self.validate_command(user_turn, user_input, valid_commands)
         if not input_valid:
             return False
+
+        if not user_turn: # everything after this line can only be done when user_turn is True
+            return False, f"You did not enter a valid command command = {user_input}"
+        if user_input in ["0-0", "0-0-0"]:
+            if user_input == "0-0":
+                side = "king"
+            elif user_input == "0-0-0":
+                side = "queen"
+            valid_castle = self.castle(is_black, side)
+            if not valid_castle:
+                return False, False, f"Castling is not valid in {side}'s direction"
+                
+            elif valid_castle:
+                return True, True, f""
+            
         # if input valid parse text
             
             
