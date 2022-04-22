@@ -134,7 +134,18 @@ class Game():
         pass
 
     def input_parse(self, is_black, user_turn, user_input):
-        """Calls method based on player input
+        """Parses user input and checks validity of command
+
+        Args:
+            is_black (bool): True if player is black, else False
+            user_turn (bool): True if it is player's turn, else False
+            user_input (str): input from user
+
+        Returns:
+            bool: if input was valid True, else False
+            bool: if board state or user turn was changed True, else False
+            str: message to print to terminal
+
         """
         if not user_turn:
             valid_commands = ["(=)", "draw", "xx", "resign", "back"]
@@ -142,10 +153,10 @@ class Game():
             valid_commands = ["(=)", "draw", "xx", "resign", "back", "0-0", "0-0-0"]
         input_valid = self.validate_command(user_turn, user_input, valid_commands)
         if not input_valid:
-            return False
+            return False, False, f"You did not enter a valid command. Command = {user_input}"
 
         if not user_turn: # everything after this line can only be done when user_turn is True
-            return False, f"You did not enter a valid command command = {user_input}"
+            return False, False, f"You can not do that until it's your turn. command = {user_input}"
         if user_input in ["0-0", "0-0-0"]:
             if user_input == "0-0":
                 side = "king"
