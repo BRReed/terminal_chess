@@ -32,17 +32,11 @@ def main(ip_info):
             opponent = game_choice['white']
         else:
             opponent = game_choice['black']
-        
+
         while True:
             move = False
             user_input = get_input(user_ip)
-            # add "change game" command to exit out of specific game while loop
-            if not user_turn:
-                valid_commands = ["(=)", "draw", "xx", "resign"]
-                input_valid = validate_command(g, turn, user_input, valid_commands)
-            elif user_turn:
-                valid_commands = ["(=)", "draw", "xx", "resign", "0-0", "0-0-0"]
-                input_valid = validate_command(g, turn, user_input, valid_commands)
+            input_valid = g.input_parse(user_turn, user_input)
 
             if not input_valid:
                 print("Sorry, that is not a valid command")
@@ -67,31 +61,6 @@ def main(ip_info):
                 g.c.print_current_state(perspective)
                 break
         
-
-
-
-
-
-
-def validate_command(g, user_turn, user_input, valid_commands):
-    """Returns True if user input is valid, else returns False
-
-    Args:
-        g (cls): instance of a game
-        user_turn (bool): if it is the user's turn True, else False
-        user_input (str): input from user
-        valid_commands (list): list of valid commands aside from coords
-
-    Returns:
-        bool: True if input is valid, else False
-    """
-    if user_input in valid_commands:
-        return True
-    if user_turn:
-        return g.c.bs.alpha_coords_to_nums(user_input)
-    return False
-
-
 
 def cleanup_ip(ip_info):
     """cleans IP info gained from argv
@@ -420,8 +389,8 @@ def commands():
     """prints commands to terminal
     """
     print("""
-** At Any time you can enter "commands" to display the commands available to 
-   you, or "exit" to exit the program
+** At Any time you can enter `commands` to display the commands available to 
+   you, or `exit` to exit the program
 
 * Use long algebraic notation to move pieces
 * Movement format = starting square, ending square: `b2a3`
@@ -429,6 +398,8 @@ def commands():
 * To request a draw you can enter `draw` or `(=)`. Your opponent will have to 
   accept for the draw to go through
 * To resign enter `resign` or `xx`
+* To choose a different game without making changes to the current game enter 
+  `back`
 """)
 
 
