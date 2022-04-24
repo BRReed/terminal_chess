@@ -21,7 +21,7 @@ def main(ip_info):
 
         turn = game_choice['turn']
 
-        game_id = game_choice[game_id]
+        game_id = game_choice['game_id']
 
         perspective = check_game_info(game_choice, uname)
 
@@ -41,7 +41,8 @@ def main(ip_info):
                 break
             if user_input in ["xx","resign"]: 
                 resign(uname, opponent, game_id)
-                pass
+                print(f"You have resigned from {game_id} against {opponent}")
+                break
             input_valid, move, msg, = g.input_parse(is_black, user_turn, user_input)
 
             if not input_valid:
@@ -397,11 +398,23 @@ def commands():
 """)
 
 def resign(user, opponent, game_id):
-    # open users.json, add win to opponent, loss to user, remove id from list of games of both users
-    # open currentgames.json, pop game from dictionary
-    user_data = get_json_info('users.json')
-    pass
+    """resign from an in progress game
 
+    Args:
+        user (str): name of user resigning
+        opponent (str): name of opponent in game being resigned
+        game_id (str): id of the game being resigned
+    """
+
+    user_data = get_json_info('users.json')
+    user_data[user]["currentgames"].remove(game_id)
+    user_data[opponent]["currentgames"].remove(game_id)
+    write_to_json('users.json', user_data)
+
+    games_data = get_json_info('currentgames.json')
+    games_data["in_progress"].pop(game_id)
+    write_to_json('currentgames.json', games_data)
+    # future: add win to opponent, loss to user
 
 
 def exit_game(user_ip, ban, reason="None"):
