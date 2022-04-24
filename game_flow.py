@@ -85,13 +85,6 @@ class Game():
         """returns list of all possible moves for piece in c_coords"""
         pass
 
-    def resignation(self, player):
-        """allows player to resign"""
-        if self.c.bs.is_black(player['color']):
-            self.end_game(False)
-        else:
-            self.end_game(True)
-
     def castle(self, is_black, side):
         """allows player to castle
 
