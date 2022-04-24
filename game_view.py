@@ -21,6 +21,8 @@ def main(ip_info):
 
         turn = game_choice['turn']
 
+        game_id = game_choice[game_id]
+
         perspective = check_game_info(game_choice, uname)
 
         g = load_game(game_choice, uname)
@@ -37,6 +39,9 @@ def main(ip_info):
             user_input = get_input(user_ip)
             if user_input == 'back':
                 break
+            if user_input in ["xx","resign"]: 
+                resign(uname, opponent, game_id)
+                pass
             input_valid, move, msg, = g.input_parse(is_black, user_turn, user_input)
 
             if not input_valid:
@@ -390,6 +395,12 @@ def commands():
 * To choose a different game without making changes to the current game enter 
   `back`
 """)
+
+def resign(user, opponent, game_id):
+    # open users.json, add win to opponent, loss to user, remove id from list of games of both users
+    # open currentgames.json, pop game from dictionary
+    user_data = get_json_info('users.json')
+    pass
 
 
 
