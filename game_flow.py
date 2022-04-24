@@ -141,9 +141,9 @@ class Game():
 
         """
         if not user_turn:
-            valid_commands = ["(=)", "draw", "xx", "resign", "back"]
+            valid_commands = ["(=)", "draw"]
         elif user_turn:
-            valid_commands = ["(=)", "draw", "xx", "resign", "back", "0-0", "0-0-0"]
+            valid_commands = ["(=)", "draw", "0-0", "0-0-0"]
         input_valid = self.validate_command(user_turn, user_input, valid_commands)
         if not input_valid:
             return False, False, f"You did not enter a valid command. Command = {user_input}"
