@@ -29,11 +29,11 @@ class Game():
         else:
             print("white wins")
 
-    def move(self, player, c_coords, d_coords):
+    def move(self, is_black, c_coords, d_coords):
         """allows player to move piece
 
         Args:
-            player (str): color of player pieces 'white' or 'black'
+            is_black(bool): True if player is black, else False
             c_coords (str): column x row space in chessboard, start coords
             d_coords (str): column x row space in chessboard, end coords
 
@@ -49,14 +49,10 @@ class Game():
         if not self.c.bs.coords_not_equal(c_coords, d_coords):
             return False
 
-        if player == 'black':
-            p_is_black = True
-        else:
-            p_is_black = False
         piece = self.c.current_state[c_coords][2]
         if piece == self.c.bs.empty:
             return False
-        if self.c.bs.is_black(piece) != p_is_black:
+        if self.c.bs.is_black(piece) != is_black:
             return False
 
         temp_board = deepcopy(self.c.current_state)
@@ -64,17 +60,17 @@ class Game():
             temp_board)
         possible_moves = self.c.bs.possible_moves(piece, c_coords,
                                                   self.c.current_state)
-        if self.c.bs.in_check(p_is_black, temp_board):
+        if self.c.bs.in_check(is_black, temp_board):
             return False
         if (self.c.bs.piece_movement(piece, c_coords, d_coords) and
             d_coords in possible_moves):
-            self.c.bs.check_en_passant(p_is_black, c_coords, d_coords,
+            self.c.bs.check_en_passant(is_black, c_coords, d_coords,
                 self.c.current_state)
             self.c.move_piece(piece, c_coords, d_coords)
             self.c.bs.check_castling_valid(self.c.current_state)
-            if self.c.bs.in_check(not p_is_black, self.c.current_state):
-                if self.c.check_mate(not p_is_black, self.c.current_state):
-                    self.end_game(p_is_black)
+            if self.c.bs.in_check(not is_black, self.c.current_state):
+                if self.c.check_mate(not is_black, self.c.current_state):
+                    self.end_game(is_black)
                 else:
                     print('in check') # change to specify player in check
             return True
@@ -161,10 +157,10 @@ class Game():
                 
             elif valid_castle:
                 return True, True, f""
+        if input_valid.isnumeric():
+            pass
             
-        # if input valid parse text
-            
-            
+        
 
     def validate_command(self, user_turn, user_input, valid_commands):
         """Returns True if user input is valid, else returns False
@@ -176,7 +172,8 @@ class Game():
             valid_commands (list): list of valid commands aside from coords
 
         Returns:
-            bool: True if input is valid, else False
+            bool/str: True if input is valid or 4 char str if valid move, 
+            if invalid False
         """
         if user_input in valid_commands:
             return True
