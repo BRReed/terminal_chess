@@ -158,7 +158,10 @@ class Game():
             elif valid_castle:
                 return True, True, f""
         if input_valid.isnumeric():
-            pass
+            c_coords = f"{input_valid[0]}{input_valid[1]}"
+            d_coords = f"{input_valid[2]}{input_valid[3]}"
+            self.move(is_black, c_coords, d_coords)
+            return True, True, f""
             
         
 
