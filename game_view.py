@@ -26,14 +26,19 @@ def main(ip_info):
         perspective = check_game_info(game_choice, uname)
 
         g = load_game(game_choice, uname)
-
+        
         g.c.print_current_state(perspective)
-        user_turn = (game_choice[turn] == uname)
         is_black = (game_choice['black'] == uname)
         if is_black:
             opponent = game_choice['white']
+            op_color = 'white'
+            user_color = 'black'
         else:
             opponent = game_choice['black']
+            op_color = 'black'
+            user_color = 'white'
+        user_turn = (game_choice['turn'] == user_color)
+        game_status = get_game_status(opponent)
 
         while True:
             user_input = get_input(user_ip)
@@ -48,10 +53,10 @@ def main(ip_info):
             if not input_valid:
                 print(msg)
                 continue
-            if move == True:
+            if move == True: # need to check for in progress/currentgames when loading and call correctly
                 data = get_json_info('currentgames.json')
-                data[game_choice['gameState']] = g.c.current_state
-                data[game_choice['turn']] = opponent
+                data[game_status][game_id]['gameState'] = g.c.current_state
+                data[game_status][game_id]['turn'] = op_color
                 write_to_json('currentgames.json', data)
                 g.c.print_current_state(perspective)
                 break
@@ -150,6 +155,20 @@ def get_input(user_ip):
         else:
             break
     return i
+
+def get_game_status(opponent):
+    """if opponent == None return 'wait_for_opponent" else return in_progress
+
+    Args:
+        opponent (str/None): opponents name, else None
+
+    Returns:
+        str: status of game either "wait_for_opponent" or "in_progress"
+    """
+    if opponent == None:
+        return 'wait_for_opponent'
+    else:
+        return 'in_progress'
 
 
 def create_account(user_ip):
@@ -263,7 +282,7 @@ or '0' to create a new game
             elif game['turn'] == opp_color:
                 print(f"{i}. ID: {game['game_id']} vs {opp}. It's {opp}'s turn")
             else:
-                print("Error with user/opp config")
+                print(f"Error with user/opp config")
             i+=1
     for game in games_data['wait_for_opponent']:
         if games_data['wait_for_opponent'][game]['white'] != uname:
@@ -279,6 +298,7 @@ or '0' to create a new game
             elif game['turn'] == 'white':
                 print(f"{i}. ID: {game['game_id']} vs {opp}. {opp} hasn't " +
                 "made their first move.")
+            i+=1
     return game_list
 
 
@@ -300,6 +320,8 @@ def check_game_info(game_dict, uname):
         return 'black'
     elif game_dict['black'] == None:
         game_dict['black'] = uname
+        if game_dict['turn'] == None:
+            game_dict['turn'] = 'black'
         g = game_dict["game_id"]
         games_data = get_json_info('currentgames.json')
         games_data['in_progress'][g] = game_dict
