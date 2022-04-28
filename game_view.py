@@ -53,7 +53,7 @@ def main(ip_info):
             if not input_valid:
                 print(msg)
                 continue
-            if move == True: # need to check for in progress/currentgames when loading and call correctly
+            if move == True:
                 data = get_json_info('currentgames.json')
                 data[game_status][game_id]['gameState'] = g.c.current_state
                 data[game_status][game_id]['turn'] = op_color
@@ -108,6 +108,11 @@ Welcome to
 def get_info(user_ip):
     """start log in or account set up process for user
     
+    Args:
+        user_ip (str):ip of user in string format
+    
+    Returns:
+        str: input from user (their username)
     """
     print("""
 Enter:
@@ -140,6 +145,9 @@ Enter:
 
 def get_input(user_ip):
     """returns string entered by user. if input is "exit" program will exit 
+
+    Args:
+        user_ip (str):ip of user in string format
 
     Returns:
         (str): input from the user
@@ -176,6 +184,9 @@ def create_account(user_ip):
 
     Args:
         user_ip (str): ip of user
+
+    Returns:
+        str: input from user (their username)
     """
     print("Please enter your desired username.")
     data = get_json_info('users.json')
@@ -204,6 +215,14 @@ INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
 
 
 def sign_in(user_ip):
+    """Allows user to sign in
+
+    Args:
+        user_ip (str): ip of user
+
+    Returns:
+        str: input from user (their username)
+    """
     print("Please enter your username.")
     data = get_json_info('users.json')
     while True:
@@ -368,6 +387,9 @@ def create_game(uname):
 
     Args:
         uname (str): users name
+
+    Returns:
+        str: Game ID number
     """
     g = Game()
     new_game = g.create_new_game()
@@ -437,6 +459,24 @@ def resign(user, opponent, game_id):
     games_data["in_progress"].pop(game_id)
     write_to_json('currentgames.json', games_data)
     # future: add win to opponent, loss to user
+
+def end_game(winner, loser, game_id):
+    """resign from an in progress game
+
+    Args:
+        user (str): name of user resigning
+        opponent (str): name of opponent in game being resigned
+        game_id (str): id of the game being resigned
+    """
+    user_data = get_json_info('users.json')
+    user_data[winner]["currentgames"].remove(game_id)
+    user_data[loser]["currentgames"].remove(game_id)
+    write_to_json('users.json', user_data)
+
+    games_data = get_json_info('currentgames.json')
+    games_data["in_progress"].pop(game_id)
+    write_to_json('currentgames.json', games_data)
+    # future: add win to winner, loss to loser
 
 
 def exit_game(user_ip, ban, reason="None"):
