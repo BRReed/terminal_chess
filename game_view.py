@@ -50,7 +50,7 @@ def main(ip_info):
                 break
             input_valid, move, msg, = g.input_parse(is_black, user_turn, user_input)
 
-            if not input_valid:
+            if not input_valid or not move:
                 print(msg)
                 continue
             if move == True:
@@ -451,12 +451,17 @@ def end_game(winner, loser, game_id):
         game_id (str): id of the game being removed
     """
     user_data = get_json_info('users.json')
-    user_data[winner]["currentgames"].remove(game_id)
-    user_data[loser]["currentgames"].remove(game_id)
+    if winner != None:
+        user_data[winner]["currentgames"].remove(game_id)
+    if loser != None:
+        user_data[loser]["currentgames"].remove(game_id)
     write_to_json('users.json', user_data)
 
     games_data = get_json_info('currentgames.json')
-    games_data["in_progress"].pop(game_id)
+    if winner != None and loser != None:
+        games_data["in_progress"].pop(game_id)
+    else:
+        games_data["wait_for_opponent"].pop(game_id)
     write_to_json('currentgames.json', games_data)
     # future: add win to winner, loss to loser
 
