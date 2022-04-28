@@ -18,17 +18,6 @@ class Game():
         self.p1 = player1
         self.p2 = player2
 
-    def end_game(self, winner):
-        """ends current game
-        Args:
-            winner: (bool): True if winner is black, else False
-
-        """
-        if winner:
-            print("black wins")
-        else:
-            print("white wins")
-
     def move(self, is_black, c_coords, d_coords):
         """allows player to move piece
 
