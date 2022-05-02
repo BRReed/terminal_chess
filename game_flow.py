@@ -49,7 +49,7 @@ class Game():
             temp_board)
         possible_moves = self.c.bs.possible_moves(piece, c_coords,
                                                   self.c.current_state)
-        if self.c.bs.in_check(is_black, temp_board): ##########################
+        if self.c.bs.in_check(is_black, temp_board):
             return False
         if (self.c.bs.piece_movement(piece, c_coords, d_coords) and
             d_coords in possible_moves):
@@ -59,9 +59,9 @@ class Game():
             self.c.bs.check_castling_valid(self.c.current_state)
             if self.c.bs.in_check(not is_black, self.c.current_state):
                 if self.c.check_mate(not is_black, self.c.current_state):
-                    return "END GAME" ###############
+                    return True
                 else:
-                    print('in check') # change to specify player in check
+                    print('Opponent in check')
             return True
         else:
             return False
