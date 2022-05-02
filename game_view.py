@@ -59,6 +59,9 @@ def main(ip_info):
                 data[game_status][game_id]['turn'] = op_color
                 write_to_json('currentgames.json', data)
                 g.c.print_current_state(perspective)
+                if g.c.check_mate(not is_black, g.c.current_state):
+                    print("Check mate! You won!")
+                    end_game(opponent, uname, game_id)
                 break
         
 
