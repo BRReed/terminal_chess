@@ -869,6 +869,9 @@ class BoardState():
             z += '    H  G  F  E  D  C  B  A '
         print(z)
 
+    def check_stalemate(self, is_black, board_state):
+        pass
+
     def block_check(self, is_black, board_state):
         """check if friendly piece of king under attack can block
 
