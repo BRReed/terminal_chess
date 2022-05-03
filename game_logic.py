@@ -870,7 +870,13 @@ class BoardState():
         print(z)
 
     def check_stalemate(self, is_black, board_state):
-        pass
+        for space in board_state:
+            if is_black == self.is_black(board_state[space][2]):
+                moves = self.possible_moves(board_state[space][2], space, board_state)
+                if moves:
+                    return False
+        return True
+        
 
     def block_check(self, is_black, board_state):
         """check if friendly piece of king under attack can block
