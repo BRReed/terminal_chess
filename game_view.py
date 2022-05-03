@@ -26,9 +26,9 @@ def main(ip_info):
         perspective = check_game_info(game_choice, uname)
 
         g = load_game(game_choice, uname)
-        
         g.c.print_current_state(perspective)
         is_black = (game_choice['black'] == uname)
+        # g.c.bs.check_stalemate(is_black, g.c.current_state)
         if is_black:
             opponent = game_choice['white']
             op_color = 'white'
@@ -492,10 +492,6 @@ def draw_response(uname, opponent, game_id, user_ip):
         game_data = get_json_info('currentgames.json')
         game_data['in_progress'][game_id]['draw'] = [False, None]
         write_to_json('currentgames.json', game_data)
-
-
-def check_stalemate(uname, game):
-    pass
 
 
 def end_game(winner, loser, game_id):
