@@ -494,7 +494,7 @@ def draw_response(uname, opponent, game_id, user_ip):
         write_to_json('currentgames.json', game_data)
 
 
-def check_stalemate(uname, game_id):
+def check_stalemate(uname, game):
     pass
 
 
