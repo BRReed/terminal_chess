@@ -403,7 +403,8 @@ def create_game(uname):
         "gameState": new_game,
         "white": uname,
         "black": None,
-        "turn": "white"}
+        "turn": "white",
+        "draw": [False, None]}
     games_data["next_id"] = game_id + 1
     write_to_json('currentgames.json', games_data)
     user_games_data = get_json_info('users.json')
