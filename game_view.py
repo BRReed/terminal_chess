@@ -39,6 +39,10 @@ def main(ip_info):
             user_color = 'white'
         user_turn = (game_choice['turn'] == user_color)
         game_status = get_game_status(opponent)
+        if game_choice['draw'][0] == True and game_choice['draw'][1] == uname:
+            draw_response(uname, opponent, game_id, user_ip)
+            continue
+        
 
         while True:
             user_input = get_input(user_ip)
@@ -47,6 +51,9 @@ def main(ip_info):
             if user_input in ["xx","resign"]: 
                 end_game(opponent, uname, game_id)
                 print(f"You have resigned from {game_id} against {opponent}")
+                break
+            if user_input in ['(=)', 'draw']:
+                draw_request(uname, opponent, game_id)
                 break
             input_valid, move, msg, = g.input_parse(is_black, user_turn, user_input)
 
@@ -444,6 +451,47 @@ def commands():
 * To choose a different game without making changes to the current game enter 
   `back`
 """)
+
+
+def draw_request(uname, opponent, game_id):
+    """requests draw by editing draw key in game_id to [True, opponent]
+
+    Args:
+        uname (str): user name of user requesting draw
+        opponent (str): user name of opponent of uname
+        game_id (str): id of the game
+    """
+    if opponent == None:
+        print("No opponent. Please resign to end game")
+        return
+    game_data = get_json_info('currentgames.json')
+    game_data['in_progress'][game_id]['draw'] = [True, opponent]
+    write_to_json('currentgames.json', game_data)
+
+
+def draw_response(uname, opponent, game_id, user_ip):
+    """processes response to a draw request, removing game if draw is True, 
+       editing draw key in game_id back to [False, None] if draw is False
+
+    Args:
+        uname (str): user name of user responding to draw request
+        opponent (str): user name of user that made the request
+        game_id (str): id of the game
+        user_ip (str): ip of user
+    """
+    print(f"{opponent} has requested a draw. Enter '1' for yes, and '2' for no")
+    while True:
+        user_input = get_input(user_ip)
+        if user_input not in ['1', '2']:
+            print("You must enter '1' or '2'")
+            continue
+        break
+    if user_input == '1':
+        end_game(uname, opponent, game_id)
+    elif user_input == '2':
+        game_data = get_json_info('currentgames.json')
+        game_data['in_progress'][game_id]['draw'] = [False, None]
+        write_to_json('currentgames.json', game_data)
 
 
 def end_game(winner, loser, game_id):
