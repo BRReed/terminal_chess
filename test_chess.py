@@ -920,48 +920,53 @@ class TestMove(unittest.TestCase):
         reset_board()
 
     def test_queen_side_white_knight_to_13(self):
-        g.move('white', '21', '13')
+        is_black = False
+        g.move(is_black, '21', '13')
         self.assertTrue(c.bs.is_empty('21', g.c.current_state))
         self.assertFalse(c.bs.is_empty('13', g.c.current_state))
-        wn = find_pieces(c.bs.wn, False, g.c.current_state)
+        wn = find_pieces(c.bs.wn, is_black, g.c.current_state)
         assert '13' in wn
         assert '21' not in wn
 
     def test_queen_side_white_knight_to_33(self):
-        g.move('white', '21', '33')
+        is_black = False
+        g.move(is_black, '21', '33')
         self.assertTrue(c.bs.is_empty('21', g.c.current_state))
         self.assertFalse(c.bs.is_empty('33', g.c.current_state))
-        wn = find_pieces(c.bs.wn, False, g.c.current_state)
+        wn = find_pieces(c.bs.wn, is_black, g.c.current_state)
         assert '33' in wn
         assert '21' not in wn
 
     def test_king_side_white_knight_to_83(self):
-        g.move('white', '71', '83')
+        is_black = False
+        g.move(is_black, '71', '83')
         self.assertTrue(c.bs.is_empty('71', g.c.current_state))
         self.assertFalse(c.bs.is_empty('83', g.c.current_state))
-        wn = find_pieces(c.bs.wn, False, g.c.current_state)
+        wn = find_pieces(c.bs.wn, is_black, g.c.current_state)
         assert '83' in wn
         assert '71' not in wn
 
     def test_king_side_white_knight_to_63(self):
-        g.move('white', '71', '63')
+        is_black = False
+        g.move(is_black, '71', '63')
         self.assertTrue(c.bs.is_empty('71', g.c.current_state))
         self.assertFalse(c.bs.is_empty('63', g.c.current_state))
-        wn = find_pieces(c.bs.wn, False, g.c.current_state)
+        wn = find_pieces(c.bs.wn, is_black, g.c.current_state)
         assert '63' in wn
         assert '71' not in wn
 
     def test_queen_side_black_knight(self):
-        g.move('black', '28', '36')
+        is_black = True
+        g.move(is_black, '28', '36')
         bn = find_pieces(c.bs.bn, True, g.c.current_state)
         assert '36' in bn
-        g.move('black', '36', '15')
+        g.move(is_black, '36', '15')
         bn = find_pieces(c.bs.bn, True, g.c.current_state)
         assert '15' in bn
-        g.move('black', '15', '34')
+        g.move(is_black, '15', '34')
         bn = find_pieces(c.bs.bn, True, g.c.current_state)
         assert '34' in bn
-        g.move('black', '34', '42')
+        g.move(is_black, '34', '42')
         bn = find_pieces(c.bs.bn, True, g.c.current_state)
         assert '42' in bn
         past_spaces = ['28', '36', '15', '34']
@@ -970,32 +975,35 @@ class TestMove(unittest.TestCase):
         assert '42' not in wp
 
     def test_queen_side_white_bishop(self):
-        g.move('white', '22', '23')
+        is_black = False
+        g.move(is_black, '22', '23')
         self.assertTrue(c.bs.is_empty('22', g.c.current_state))
         self.assertFalse(c.bs.is_empty('23', g.c.current_state))
-        g.move('white', '31', '13')
+        g.move(is_black, '31', '13')
         self.assertTrue(c.bs.is_empty('31', g.c.current_state))
-        g.move('white', '13', '57')
+        g.move(is_black, '13', '57')
         wb = find_pieces(c.bs.wb, False, g.c.current_state)
         bp = find_pieces(c.bs.bp, True, g.c.current_state)
         assert '13' not in wb
         assert '57' not in bp
 
     def test_black_side_queen(self):
-        g.move('black', '47', '45')
-        g.move('black', '48', '46')
-        g.move('black', '46', '76')
-        g.move('black', '76', '32')
+        is_black = True
+        g.move(True, '47', '45')
+        g.move(True, '48', '46')
+        g.move(True, '46', '76')
+        g.move(True, '76', '32')
         bq = find_pieces(c.bs.bq, True, g.c.current_state)
         assert '32' in bq
         past_spaces = ['47', '45', '48', '46', '76']
         assert not any(space in past_spaces for space in bq)
 
     def test_king_side_black_rook(self):
-        g.move('black', '87', '85')
-        g.move('black', '88', '86')
-        g.move('black', '86', '36')
-        g.move('black', '36', '32')
+        is_black = True
+        g.move(is_black, '87', '85')
+        g.move(is_black, '88', '86')
+        g.move(is_black, '86', '36')
+        g.move(is_black, '36', '32')
         br = find_pieces(c.bs.br, True, g.c.current_state)
         assert '32' in br
         past_spaces = ['88', '86', '36']
@@ -1010,21 +1018,23 @@ class TestCheckPromotion(unittest.TestCase):
         reset_game_board()
     
     def test_black_pawn_11(self):
-        g.move('black', '17', '15')
-        g.move('black', '15', '14')
-        g.move('black', '14', '13')
-        g.move('black', '13', '22')
-        g.move('black', '22', '11')
+        is_black = True
+        g.move(is_black, '17', '15')
+        g.move(is_black, '15', '14')
+        g.move(is_black, '14', '13')
+        g.move(is_black, '13', '22')
+        g.move(is_black, '22', '11')
         check_bool, check_space = c.bs.check_promotion(True, g.c.current_state)
         assert [check_bool, check_space] == [True, '11']
 
     def test_white_pawn_78(self):
-        g.move('white', '52', '53')
-        g.move('white', '53', '54')
-        g.move('white', '54', '55')
-        g.move('white', '55', '56')
-        g.move('white', '56', '67')
-        g.move('white', '67', '78')
+        is_black = False
+        g.move(is_black, '52', '53')
+        g.move(is_black, '53', '54')
+        g.move(is_black, '54', '55')
+        g.move(is_black, '55', '56')
+        g.move(is_black, '56', '67')
+        g.move(is_black, '67', '78')
         check_bool, check_space = c.bs.check_promotion(False, g.c.current_state)
         assert [check_bool, check_space] == [True, '78']
 
