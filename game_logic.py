@@ -870,12 +870,14 @@ class BoardState():
         print(z)
 
     def check_stalemate(self, is_black, board_state):
-        for space in board_state:
-            if is_black == self.is_black(board_state[space][2]):
-                moves = self.possible_moves(board_state[space][2], space, board_state)
-                if moves:
-                    return False
-        return True
+        #find is_black king, check king_moves. check all opponent moves if opponent move in king_moves list pop from list
+        # if king_moves list empty stalemate is true
+        if is_black:
+            king = self.bk
+        else:
+            king = self.wk
+        space = self.find_piece(king, is_black, board_state)
+        king_moves = self.possible_moves(king, space, board_state)
         
 
     def block_check(self, is_black, board_state):
