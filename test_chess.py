@@ -1105,41 +1105,54 @@ class TestCheckStaleMate(unittest.TestCase):
         reset_board()
         reset_game_board()
 
-    def test_stalemate_true(self):
-        
-        is_black = False
-        g.move(is_black, '32', '33')
-        g.move(is_black, '41', '14')
-        g.move(is_black, '14', '17')
-        g.move(is_black, '17', '18')
-        g.move(is_black, '18', '28')
-        g.move(is_black, '28', '38')
-        g.move(is_black, '38', '27')
-        g.move(is_black, '27', '37')
-        g.move(is_black, '37', '47')
-        g.move(is_black, '47', '57')
-        g.move(is_black, '57', '67')
-        g.move(is_black, '67', '77')
-        g.move(is_black, '77', '78')
-        g.move(is_black, '78', '68')
-        g.move(is_black, '68', '88')
-        g.move(is_black, '88', '87')
-        g.move(is_black, '87', '47')
-        g.move(is_black, '47', '48')
-        g.move(is_black, '48', '43')
-        g.move(is_black, '52', '53')
-        g.move(is_black, '51', '52')
-        g.move(is_black, '53', '54')
-        g.move(is_black, '54', '55')
-        g.move(is_black, '55', '56')
-        g.move(is_black, '56', '57')
-        g.move(is_black, '52', '53')
-        g.move(is_black, '53', '54')
-        g.move(is_black, '54', '55')
-        g.move(is_black, '55', '56')
-        g.c.print_current_state('white')
-        assert g.c.bs.check_stalemate(True, g.c.current_state) == True
+    def test_stalemate_true_1(self):
+        is_black = True
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.bk, '11', '58')
+        g.c.move_piece(g.c.bs.wp, '11', '57')
+        g.c.move_piece(g.c.bs.wk, '11', '56')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == True
     
+    def test_stalemate_true_2(self):
+        is_black = False
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.bk, '64', '65')
+        g.c.move_piece(g.c.bs.wp, '83', '84')
+        g.c.move_piece(g.c.bs.wk, '86', '85')
+        g.c.move_piece(g.c.bs.bp, '67', '66')
+        g.c.move_piece(g.c.bs.bp, '78', '77')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == True
+
+    def test_stalemate_true_3(self):
+        is_black = False
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.bk, '11', '65')
+        g.c.move_piece(g.c.bs.bp, '11', '64')
+        g.c.move_piece(g.c.bs.br, '11', '22')
+        g.c.move_piece(g.c.bs.wk, '11', '63')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == True
+
+    def test_stalemate_false_1(self):
+        is_black = False
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == False
+
+    def test_stalemate_false_2(self):
+        is_black = True
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.bk, '11', '65')
+        g.c.move_piece(g.c.bs.bp, '11', '64')
+        g.c.move_piece(g.c.bs.br, '11', '22')
+        g.c.move_piece(g.c.bs.wk, '11', '63')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == False
+
 
 # game_view.py tests below
 
