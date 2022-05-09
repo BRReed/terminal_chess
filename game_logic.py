@@ -893,7 +893,6 @@ class BoardState():
             elif self.is_black(piece) == is_black:
                 moves = self.possible_moves(piece, space, board_state)
             if moves:
-                print(moves)
                 return False
 
         king_moves = self.possible_moves(king, king_space, board_state)
