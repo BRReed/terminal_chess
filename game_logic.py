@@ -870,15 +870,41 @@ class BoardState():
         print(z)
 
     def check_stalemate(self, is_black, board_state):
-        #find is_black king, check king_moves. check all opponent moves if opponent move in king_moves list pop from list
-        # if king_moves list empty stalemate is true
+        """check if board_state is in stalemate
+
+        Args:
+            is_black (bool): if player to move is_black True, else False
+            board_state (dict): representation of a chess board
+
+        Returns:
+            bool: True if board in a state of stalemate, else False
+        """
         if is_black:
             king = self.bk
         else:
             king = self.wk
-        space = self.find_piece(king, is_black, board_state)
-        king_moves = self.possible_moves(king, space, board_state)
-        
+        for space in board_state:
+            piece = board_state[space][2]
+            if piece == king:
+                king_space = space
+                continue
+            if self.is_black(piece) != is_black:
+                continue
+            elif self.is_black(piece) == is_black:
+                moves = self.possible_moves(piece, space, board_state)
+            if moves:
+                print(moves)
+                return False
+
+        king_moves = self.possible_moves(king, king_space, board_state)
+        for move in king_moves:
+            temp_board = deepcopy(board_state)
+            temp_board = self.move_piece(king, king_space, move, temp_board)
+            if not self.in_check(is_black, temp_board):
+                return False
+            else:
+                continue
+        return True
 
     def block_check(self, is_black, board_state):
         """check if friendly piece of king under attack can block
