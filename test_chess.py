@@ -1099,6 +1099,47 @@ class TestAlphaCoordsToNums(unittest.TestCase):
         assert c.bs.alpha_coords_to_nums("a1b") == False
         assert c.bs.alpha_coords_to_nums("a1b1a3b3") == False
 
+class TestCheckStaleMate(unittest.TestCase):
+
+    def setUp(self):
+        reset_board()
+        reset_game_board()
+
+    def test_stalemate_true(self):
+        
+        is_black = False
+        g.move(is_black, '32', '33')
+        g.move(is_black, '41', '14')
+        g.move(is_black, '14', '17')
+        g.move(is_black, '17', '18')
+        g.move(is_black, '18', '28')
+        g.move(is_black, '28', '38')
+        g.move(is_black, '38', '27')
+        g.move(is_black, '27', '37')
+        g.move(is_black, '37', '47')
+        g.move(is_black, '47', '57')
+        g.move(is_black, '57', '67')
+        g.move(is_black, '67', '77')
+        g.move(is_black, '77', '78')
+        g.move(is_black, '78', '68')
+        g.move(is_black, '68', '88')
+        g.move(is_black, '88', '87')
+        g.move(is_black, '87', '47')
+        g.move(is_black, '47', '48')
+        g.move(is_black, '48', '43')
+        g.move(is_black, '52', '53')
+        g.move(is_black, '51', '52')
+        g.move(is_black, '53', '54')
+        g.move(is_black, '54', '55')
+        g.move(is_black, '55', '56')
+        g.move(is_black, '56', '57')
+        g.move(is_black, '52', '53')
+        g.move(is_black, '53', '54')
+        g.move(is_black, '54', '55')
+        g.move(is_black, '55', '56')
+        g.c.print_current_state('white')
+        assert g.c.bs.check_stalemate(True, g.c.current_state) == True
+    
 
 # game_view.py tests below
 
