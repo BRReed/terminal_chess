@@ -1138,6 +1138,25 @@ class TestCheckStaleMate(unittest.TestCase):
         g.c.move_piece(g.c.bs.wk, '11', '63')
         assert g.c.bs.check_stalemate(is_black, g.c.current_state) == True
 
+    def test_stalemate_true_4(self):
+        is_black = True
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.br, '11', '88')
+        g.c.move_piece(g.c.bs.bn, '11', '78')
+        g.c.move_piece(g.c.bs.bb, '11', '68')
+        g.c.move_piece(g.c.bs.bq, '11', '87')
+        g.c.move_piece(g.c.bs.bp, '11', '77')
+        g.c.move_piece(g.c.bs.bp, '11', '57')
+        g.c.move_piece(g.c.bs.br, '11', '86')
+        g.c.move_piece(g.c.bs.bk, '11', '76')
+        g.c.move_piece(g.c.bs.bp, '11', '66')
+        g.c.move_piece(g.c.bs.wq, '11', '56')
+        g.c.move_piece(g.c.bs.bp, '11', '85')
+        g.c.move_piece(g.c.bs.wp, '11', '84')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == True
+
     def test_stalemate_false_1(self):
         is_black = False
         assert g.c.bs.check_stalemate(is_black, g.c.current_state) == False
