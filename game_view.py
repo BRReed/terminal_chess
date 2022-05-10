@@ -16,19 +16,17 @@ def main(ip_info):
     while True:
 
         game_list = display_games(uname)
-
         game_choice = choose_game(user_ip, uname, game_list)
-
+        if game_choice == False:
+            continue
         turn = game_choice['turn']
 
         game_id = game_choice['game_id']
 
         perspective = check_game_info(game_choice, uname)
-
         g = load_game(game_choice, uname)
         g.c.print_current_state(perspective)
         is_black = (game_choice['black'] == uname)
-        # g.c.bs.check_stalemate(is_black, g.c.current_state)
         if is_black:
             opponent = game_choice['white']
             op_color = 'white'
@@ -42,9 +40,9 @@ def main(ip_info):
         if game_choice['draw'][0] == True and game_choice['draw'][1] == uname:
             draw_response(uname, opponent, game_id, user_ip)
             continue
-        
 
         while True:
+
             user_input = get_input(user_ip)
             if user_input == 'back':
                 break
@@ -380,10 +378,14 @@ def choose_game(user_ip, uname, game_list):
 
     Returns:
         dict: game_id the user chose
+        False: if user wants to refresh list
     """
     i = len(game_list)
     while True:
+        print("Enter 'r' or 'refresh' to update games list")
         game_choice = get_input(user_ip)
+        if game_choice in ['r', 'refresh']:
+            return False
         if game_choice.isnumeric() and int(game_choice) <= (i-1):
             if int(game_choice) == 0:
                 new_id = create_game(uname)
