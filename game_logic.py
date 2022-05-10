@@ -892,8 +892,11 @@ class BoardState():
                 continue
             elif self.is_black(piece) == is_black:
                 moves = self.possible_moves(piece, space, board_state)
-            if moves:
-                return False
+            for move in moves:
+                temp_board = deepcopy(board_state)
+                temp_board = self.move_piece(piece, space, move, temp_board)
+                if not self.in_check(is_black, temp_board):
+                    return False
 
         king_moves = self.possible_moves(king, king_space, board_state)
         for move in king_moves:
