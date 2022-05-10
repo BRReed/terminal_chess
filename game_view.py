@@ -66,11 +66,15 @@ def main(ip_info):
                 data[game_status][game_id]['turn'] = op_color
                 write_to_json('currentgames.json', data)
                 g.c.print_current_state(perspective)
-                if g.c.check_mate(not is_black, g.c.current_state):
+                if g.c.check_mate((not is_black), g.c.current_state):
                     print("Check mate! You won!")
                     end_game(opponent, uname, game_id)
+                print(g.c.bs.check_stalemate((not is_black), g.c.current_state), "stale_mate check")
+                if g.c.bs.check_stalemate((not is_black), g.c.current_state):
+                    print("Stalemate! This game is a draw.")
+                    end_game(opponent, uname, game_id)
                 break
-        
+
 
 def cleanup_ip(ip_info):
     """cleans IP info gained from argv
