@@ -721,6 +721,7 @@ class BoardState():
                          board
             piece (str): accepts queen, rook, bishop, knight
             board_state (dict): state of chess board
+        Returns (dict): modified board_state
         """
         if is_black:
             if piece == 'queen':
@@ -740,6 +741,7 @@ class BoardState():
                 board_state[space][2] = self.wb
             elif piece == 'knight':
                 board_state[space][2] = self.wn
+        return board_state
 
 
     def check_castling(self, is_black, side, board_state):
