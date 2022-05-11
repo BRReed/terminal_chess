@@ -2,7 +2,7 @@ import unittest
 from collections import Counter
 from game_logic import Chess
 from game_flow import Game
-import game_view as gv
+# import game_view as gv
 
 
 def reset_board():
@@ -920,48 +920,53 @@ class TestMove(unittest.TestCase):
         reset_board()
 
     def test_queen_side_white_knight_to_13(self):
-        g.move('white', '21', '13')
+        is_black = False
+        g.move(is_black, '21', '13')
         self.assertTrue(c.bs.is_empty('21', g.c.current_state))
         self.assertFalse(c.bs.is_empty('13', g.c.current_state))
-        wn = find_pieces(c.bs.wn, False, g.c.current_state)
+        wn = find_pieces(c.bs.wn, is_black, g.c.current_state)
         assert '13' in wn
         assert '21' not in wn
 
     def test_queen_side_white_knight_to_33(self):
-        g.move('white', '21', '33')
+        is_black = False
+        g.move(is_black, '21', '33')
         self.assertTrue(c.bs.is_empty('21', g.c.current_state))
         self.assertFalse(c.bs.is_empty('33', g.c.current_state))
-        wn = find_pieces(c.bs.wn, False, g.c.current_state)
+        wn = find_pieces(c.bs.wn, is_black, g.c.current_state)
         assert '33' in wn
         assert '21' not in wn
 
     def test_king_side_white_knight_to_83(self):
-        g.move('white', '71', '83')
+        is_black = False
+        g.move(is_black, '71', '83')
         self.assertTrue(c.bs.is_empty('71', g.c.current_state))
         self.assertFalse(c.bs.is_empty('83', g.c.current_state))
-        wn = find_pieces(c.bs.wn, False, g.c.current_state)
+        wn = find_pieces(c.bs.wn, is_black, g.c.current_state)
         assert '83' in wn
         assert '71' not in wn
 
     def test_king_side_white_knight_to_63(self):
-        g.move('white', '71', '63')
+        is_black = False
+        g.move(is_black, '71', '63')
         self.assertTrue(c.bs.is_empty('71', g.c.current_state))
         self.assertFalse(c.bs.is_empty('63', g.c.current_state))
-        wn = find_pieces(c.bs.wn, False, g.c.current_state)
+        wn = find_pieces(c.bs.wn, is_black, g.c.current_state)
         assert '63' in wn
         assert '71' not in wn
 
     def test_queen_side_black_knight(self):
-        g.move('black', '28', '36')
+        is_black = True
+        g.move(is_black, '28', '36')
         bn = find_pieces(c.bs.bn, True, g.c.current_state)
         assert '36' in bn
-        g.move('black', '36', '15')
+        g.move(is_black, '36', '15')
         bn = find_pieces(c.bs.bn, True, g.c.current_state)
         assert '15' in bn
-        g.move('black', '15', '34')
+        g.move(is_black, '15', '34')
         bn = find_pieces(c.bs.bn, True, g.c.current_state)
         assert '34' in bn
-        g.move('black', '34', '42')
+        g.move(is_black, '34', '42')
         bn = find_pieces(c.bs.bn, True, g.c.current_state)
         assert '42' in bn
         past_spaces = ['28', '36', '15', '34']
@@ -970,32 +975,35 @@ class TestMove(unittest.TestCase):
         assert '42' not in wp
 
     def test_queen_side_white_bishop(self):
-        g.move('white', '22', '23')
+        is_black = False
+        g.move(is_black, '22', '23')
         self.assertTrue(c.bs.is_empty('22', g.c.current_state))
         self.assertFalse(c.bs.is_empty('23', g.c.current_state))
-        g.move('white', '31', '13')
+        g.move(is_black, '31', '13')
         self.assertTrue(c.bs.is_empty('31', g.c.current_state))
-        g.move('white', '13', '57')
+        g.move(is_black, '13', '57')
         wb = find_pieces(c.bs.wb, False, g.c.current_state)
         bp = find_pieces(c.bs.bp, True, g.c.current_state)
         assert '13' not in wb
         assert '57' not in bp
 
     def test_black_side_queen(self):
-        g.move('black', '47', '45')
-        g.move('black', '48', '46')
-        g.move('black', '46', '76')
-        g.move('black', '76', '32')
+        is_black = True
+        g.move(True, '47', '45')
+        g.move(True, '48', '46')
+        g.move(True, '46', '76')
+        g.move(True, '76', '32')
         bq = find_pieces(c.bs.bq, True, g.c.current_state)
         assert '32' in bq
         past_spaces = ['47', '45', '48', '46', '76']
         assert not any(space in past_spaces for space in bq)
 
     def test_king_side_black_rook(self):
-        g.move('black', '87', '85')
-        g.move('black', '88', '86')
-        g.move('black', '86', '36')
-        g.move('black', '36', '32')
+        is_black = True
+        g.move(is_black, '87', '85')
+        g.move(is_black, '88', '86')
+        g.move(is_black, '86', '36')
+        g.move(is_black, '36', '32')
         br = find_pieces(c.bs.br, True, g.c.current_state)
         assert '32' in br
         past_spaces = ['88', '86', '36']
@@ -1010,21 +1018,23 @@ class TestCheckPromotion(unittest.TestCase):
         reset_game_board()
     
     def test_black_pawn_11(self):
-        g.move('black', '17', '15')
-        g.move('black', '15', '14')
-        g.move('black', '14', '13')
-        g.move('black', '13', '22')
-        g.move('black', '22', '11')
+        is_black = True
+        g.move(is_black, '17', '15')
+        g.move(is_black, '15', '14')
+        g.move(is_black, '14', '13')
+        g.move(is_black, '13', '22')
+        g.move(is_black, '22', '11')
         check_bool, check_space = c.bs.check_promotion(True, g.c.current_state)
         assert [check_bool, check_space] == [True, '11']
 
     def test_white_pawn_78(self):
-        g.move('white', '52', '53')
-        g.move('white', '53', '54')
-        g.move('white', '54', '55')
-        g.move('white', '55', '56')
-        g.move('white', '56', '67')
-        g.move('white', '67', '78')
+        is_black = False
+        g.move(is_black, '52', '53')
+        g.move(is_black, '53', '54')
+        g.move(is_black, '54', '55')
+        g.move(is_black, '55', '56')
+        g.move(is_black, '56', '67')
+        g.move(is_black, '67', '78')
         check_bool, check_space = c.bs.check_promotion(False, g.c.current_state)
         assert [check_bool, check_space] == [True, '78']
 
@@ -1035,6 +1045,132 @@ class TestCheckPromotion(unittest.TestCase):
     def test_black_false(self):
         check_bool, check_space = c.bs.check_promotion(True, g.c.current_state)
         assert [check_bool, check_space] == [False, '00']
+
+class TestAlphaCoordsToNums(unittest.TestCase):
+
+    def setUp(self):
+        reset_board()
+        reset_game_board()
+    
+    def test_valid_coords(self):
+        assert c.bs.alpha_coords_to_nums("a1b1") == "1121"
+        assert c.bs.alpha_coords_to_nums("b1b1") == "2121"
+        assert c.bs.alpha_coords_to_nums("c1b1") == "3121"
+        assert c.bs.alpha_coords_to_nums("d1b1") == "4121"
+        assert c.bs.alpha_coords_to_nums("e1b1") == "5121"
+        assert c.bs.alpha_coords_to_nums("f1b1") == "6121"
+        assert c.bs.alpha_coords_to_nums("g1b1") == "7121"
+        assert c.bs.alpha_coords_to_nums("h1b1") == "8121"
+        assert c.bs.alpha_coords_to_nums("a1a1") == "1111"
+        assert c.bs.alpha_coords_to_nums("a1c1") == "1131"
+        assert c.bs.alpha_coords_to_nums("a1d1") == "1141"
+        assert c.bs.alpha_coords_to_nums("a1e1") == "1151"
+        assert c.bs.alpha_coords_to_nums("a1f1") == "1161"
+        assert c.bs.alpha_coords_to_nums("a1g1") == "1171"
+        assert c.bs.alpha_coords_to_nums("a1h1") == "1181"
+        assert c.bs.alpha_coords_to_nums("a2b1") == "1221"
+        assert c.bs.alpha_coords_to_nums("a3b1") == "1321"
+        assert c.bs.alpha_coords_to_nums("a4b1") == "1421"
+        assert c.bs.alpha_coords_to_nums("a5b1") == "1521"
+        assert c.bs.alpha_coords_to_nums("a6b1") == "1621"
+        assert c.bs.alpha_coords_to_nums("a7b1") == "1721"
+        assert c.bs.alpha_coords_to_nums("a8b1") == "1821"
+        assert c.bs.alpha_coords_to_nums("a1b2") == "1122"
+        assert c.bs.alpha_coords_to_nums("a1b3") == "1123"
+        assert c.bs.alpha_coords_to_nums("a1b4") == "1124"
+        assert c.bs.alpha_coords_to_nums("a1b5") == "1125"
+        assert c.bs.alpha_coords_to_nums("a1b6") == "1126"
+        assert c.bs.alpha_coords_to_nums("a1b7") == "1127"
+        assert c.bs.alpha_coords_to_nums("a1b8") == "1128"
+
+    def test_invalid_coords(self):
+        assert c.bs.alpha_coords_to_nums("t1b1") == False
+        assert c.bs.alpha_coords_to_nums("adb1") == False
+        assert c.bs.alpha_coords_to_nums("a1bv") == False
+        assert c.bs.alpha_coords_to_nums("31b1") == False
+        assert c.bs.alpha_coords_to_nums("a161") == False
+        assert c.bs.alpha_coords_to_nums("!1b1") == False
+        assert c.bs.alpha_coords_to_nums("a%b1") == False
+    
+    def test_invalid_length(self):
+        assert c.bs.alpha_coords_to_nums("a1b1a") == False
+        assert c.bs.alpha_coords_to_nums("a") == False
+        assert c.bs.alpha_coords_to_nums("a2") == False
+        assert c.bs.alpha_coords_to_nums("a1b") == False
+        assert c.bs.alpha_coords_to_nums("a1b1a3b3") == False
+
+class TestCheckStaleMate(unittest.TestCase):
+
+    def setUp(self):
+        reset_board()
+        reset_game_board()
+
+    def test_stalemate_true_1(self):
+        is_black = True
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.bk, '11', '58')
+        g.c.move_piece(g.c.bs.wp, '11', '57')
+        g.c.move_piece(g.c.bs.wk, '11', '56')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == True
+    
+    def test_stalemate_true_2(self):
+        is_black = False
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.bk, '64', '65')
+        g.c.move_piece(g.c.bs.wp, '83', '84')
+        g.c.move_piece(g.c.bs.wk, '86', '85')
+        g.c.move_piece(g.c.bs.bp, '67', '66')
+        g.c.move_piece(g.c.bs.bp, '78', '77')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == True
+
+    def test_stalemate_true_3(self):
+        is_black = False
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.bk, '11', '65')
+        g.c.move_piece(g.c.bs.bp, '11', '64')
+        g.c.move_piece(g.c.bs.br, '11', '22')
+        g.c.move_piece(g.c.bs.wk, '11', '63')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == True
+
+    def test_stalemate_true_4(self):
+        is_black = True
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.br, '11', '88')
+        g.c.move_piece(g.c.bs.bn, '11', '78')
+        g.c.move_piece(g.c.bs.bb, '11', '68')
+        g.c.move_piece(g.c.bs.bq, '11', '87')
+        g.c.move_piece(g.c.bs.bp, '11', '77')
+        g.c.move_piece(g.c.bs.bp, '11', '57')
+        g.c.move_piece(g.c.bs.br, '11', '86')
+        g.c.move_piece(g.c.bs.bk, '11', '76')
+        g.c.move_piece(g.c.bs.bp, '11', '66')
+        g.c.move_piece(g.c.bs.wq, '11', '56')
+        g.c.move_piece(g.c.bs.bp, '11', '85')
+        g.c.move_piece(g.c.bs.wp, '11', '84')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == True
+
+    def test_stalemate_false_1(self):
+        is_black = False
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == False
+
+    def test_stalemate_false_2(self):
+        is_black = True
+        for space in g.c.current_state:
+            piece = g.c.current_state[space][2]
+            g.c.move_piece(piece, space, space)
+        g.c.move_piece(g.c.bs.bk, '11', '65')
+        g.c.move_piece(g.c.bs.bp, '11', '64')
+        g.c.move_piece(g.c.bs.br, '11', '22')
+        g.c.move_piece(g.c.bs.wk, '11', '63')
+        assert g.c.bs.check_stalemate(is_black, g.c.current_state) == False
 
 
 # game_view.py tests below

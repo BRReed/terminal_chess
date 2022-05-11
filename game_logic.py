@@ -388,6 +388,36 @@ class BoardState():
         y += shift[1]
         return f'{x}{y}'
 
+    def alpha_coords_to_nums(self, coords):
+        """takes coordinates and changes alphas into equivalent numbers
+        so that: "b3h5" is returned as "2385".
+        If argument does not follow this format return False
+
+        Args:
+            coords (str): 2 coordinates of a chess board "a1b2" 
+
+        Returns:
+            str or bool: False if req. params not met, else coords as all nums
+        """
+        if len(coords) != 4:
+            return False
+        chess_files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+        chess_ranks = ['1', '2', '3', '4', '5', '6', '7', '8']
+        x1 = coords[0]
+        y1 = coords[1]
+        x2 = coords[2]
+        y2 = coords[3]
+        if x1 not in chess_files or x2 not in chess_files:
+            return False
+        if y1 not in chess_ranks or y2 not in chess_ranks:
+            return False
+        index_c0 = chess_files.index(x1)
+        index_c2 = chess_files.index(x2)
+        alpha_c0 = chess_ranks[index_c0]
+        alpha_c2 = chess_ranks[index_c2]
+        alpha_coords = f"{alpha_c0}{coords[1]}{alpha_c2}{coords[3]}"
+        return alpha_coords
+
     def move_piece(self, piece, c_coords, d_coords, board_state):
         """Move piece on board
 
@@ -691,6 +721,7 @@ class BoardState():
                          board
             piece (str): accepts queen, rook, bishop, knight
             board_state (dict): state of chess board
+        Returns (dict): modified board_state
         """
         if is_black:
             if piece == 'queen':
@@ -710,6 +741,7 @@ class BoardState():
                 board_state[space][2] = self.wb
             elif piece == 'knight':
                 board_state[space][2] = self.wn
+        return board_state
 
 
     def check_castling(self, is_black, side, board_state):
@@ -839,6 +871,45 @@ class BoardState():
             z += '    H  G  F  E  D  C  B  A '
         print(z)
 
+    def check_stalemate(self, is_black, board_state):
+        """check if board_state is in stalemate
+
+        Args:
+            is_black (bool): if player to move is_black True, else False
+            board_state (dict): representation of a chess board
+
+        Returns:
+            bool: True if board in a state of stalemate, else False
+        """
+        if is_black:
+            king = self.bk
+        else:
+            king = self.wk
+        for space in board_state:
+            piece = board_state[space][2]
+            if piece == king:
+                king_space = space
+                continue
+            if self.is_black(piece) != is_black:
+                continue
+            elif self.is_black(piece) == is_black:
+                moves = self.possible_moves(piece, space, board_state)
+            for move in moves:
+                temp_board = deepcopy(board_state)
+                temp_board = self.move_piece(piece, space, move, temp_board)
+                if not self.in_check(is_black, temp_board):
+                    return False
+
+        king_moves = self.possible_moves(king, king_space, board_state)
+        for move in king_moves:
+            temp_board = deepcopy(board_state)
+            temp_board = self.move_piece(king, king_space, move, temp_board)
+            if not self.in_check(is_black, temp_board):
+                return False
+            else:
+                continue
+        return True
+
     def block_check(self, is_black, board_state):
         """check if friendly piece of king under attack can block
 
@@ -864,4 +935,3 @@ class BoardState():
             else:
                 continue
         return False
-
