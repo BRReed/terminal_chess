@@ -59,6 +59,19 @@ def main(ip_info):
                 print(msg)
                 continue
             if move == True:
+                promo, p_space = g.c.bs.check_promotion(is_black, g.c.current_state)
+                if promo == True:
+                    promo_list = ['queen', 'rook', 'bishop', 'knight']
+                    print(f"One of your pawns made it to your opponents back row",
+                    " what would you like it to be promoted to?")
+                    while True:
+                        print("Enter queen, rook, bishop, or knight")
+                        promo_choice = get_input(user_ip)
+                        if promo_choice not in promo_list:
+                            print("Invalid piece")
+                            continue
+                        g.c.current_state = g.c.bs.promotion(is_black, p_space, promo_choice, g.c.current_state)
+                        break
                 data = get_json_info('currentgames.json')
                 data[game_status][game_id]['gameState'] = g.c.current_state
                 data[game_status][game_id]['turn'] = op_color
@@ -67,10 +80,11 @@ def main(ip_info):
                 if g.c.check_mate((not is_black), g.c.current_state):
                     print("Check mate! You won!")
                     end_game(opponent, uname, game_id)
-                print(g.c.bs.check_stalemate((not is_black), g.c.current_state), "stale_mate check")
+                    break
                 if g.c.bs.check_stalemate((not is_black), g.c.current_state):
                     print("Stalemate! This game is a draw.")
                     end_game(opponent, uname, game_id)
+                    break
                 break
 
 
@@ -366,9 +380,6 @@ def check_game_info(game_dict, uname):
         print("Error user not in game")
     
 
-
-
-
 def choose_game(user_ip, uname, game_list):
     """takes a list of game_id's and returns game_id user chooses
 
@@ -395,7 +406,6 @@ def choose_game(user_ip, uname, game_list):
         else:
             print('You entered a value that is out of bounds, please try again')
     return game_list[int(game_choice)]
-
 
 
 def create_game(uname):
