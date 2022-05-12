@@ -270,6 +270,7 @@ def display_games(uname):
 
     Args:
         uname (string): the name of the verified user
+
     Returns:
         list of available games
     """
@@ -352,6 +353,7 @@ def check_game_info(game_dict, uname):
     Args:
         game_dict (dict): game information
         uname (string): user name of player
+
     Returns:
         str: perspective of user on selected game
     """
@@ -439,7 +441,7 @@ def load_game(game_id, uname):
 
     Args:
         game_id (dict): reference number for existing game
-    
+
     Returns:
         (obj): game object
     """
