@@ -1,6 +1,7 @@
 from game_logic import Chess
 from copy import deepcopy
 
+
 class Game():
     """A class to represent a game of Chess.
     """
