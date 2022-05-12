@@ -38,14 +38,14 @@ def main(ip_info):
             user_input = get_input(user_ip)
             if user_input == 'back':
                 break
-            if user_input in ["xx","resign"]: 
+            if user_input in ["xx","resign"]:
                 end_game(opponent, uname, game_id)
                 print(f"You have resigned from {game_id} against {opponent}")
                 break
             if user_input in ['(=)', 'draw']:
                 draw_request(uname, opponent, game_id)
                 break
-            input_valid, move, msg, = g.input_parse(is_black, user_turn, 
+            input_valid, move, msg, = g.input_parse(is_black, user_turn,
                                                     user_input)
             if not input_valid or not move:
                 print(msg)
