@@ -1,8 +1,9 @@
 from copy import deepcopy
 
 
-
 class Chess():
+    """Class to represent current state of a Chess game.
+    """
 
     def __init__(self):
         self.bs = BoardState()
@@ -21,8 +22,8 @@ class Chess():
                 b = f' {r} '
                 for c in range(1, 9):
                     b += (self.current_state[f'{c}{r}'][0] +
-                        self.current_state[f'{c}{r}'][2] +
-                        self.current_state[f'{c}{r}'][1])
+                          self.current_state[f'{c}{r}'][2] +
+                          self.current_state[f'{c}{r}'][1])
                 z += (f'{b}\n')
             z += '    A  B  C  D  E  F  G  H '
         elif perspective == 'black':
@@ -30,8 +31,8 @@ class Chess():
                 b = f' {r} '
                 for c in range(8, 0, -1):
                     b += (self.current_state[f'{c}{r}'][0] +
-                        self.current_state[f'{c}{r}'][2] +
-                        self.current_state[f'{c}{r}'][1])
+                          self.current_state[f'{c}{r}'][2] +
+                          self.current_state[f'{c}{r}'][1])
                 z += (f'{b}\n')
             z += '    H  G  F  E  D  C  B  A '
         print(z)
@@ -87,7 +88,7 @@ class Chess():
         for coords in board_state:
             if is_black != self.bs.is_black(board_state[coords][2]):
                 mov += self.bs.possible_moves(board_state[coords][2], coords,
-                    board_state)
+                                              board_state)
 
         if king_space in mov:
             return True
@@ -112,15 +113,15 @@ class Chess():
         if is_black is True:
             king_space = self.bs.find_piece(self.bs.bk, is_black, board_state)
             king_spaces = self.bs.possible_moves(self.bs.bk, king_space,
-                board_state)
+                                                 board_state)
         else:
             king_space = self.bs.find_piece(self.bs.wk, is_black, board_state)
             king_spaces = self.bs.possible_moves(self.bs.wk, king_space,
-                board_state)
+                                                 board_state)
         for coords in board_state:
             if is_black != self.bs.is_black(board_state[coords][2]):
                 mov += self.bs.possible_moves(board_state[coords][2], coords,
-                    board_state)
+                                              board_state)
         for move in king_spaces:
             if move not in mov:
                 return False
@@ -130,6 +131,9 @@ class Chess():
 
 
 class BoardState():
+    """Class to modify, manipulate, and check board state of a Chess game.
+    """
+
     def __init__(self):
         self.wk = self.assign_piece(False, 'king')
         self.wq = self.assign_piece(False, 'queen')
@@ -183,13 +187,10 @@ class BoardState():
         return string
 
     def create_start_state(self):
-        """Create start game board state
-        Vars:
-            self.start_state:
-                keys = [cr] where row is r and column is c. Both represented
-                    by a number
-                values = (RGB BG colorcode, unicode chess piece,
-                    colorcode reset)
+        """Create start game board state.
+        
+        Returns:
+            (dict): Representation of a chess board.
         """
         start_state = {}
         for row in range(1, 9):
@@ -205,14 +206,14 @@ class BoardState():
         return start_state
 
     def populate_start(self, c, r):
-        """Populates pieces on board at start of game
+        """Populates pieces on board at start of game.
 
         Args:
-            r (string): row on chess board
-            c (string): column on chess board
+            r (str): row on chess board
+            c (str): column on chess board
 
         Returns:
-            Var equal to chess piece
+            (str): Chess piece
         """
         if r == 1:
             if c == 1 or c == 8:
@@ -252,10 +253,10 @@ class BoardState():
         """checks if a piece is black
 
         Args:
-            piece (string): chess piece
+            piece (str): chess piece
 
         Returns:
-            Bool: True if '\033[38;2;0;0;0m' in var piece; else False
+            (bool): True if '\033[38;2;0;0;0m' in piece; else False
         """
         if '\033[38;2;0;0;0m' in piece:
             return True
@@ -266,13 +267,12 @@ class BoardState():
         """checks if piece in coords is friendly
 
         Args:
-            coords (string): column x row 'cr'
+            coords (str): column x row 'cr'
             is_black (bool): True if piece in movement is black; else False
             board_state (dict): dictionary representation of a board state
 
         Returns:
-            Bool: If piece in bounds is same color as piece in coords True;
-                  else False
+            (bool): If is_black and piece are same color True; else False
         """
         if is_black == self.is_black(board_state[coords][2]):
             return True
@@ -283,12 +283,12 @@ class BoardState():
         """checks if piece in coords is enemy
 
         Args:
-            coords (string): column x row 'cr'
+            coords (str): column x row 'cr'
             is_black (bool): True if piece in movement is black; else False
             board_state (dict): dictionary representation of a board state
 
         Returns:
-            [type]: [description]
+            (bool): if is_black and piece are not same color True; else False
         """
         if self.is_empty(coords, board_state) or (
             is_black == self.is_black(board_state[coords][2])):
@@ -300,11 +300,11 @@ class BoardState():
         """checks if coords is empty
 
         Args:
-            coords (string): column x row 'cr'
+            coords (str): column x row 'cr'
             board_state (dict): dictionary representation of a board state
 
         Returns:
-            Bool: True if space is empty; else False
+            (bool): True if space is empty; else False
         """
         if self.empty in board_state[coords][2]:
             return True
@@ -318,8 +318,7 @@ class BoardState():
             coords (string): column x row 'cr'
 
         Returns:
-            Bool: True if both positions in coords string are ints;
-                  else False
+            (bool): True if both positions in coords are ints; else False
         """
         try:
             int(coords[0])
@@ -329,10 +328,10 @@ class BoardState():
         return True
 
     def str_coords_to_int(self, coords):
-        """change string coordinates into integers
+        """Change string coordinates into integers.
 
         Args:
-            coords (string): column x row 'cr'
+            coords (str): column x row 'cr'
 
         Returns:
             int : 0 position in coords
@@ -344,13 +343,13 @@ class BoardState():
 
 
     def coords_valid(self, coords):
-        """Validate coordinates
+        """Validate coordinates.
 
         Args:
-            coords (string): row x column 'rc'
+            coords (str): row x column 'rc'
 
         Returns:
-            Bool: True if coordinates is valid; else False
+            (bool): True if coordinates are valid; else False
         """
         x, y = self.str_coords_to_int(coords)
         if ((x >= 1 and x <= 8) and (y >= 1 and y <= 8)):
@@ -359,14 +358,14 @@ class BoardState():
             return False
 
     def coords_not_equal(self, c_coords, d_coords):
-        """Check that current coords are not equal to destination coords
+        """Check that current coords are not equal to destination coords.
 
         Args:
-            c_coords (string): destination row x column 'rc'
-            d_coords (string): destination row x column 'rc'
+            c_coords (str): destination row x column 'rc'
+            d_coords (str): destination row x column 'rc'
 
         Returns:
-            Bool: True if c_coords != d_coords; else False
+            (bool): True if c_coords != d_coords; else False
         """
         if c_coords.lower() == d_coords.lower():
             return False
@@ -377,11 +376,11 @@ class BoardState():
         """adds a shift to coords
 
         Args:
-            coords (string): column x row 'cr'
+            coords (str): column x row 'cr'
             shift (tuple): amount to shift (row, column)
 
         Returns:
-            string: coords with shift applied 'cr'
+            str: coords with shift applied 'cr'
         """
         x, y = self.str_coords_to_int(coords)
         x += shift[0]
@@ -419,15 +418,15 @@ class BoardState():
         return alpha_coords
 
     def move_piece(self, piece, c_coords, d_coords, board_state):
-        """Move piece on board
+        """Move piece on board.
 
         Args:
-            piece (string): unicode chess piece
-            c_coords (string): column x row 'cr'
-            d_coords (string): column x row 'cr'
+            piece (str): unicode chess piece
+            c_coords (str): column x row 'cr'
+            d_coords (str): column x row 'cr'
 
         Returns:
-            Dict: board_state with applied movement changes
+            (dict): board_state with applied movement changes
         """
         board_state[d_coords][2] = piece
         board_state[c_coords][2] = self.empty
@@ -437,13 +436,13 @@ class BoardState():
         """checks all possible moves for piece
 
         Args:
-            coords (string): column x row 'cr'
+            coords (str): column x row 'cr'
             shift (tuple): amount to shift (column, row)
             is_black (bool): if piece in movement is black: True; else False
             board_state (dict): dictionary representation of a board state
 
         Returns:
-            list: possible moves based on shift and coords
+            (list): possible moves based on shift and coords
         """
         moves = []
         coords = self.add_coords(coords, shift)
@@ -468,12 +467,12 @@ class BoardState():
         """Validate movement of a piece
 
         Args:
-            piece (string): a unicode chess piece
-            c_coords (string): current coordinates of piece
-            d_coords (string): destination coordinates of piece
+            piece (str): a unicode chess piece
+            c_coords (str): current coordinates of piece
+            d_coords (str): destination coordinates of piece
 
         Returns:
-            Boolean: True if move is valid based on piece movement restrictions
+            (bool): True if move is valid based on piece movement restrictions
                 else; False
         """
         x1, y1 = self.str_coords_to_int(c_coords)
@@ -531,8 +530,8 @@ class BoardState():
         """Given current board state check all possible moves
 
         Args:
-            piece (string): unicode chess piece
-            coords (string): row x column 'rc'
+            piece (str): unicode chess piece
+            coords (str): row x column 'rc'
             board_state (dict): dictionary representation of a board state
         """
         moves = []
@@ -542,35 +541,35 @@ class BoardState():
         if piece in [self.wk, self.bk]:
             for shift in diag:
                 moves += (self.moves_dir(coords, shift, self.is_black(piece),
-                    board_state))
+                                         board_state))
             for shift in horz_vert:
                 moves += (self.moves_dir(coords, shift, self.is_black(piece),
-                    board_state))
+                                         board_state))
         # queen moves
         elif piece in [self.wq, self.bq]:
             for shift in diag:
                 moves += (self.moves_dir(coords, shift, self.is_black(piece),
-                    board_state))
+                                         board_state))
             for shift in horz_vert:
                 moves += (self.moves_dir(coords, shift, self.is_black(piece),
-                    board_state))
+                                         board_state))
         # bishop moves
         elif piece in [self.wb, self.bb]:
             for shift in diag:
                 moves += self.moves_dir(coords, shift, self.is_black(piece),
-                    board_state)
+                                        board_state)
         # rook moves
         elif piece in [self.wr, self.br]:
             for shift in horz_vert:
                 moves += self.moves_dir(coords, shift, self.is_black(piece),
-                    board_state)
+                                        board_state)
         # knight moves
         elif piece in [self.wn, self.bn]:
             knight_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1),
-                (1, 2), (1, -2), (-1, 2), (-1, -2)]
+                            (1, 2), (1, -2), (-1, 2), (-1, -2)]
             for shift in knight_moves:
                 moves += self.moves_dir(coords, shift, self.is_black(piece),
-                    board_state)
+                                        board_state)
         # white pawn moves
         elif piece == self.wp:
             pawn_moves = []
@@ -590,7 +589,7 @@ class BoardState():
                 if self.is_empty(diag_minus, board_state):
                     pass
                 elif self.is_enemy(diag_minus, self.is_black(piece),
-                    board_state):
+                                   board_state):
                     pawn_moves.append(diag_minus)
             except KeyError:
                 pass
@@ -598,7 +597,7 @@ class BoardState():
                 if self.is_empty(diag_plus, board_state):
                     pass
                 elif self.is_enemy(diag_plus, self.is_black(piece),
-                    board_state):
+                                   board_state):
                     pawn_moves.append(diag_plus)
             except KeyError:
                 pass
@@ -623,7 +622,7 @@ class BoardState():
                 if self.is_empty(diag_minus, board_state):
                     pass
                 elif self.is_enemy(diag_minus, self.is_black(piece),
-                    board_state):
+                                   board_state):
                     pawn_moves.append(diag_minus)
             except KeyError:
                 pass
@@ -631,7 +630,7 @@ class BoardState():
                 if self.is_empty(diag_plus, board_state):
                     pass
                 elif self.is_enemy(diag_plus, self.is_black(piece),
-                    board_state):
+                                   board_state):
                     pawn_moves.append(diag_plus)
             except KeyError:
                 pass
@@ -643,15 +642,15 @@ class BoardState():
         return list(set(moves))
 
     def find_piece(self, piece, is_black, board_state):
-        """find piece if exists on board. Returns location of only one piece
+        """Find piece if exists on board. Returns location of only one piece.
 
         Args:
-            piece (string): unicode representation of a chess piece
+            piece (str): unicode representation of a chess piece
             is_black (bool): True if piece is black; else False
             board_state (dict): dictionary representation of a board state
 
         Returns:
-            string: row x column 'rc' if piece on board; else returns False
+            (str): row x column 'rc' if piece on board; else returns False
         """
         for space in board_state:
             if piece in board_state[space][2] and (
@@ -690,15 +689,15 @@ class BoardState():
                 self.b_en_passant = [True, f'{x1}{y1 - 1}']
 
     def check_promotion(self, is_black, board_state):
-        """Checks if pawn has reached eighth rank
+        """Checks if pawn has reached eighth rank.
 
         Args:
             is_black (bool): if pawn checking is black True, else False
             board_state (dict): state of the board to check
         
         Returns:
-            bool: True if a pawn can be promoted, else False
-            string: if True 'xy' coords of pawn, else '00'
+            (bool): True if a pawn can be promoted, else False
+            (str): if True 'xy' coords of pawn, else '00'
         """
         if is_black:
             piece = self.bp
@@ -713,7 +712,7 @@ class BoardState():
         return False, '00'
 
     def promotion(self, is_black, space, piece, board_state):
-        """Changes piece in space to variable piece
+        """Changes piece in space to variable piece.
 
         Args:
             is_black(bool): if team is black True, else False
@@ -721,7 +720,9 @@ class BoardState():
                          board
             piece (str): accepts queen, rook, bishop, knight
             board_state (dict): state of chess board
-        Returns (dict): modified board_state
+
+        Returns:
+            (dict): modified board_state
         """
         if is_black:
             if piece == 'queen':
@@ -753,7 +754,7 @@ class BoardState():
             board_state (dict): state of the board to check
 
         Returns:
-            bool: True if castling is valid, else False
+            (bool): True if castling is valid, else False
         """
         if self.in_check(is_black, board_state):
             return False
@@ -783,7 +784,7 @@ class BoardState():
         for space in board_state:
             if self.is_enemy(space, is_black, board_state):
                 moves = self.possible_moves(board_state[space][2], space,
-                    board_state)
+                                            board_state)
                 for move in moves:
                     if move == spaces[0] or move == spaces[1]:
                         return False
@@ -794,12 +795,10 @@ class BoardState():
         return True
 
     def check_castling_valid(self, board_state):
-        """checks if king or rooks move from their spots
+        """Checks if king or rooks move from their spots.
 
-            self.w_king_side_castle, self.w_queen_side_castle,
-            self.b_king_side_castle, self.b_queen_side_castle change based on
-            if king moves both vars of that color are False, if rook moves
-            that direction that color is False
+        Args:
+        board_state (dict): dictionary representation of a board state
         """
         if self.w_king_side_castle or self.w_queen_side_castle:
             if self.wk not in board_state['51'][2]:
@@ -825,8 +824,9 @@ class BoardState():
         Args:
             is_black (bool): if king is black True; else False
             board_state (dict): dictionary representation of a board state
+
         Returns:
-            bool: True if king in check; else False
+            (bool): True if king in check; else False
         """
         mov = []
         if is_black is True:
@@ -836,7 +836,7 @@ class BoardState():
         for coords in board_state:
             if is_black != self.is_black(board_state[coords][2]):
                 mov += self.possible_moves(board_state[coords][2], coords,
-                    board_state)
+                                           board_state)
 
         if king_space in mov:
             return True
@@ -847,7 +847,7 @@ class BoardState():
         """Creates printed representation of current chess board
 
         Args:
-            perspective (string): either 'black' or 'white' flips board
+            perspective (str): either 'black' or 'white' flips board
                 to show proper perspective
         """
         z = ''
@@ -856,8 +856,8 @@ class BoardState():
                 b = f' {r} '
                 for c in range(1, 9):
                     b += (board_state[f'{r}{c}'][0] +
-                        board_state[f'{r}{c}'][2] +
-                        board_state[f'{r}{c}'][1])
+                          board_state[f'{r}{c}'][2] +
+                          board_state[f'{r}{c}'][1])
                 z += (f'{b}\n')
             z += '    A  B  C  D  E  F  G  H '
         elif perspective == 'black':
@@ -865,8 +865,8 @@ class BoardState():
                 b = f' {r} '
                 for c in range(8, 0, -1):
                     b += (board_state[f'{r}{c}'][0] +
-                        board_state[f'{r}{c}'][2] +
-                        board_state[f'{r}{c}'][1])
+                          board_state[f'{r}{c}'][2] +
+                          board_state[f'{r}{c}'][1])
                 z += (f'{b}\n')
             z += '    H  G  F  E  D  C  B  A '
         print(z)
@@ -879,7 +879,7 @@ class BoardState():
             board_state (dict): representation of a chess board
 
         Returns:
-            bool: True if board in a state of stalemate, else False
+            (bool): True if board in a state of stalemate, else False
         """
         if is_black:
             king = self.bk
@@ -918,16 +918,16 @@ class BoardState():
             board_state (dict): state of board to be tested
 
         Returns:
-            bool: if friendly piece can block check True; else False
+            (bool): if friendly piece can block check True; else False
         """
         for space in board_state:
             if is_black == self.is_black(board_state[space][2]):
                 moves = self.possible_moves(board_state[space][2], space,
-                    board_state)
+                                            board_state)
                 for move in moves:
                     temp_board = deepcopy(board_state)
                     temp_board = self.move_piece(temp_board[space][2], space,
-                        move, temp_board)
+                                                 move, temp_board)
                     if self.in_check(is_black, temp_board):
                         pass
                     else:
