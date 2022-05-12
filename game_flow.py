@@ -2,24 +2,17 @@ from game_logic import Chess
 from copy import deepcopy
 
 class Game():
+    """A class to represent a game of Chess.
+    """
+
     def __init__(self):
         self.c = Chess()
 
     def create_new_game(self):
         return self.c.current_state
 
-    def start_game(self, player1, player2):
-        """assigns vars for start of game
-
-        Args:
-            player1 (dict): user: unique user id, color: unicode white
-            player2 ([type]): user: unique user id, color: unicode black
-        """
-        self.p1 = player1
-        self.p2 = player2
-
     def move(self, is_black, c_coords, d_coords):
-        """allows player to move piece
+        """allows player to move piece.
 
         Args:
             is_black(bool): True if player is black, else False
@@ -66,16 +59,13 @@ class Game():
         else:
             return False
 
-    def list_moves(self, player, piece, c_coords):
-        """returns list of all possible moves for piece in c_coords"""
-        pass
-
     def castle(self, is_black, side):
         """allows player to castle
 
         Args:
             is_black (bool): True if player is black, else False
             side (str): 'queen' or 'king'
+
         Returns:
             bool: True if castling was allowed and completed, else False
         """
@@ -93,6 +83,7 @@ class Game():
         Args:
             is_black (bool): True if player is black, else False
             side (str): 'queen' or 'king'
+
         Returns:
             bool: True if player can castle to that side, else False
         """
@@ -107,10 +98,6 @@ class Game():
             elif side == 'queen':
                 return self.c.bs.w_queen_side_castle
 
-    def draw(self, player):
-        """allows player to call draw"""
-        pass
-
     def input_parse(self, is_black, user_turn, user_input):
         """Parses user input and checks validity of command
 
@@ -123,18 +110,19 @@ class Game():
             bool: if input was valid True, else False
             bool: if board state or user turn was changed True, else False
             str: message to print to terminal
-
         """
         if not user_turn:
             valid_commands = ["(=)", "draw"]
         elif user_turn:
             valid_commands = ["(=)", "draw", "0-0", "0-0-0"]
-        input_valid = self.validate_command(user_turn, user_input, valid_commands)
+        input_valid = self.validate_command(user_turn, user_input,
+                                            valid_commands)
         if not input_valid:
-            return False, False, f"You did not enter a valid command. Command = {user_input}"
-
-        if not user_turn: # everything after this line can only be done when user_turn is True
-            return False, False, f"You can not do that until it's your turn. command = {user_input}"
+            msg = f"You did not enter a valid command. Command = {user_input}"
+            return False, False, msg
+        if not user_turn:
+            msg = f"Invalid command. Not your turn. Command = {user_input}"
+            return False, False, msg
         if user_input in ["0-0", "0-0-0"]:
             if user_input == "0-0":
                 side = "king"
@@ -142,8 +130,8 @@ class Game():
                 side = "queen"
             valid_castle = self.castle(is_black, side)
             if not valid_castle:
-                return False, False, f"Castling is not valid in {side}'s direction"
-                
+                msg = f"Castling is not valid in {side}'s direction"
+                return False, False, msg
             elif valid_castle:
                 return True, True, f""
         if input_valid.isnumeric():
@@ -151,9 +139,11 @@ class Game():
             d_coords = f"{input_valid[2]}{input_valid[3]}"
             move = self.move(is_black, c_coords, d_coords)
             if move == True:
-                return True, True, f""
+                msg = f""
+                return True, True, msg
             else:
-                return True, False, f"Invalid move {user_input}"
+                msg = f"Invalid move {user_input}"
+                return True, False, msg
             
         
 
@@ -175,6 +165,3 @@ class Game():
         if user_turn:
             return self.c.bs.alpha_coords_to_nums(user_input)
         return False
-
-
-
