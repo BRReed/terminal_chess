@@ -1,28 +1,21 @@
+import json
 from game_flow import Game
 from getpass import getpass
-import json
 from passlib.hash import bcrypt
 from sys import argv, exit
 
 
-
 def main(ip_info):
     user_ip = cleanup_ip(ip_info)
-
     welcome_screen()
-
     uname = get_info(user_ip)
 
     while True:
-
         game_list = display_games(uname)
         game_choice = choose_game(user_ip, uname, game_list)
         if game_choice == False:
             continue
-        turn = game_choice['turn']
-
         game_id = game_choice['game_id']
-
         perspective = check_game_info(game_choice, uname)
         g = load_game(game_choice, uname)
         g.c.print_current_state(perspective)
@@ -42,7 +35,6 @@ def main(ip_info):
             continue
 
         while True:
-
             user_input = get_input(user_ip)
             if user_input == 'back':
                 break
@@ -53,24 +45,27 @@ def main(ip_info):
             if user_input in ['(=)', 'draw']:
                 draw_request(uname, opponent, game_id)
                 break
-            input_valid, move, msg, = g.input_parse(is_black, user_turn, user_input)
-
+            input_valid, move, msg, = g.input_parse(is_black, user_turn, 
+                                                    user_input)
             if not input_valid or not move:
                 print(msg)
                 continue
             if move == True:
-                promo, p_space = g.c.bs.check_promotion(is_black, g.c.current_state)
+                promo, p_space = g.c.bs.check_promotion(is_black, 
+                                                        g.c.current_state)
                 if promo == True:
                     promo_list = ['queen', 'rook', 'bishop', 'knight']
-                    print(f"One of your pawns made it to your opponents back row",
-                    " what would you like it to be promoted to?")
+                    print("One of your pawns made it to your opponents back",
+                          "row what would you like it to be promoted to?")
                     while True:
                         print("Enter queen, rook, bishop, or knight")
                         promo_choice = get_input(user_ip)
                         if promo_choice not in promo_list:
                             print("Invalid piece")
                             continue
-                        g.c.current_state = g.c.bs.promotion(is_black, p_space, promo_choice, g.c.current_state)
+                        g.c.current_state = g.c.bs.promotion(is_black, p_space,
+                                                             promo_choice,
+                                                             g.c.current_state)
                         break
                 data = get_json_info('currentgames.json')
                 data[game_status][game_id]['gameState'] = g.c.current_state
@@ -133,10 +128,10 @@ Welcome to
 
 def get_info(user_ip):
     """start log in or account set up process for user
-    
+
     Args:
         user_ip (str):ip of user in string format
-    
+
     Returns:
         str: input from user (their username)
     """
@@ -149,7 +144,6 @@ Enter:
     while True:
         if i >= 10:
             exit_game(user_ip, True, "Too many unsuccessful get info attempts")
-
         sign_in_up = get_input(user_ip)
         if sign_in_up not in ("1", "2"):
             i += 1
@@ -170,7 +164,7 @@ Enter:
 
 
 def get_input(user_ip):
-    """returns string entered by user. if input is "exit" program will exit 
+    """returns string entered by user. if input is "exit" program will exit
 
     Args:
         user_ip (str):ip of user in string format
@@ -206,7 +200,7 @@ def get_game_status(opponent):
 
 
 def create_account(user_ip):
-    """take user input to create account 
+    """take user input to create account
 
     Args:
         user_ip (str): ip of user
@@ -221,10 +215,11 @@ def create_account(user_ip):
         if uname not in data:
             break
         else:
-            print("Sorry that user name already exists. Please choose another.")
+            print("Sorry that user name already exists. Please choose another."
+            )
     print("""
-Please enter your desired password. DO NOT ENTER A PASSWORD YOU HAVE USED OR 
-INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER. 
+Please enter your desired password. DO NOT ENTER A PASSWORD YOU HAVE USED OR
+INTEND TO USE ELSEWHERE. SECURITY IS NOT GUARANTEED ON THIS SERVER.
     """)
     while True:
         p1 = getpass(prompt=">")
@@ -303,7 +298,7 @@ or '0' to create a new game
             game_list.append(game)
             if game['turn'] == 'white':
                 print(f"{i}. ID: {game['game_id']} You can move before your " +
-                "opponent joins!")
+                      "opponent joins!")
             else:
                 print(f"{i}. ID: {game['game_id']} You've already moved.")
             i+=1
@@ -325,7 +320,8 @@ or '0' to create a new game
             if game['turn'] == user_color:
                 print(f"{i}. ID: {game['game_id']} vs {opp}. It's your turn")
             elif game['turn'] == opp_color:
-                print(f"{i}. ID: {game['game_id']} vs {opp}. It's {opp}'s turn")
+                print(f"{i}. ID: {game['game_id']} vs {opp}. It's {opp}'s turn"
+                )
             else:
                 print(f"Error with user/opp config")
             i+=1
@@ -378,7 +374,7 @@ def check_game_info(game_dict, uname):
         return 'black'
     else:
         print("Error user not in game")
-    
+
 
 def choose_game(user_ip, uname, game_list):
     """takes a list of game_id's and returns game_id user chooses
@@ -404,7 +400,8 @@ def choose_game(user_ip, uname, game_list):
                 game_choice = (len(game_list) - 1)
             break
         else:
-            print('You entered a value that is out of bounds, please try again')
+            print('You entered a value that is out of bounds, please try again'
+            )
     return game_list[int(game_choice)]
 
 
@@ -455,16 +452,16 @@ def commands():
     """prints commands to terminal
     """
     print("""
-** At Any time you can enter `commands` to display the commands available to 
+** At Any time you can enter `commands` to display the commands available to
    you, or `exit` to exit the program
 
 * Use long algebraic notation to move pieces
 * Movement format = starting square, ending square: `b2a3`
 * Castling king side enter: `0-0` castling queen side enter: `0-0-0`
-* To request a draw you can enter `draw` or `(=)`. Your opponent will have to 
+* To request a draw you can enter `draw` or `(=)`. Your opponent will have to
   accept for the draw to go through
 * To resign enter `resign` or `xx`
-* To choose a different game without making changes to the current game enter 
+* To choose a different game without making changes to the current game enter
   `back`
 """)
 
@@ -495,7 +492,8 @@ def draw_response(uname, opponent, game_id, user_ip):
         game_id (str): id of the game
         user_ip (str): ip of user
     """
-    print(f"{opponent} has requested a draw. Enter '1' for yes, and '2' for no")
+    print(f"{opponent} has requested a draw. Enter '1' for yes, and '2' for no"
+    )
     while True:
         user_input = get_input(user_ip)
         if user_input not in ['1', '2']:
@@ -524,7 +522,6 @@ def end_game(winner, loser, game_id):
     if loser != None:
         user_data[loser]["currentgames"].remove(game_id)
     write_to_json('users.json', user_data)
-
     games_data = get_json_info('currentgames.json')
     if winner != None and loser != None:
         games_data["in_progress"].pop(game_id)
@@ -573,5 +570,6 @@ def write_to_json(file_name, data):
     with open(file_name, 'w') as f:
         json.dump(data, f)
     return
+
 
 main(argv[1:])
