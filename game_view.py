@@ -256,7 +256,7 @@ def sign_in(user_ip):
             #FUTURE: enter create account to create account
     print("Please enter your password.")
     while True:
-        pw = get_input(user_ip)
+        pw = getpass(prompt=">")
         if bcrypt.verify(pw, hashedpw):
             break
         else:
