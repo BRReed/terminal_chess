@@ -2,7 +2,6 @@ import unittest
 from collections import Counter
 from game_logic import Chess
 from game_flow import Game
-# import game_view as gv
 
 
 def reset_board():
