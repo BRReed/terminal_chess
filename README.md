@@ -54,3 +54,9 @@ I chose to serve it to a specific user when they sign in through ssh to my serve
 * Change default font to `DejaVu Sans Mono`
 * Open a new console for changes to take affect
 * Play
+
+## To Do
+
+- [ ] Kick out after 3 failed password attempts
+- [ ] Clean up rules
+- [ ] change 'commands' to 'h', 'help', '-h' and integrate with rules section
