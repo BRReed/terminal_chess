@@ -1,16 +1,24 @@
-# Terminal Chess
+# **Terminal Chess**
 
-Terminal Chess is a game of chess you and a friend can play against each other
+Terminal Chess is a game of chess you and friends can play against each other
 using SSH.
 
 Each player will play the board from their perspective.
 
 <img src="./images/example.png">
 
-Project status: Beta testing. Working version on main branch.
+Project status: Beta version working on main.
+
+## Table of Contents
+
+1. [Installation](#installation) 
+2. [Configuring Powershell](#configuring-powershell) 
+3. [How to Play](#how-to-play)
+4. [To Do](#to-do)
 
 
-## Installation and Play
+
+## Installation 
 ** Be Aware **:
 This runs natively on shells that support UTF-8. 
 Tested on fresh installs of:
@@ -29,20 +37,11 @@ If you insist on using `PowerShell` please scroll to the `PowerShell Configure` 
   * `game_view.py`
   * `currentgames.json`
   * `users.json`
-* Call game_view directly in your shell with `python3 \<dir\>\\game_view.py
+* Call game_view directly in your shell with `python3 \<dir>\game_view.py`
 
 I chose to serve it to a specific user when they sign in through ssh to my server. 
 
-## How to play
-
-* Use long algebraic notation to move pieces
-* Movement format = starting square, ending square: `b2a3`
-* Castling king side enter: `0-0` castling queen side enter: `0-0-0`
-* To request a draw you can enter `draw` or `(=)`. Your opponent will have to 
-  accept for the draw to go through
-* To resign enter `resign` or `xx`
-
-## Powershell configure:
+## Configuring Powershell:
 
 * Run `intl.cpl` in console
 * Click `Administrative` tab
@@ -55,8 +54,21 @@ I chose to serve it to a specific user when they sign in through ssh to my serve
 * Open a new console for changes to take affect
 * Play
 
+## How to play
+
+* Use long algebraic notation to move pieces
+* Movement format = starting square, ending square: `b2a3`
+* Castling king side enter: `0-0` castling queen side enter: `0-0-0`
+* To request a draw you can enter `draw` or `(=)`. Your opponent will have to 
+  accept for the draw to go through
+* To resign enter `resign` or `xx`
+
+
 ## To Do
 
 - [ ] Kick out after 3 failed password attempts
 - [ ] Clean up rules
-- [ ] change 'commands' to 'h', 'help', '-h' and integrate with rules section
+- [ ] Change 'commands' to 'h', 'help', '-h' and integrate with rules section
+- [ ] Make powershell script to automate powershell configuration
+- [ ] Implement AI to play against
+- [ ] Separate Piece logic into per-piece files
