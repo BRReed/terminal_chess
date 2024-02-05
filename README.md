@@ -72,3 +72,4 @@ I chose to serve it to a specific user when they sign in through ssh to my serve
 - [ ] Make powershell script to automate powershell configuration
 - [ ] Implement AI to play against
 - [ ] Separate Piece logic into per-piece files
+- [ ] Make bash script to spin up and destroy a working instance of this project from procuring local physical space to sign on screen
