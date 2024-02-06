@@ -66,7 +66,8 @@ I chose to serve it to a specific user when they sign in through ssh to my serve
 
 ## To Do
 
-- [ ] Kick out after 3 failed password attempts
+- [X] Kick out after 3 failed password attempts
+- [ ] Implement temporary ban after failed password attempts
 - [ ] Clean up rules
 - [ ] Change 'commands' to 'h', 'help', '-h' and integrate with rules section
 - [ ] Make powershell script to automate powershell configuration
