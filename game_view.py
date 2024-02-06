@@ -255,13 +255,16 @@ def sign_in(user_ip):
             print("Sorry, that username isn't found in our system.")
             #FUTURE: enter create account to create account
     print("Please enter your password.")
+    attempts = 0
     while True:
         pw = getpass(prompt=">")
         if bcrypt.verify(pw, hashedpw):
             break
         else:
             print("Sorry, password does not match username")
-            #FUTURE: count and timeout for 20 minutes after 5 attempts
+            attempts += 1
+        if attempts >= 3:
+            exit_game(user_ip, False, "")
     return uname
 
 
