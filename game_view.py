@@ -278,8 +278,7 @@ def display_games(uname):
         list of available games
     """
     print("""
-Enter the corresponding number for the game you wish to play
-or '0' to create a new game
+Enter number of game you want to play or 0 to create a new game
     """)
     i=1
     game_list = ['create']
