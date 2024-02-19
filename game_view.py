@@ -175,11 +175,14 @@ def get_input(user_ip):
     while True:
         print("Enter 'exit' to exit, or 'commands' for commands")
         i = input(">")
+        i = i.lower()
         if i == "exit":
             exit_game(user_ip, False, "hey")
         elif i == "commands":
             commands()
             continue
+        elif i in ["h", "help"]:
+            help()
         else:
             break
     return i
@@ -296,7 +299,7 @@ Enter number of game you want to play or 0 to create a new game
         else:
             print("error matching user game to current games data")
     if wait_games:
-        print("These are the games you're waiting for an opponent:\n")
+        print("Games waiting for an opponent:\n")
         for game in wait_games:
             game_list.append(game)
             if game['turn'] == 'white':
@@ -306,7 +309,7 @@ Enter number of game you want to play or 0 to create a new game
                 print(f"{i}. ID: {game['game_id']} You've already moved.")
             i+=1
     if playing_games:
-        print("These are your games in progress:\n")
+        print("Games in progress:\n")
         for game in playing_games:
             game_list.append(game)
             if game['white'] != uname:
@@ -332,7 +335,7 @@ Enter number of game you want to play or 0 to create a new game
         if games_data['wait_for_opponent'][game]['white'] != uname:
             join_games.append(games_data['wait_for_opponent'][game])
     if join_games:
-        print("These are other users games looking for an opponent:\n")
+        print("Games looking for an opponent:\n")
         for game in join_games:
             game_list.append(game)
             opp = game['white']
@@ -456,19 +459,29 @@ def commands():
     """prints commands to terminal
     """
     print("""
-** At Any time you can enter `commands` to display the commands available to
-   you, or `exit` to exit the program
-
 * Use long algebraic notation to move pieces
 * Movement format = starting square, ending square: `b2a3`
-* Castling king side enter: `0-0` castling queen side enter: `0-0-0`
-* To request a draw you can enter `draw` or `(=)`. Your opponent will have to
-  accept for the draw to go through
-* To resign enter `resign` or `xx`
+* Castling:
+    king side: `0-0`, 
+    queen side: `0-0-0`
+* To request a draw you can enter (Your opponent will have to accept the draw):
+    `draw` or `(=)`
+* To resign enter:
+    `resign` or `xx`
 * To choose a different game without making changes to the current game enter
   `back`
 """)
 
+def help():
+    """prints help documentation
+    """
+    print("""
+* `commands` to see commands
+* `exit` to exit game
+
+email: brreed@gmail.com
+bug reports: https://github.com/brreed/terminal_chess
+""")
 
 def draw_request(uname, opponent, game_id):
     """requests draw by editing draw key in game_id to [True, opponent]
