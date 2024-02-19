@@ -175,13 +175,13 @@ def get_input(user_ip):
     while True:
         print("Enter 'exit' to exit, or 'commands' for commands")
         i = input(">")
-        i = i.lower()
-        if i == "exit":
+        lo_i = i.lower()
+        if lo_i == "exit":
             exit_game(user_ip, False, "hey")
-        elif i == "commands":
+        elif lo_i == "commands":
             commands()
             continue
-        elif i in ["h", "help"]:
+        elif lo_i in ["h", "help"]:
             help()
         else:
             break
