@@ -68,8 +68,8 @@ I chose to serve it to a specific user when they sign in through ssh to my serve
 
 - [X] Kick out after 3 failed password attempts
 - [ ] Implement temporary ban after failed password attempts
-- [ ] Clean up rules
-- [ ] Change 'commands' to 'h', 'help', '-h' and integrate with rules section
+- [X] Clean up rules
+- [X] Change 'commands' to 'h', 'help' and integrate with rules section
 - [ ] Make powershell script to automate powershell configuration
 - [ ] Implement AI to play against
 - [ ] Separate Piece logic into per-piece files
