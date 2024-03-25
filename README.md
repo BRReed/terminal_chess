@@ -43,6 +43,16 @@ I chose to serve it to a specific user when they sign in through ssh to my serve
 
 ## Configuring Powershell:
 
+You will need to change the default font to one of the following:
+* DejaVu Sans
+* FreeSerif
+* Quivira
+* Pecita
+
+I recommend DejaVu or FreeSerif, as I find their shapes to be more distinguishable.
+
+
+--- The following was necessary in older Windows versions. If you are on Powershell 7/core this can be disregarded.
 * Run `intl.cpl` in console
 * Click `Administrative` tab
 * Click `Change system locale...` button
@@ -74,3 +84,4 @@ I chose to serve it to a specific user when they sign in through ssh to my serve
 - [ ] Implement AI to play against
 - [ ] Separate Piece logic into per-piece files
 - [ ] Make bash script to spin up and destroy a working instance of this project from procuring local physical space to sign on screen
+- [ ] Detect Powershell and font used, in client console, if does not support chess pieces change piece from unicode characters to KkQRBP
